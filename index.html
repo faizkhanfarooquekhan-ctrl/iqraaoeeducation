@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQRA AOE - Academy of Excellence</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /*<![CDATA[*/
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+        
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --secondary-glow: rgba(236, 72, 153, 0.5);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Glassmorphism Classes */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(236, 72, 153, 0.5);
+            box-shadow: 0 15px 30px -10px var(--secondary-glow);
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+        }
+
+        /* Typography & Inputs */
+        .text-gradient {
+            background: linear-gradient(to right, #a855f7, #ec4899, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .urdu-font {
+            font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+            font-size: 3.5rem !important;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .custom-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+        .custom-input:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            outline: none;
+        }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        /* Buttons & Animations */
+        .btn-primary {
+            background: linear-gradient(45deg, #7c3aed, #db2777);
+            background-size: 200% auto;
+            transition: 0.5s;
+        }
+        .btn-primary:hover {
+            background-position: right center;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-pulse-glow { animation: pulseGlow 2s infinite; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+        }
+        @keyframes floatXP {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+
+        .xp-float {
+            position: absolute;
+            color: #fbbf24;
+            font-weight: 800;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: floatXP 1s ease-out forwards;
+            z-index: 50;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        /* Custom Toast Notification */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: rgba(15, 23, 42, 0.9);
+            border-left: 4px solid #a855f7;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast.show { transform: translateX(0); }
+        /*]]>*/
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="toast-container"></div>
+
+    <div class="container mx-auto px-4 py-10 max-w-6xl relative min-h-screen flex flex-col justify-center items-center">
+        
+        <div id="view-login" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center animate-slide-up relative overflow-hidden">
+            <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-blue-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Indane_logo.svg" alt="Indane Logo" class="h-20 mx-auto mb-4 drop-shadow-xl z-10 relative">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">Student Portal</h1>
+            <p class="text-slate-300 font-light tracking-widest text-sm mb-8 z-10 relative uppercase">Restricted Access</p>
+            
+            <div class="space-y-5 z-10 relative">
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                    <input type="text" id="loginId" placeholder="Login ID" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
+                </div>
+                
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                    <input type="password" id="loginPass" placeholder="Password" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
+                </div>
+            </div>
+            
+            <button onclick="attemptLogin()" class="btn-primary w-full mt-8 py-4 rounded-xl text-xl uppercase tracking-wider font-bold shadow-lg z-10 relative">
+                Secure Login <i class="fa-solid fa-right-to-bracket ml-2"></i>
+            </button>
+        </div>
+
+        <div id="view-onboarding" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center hidden animate-slide-up relative overflow-hidden">
+            <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-purple-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
+            <div class="absolute bottom-[-50px] right-[-50px] w-32 h-32 bg-pink-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Indane_logo.svg" alt="Indane Logo" class="h-20 mx-auto mb-4 drop-shadow-xl z-10 relative">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">IQRA AOE</h1>
+            <p class="text-slate-300 font-light tracking-widest uppercase text-sm mb-8 z-10 relative">Academy of Excellence</p>
+            
+            <div class="space-y-5 z-10 relative">
+                <div class="relative">
+                    <i class="fa-solid fa-user-graduate absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                    <input type="text" id="studentName" placeholder="Student Name" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
+                </div>
+                
+                <div class="relative flex flex-col items-start">
+                    <label class="text-xs text-slate-400 ml-2 mb-1 uppercase tracking-wider font-semibold">Date of Birth</label>
+                    <div class="w-full relative">
+                        <i class="fa-solid fa-calendar-days absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                        <input type="date" id="studentDOB" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <i class="fa-solid fa-school absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                    <select id="studentClass" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white appearance-none" required>
+                        <option value="" disabled selected>Select Your Class</option>
+                        <option value="1">Class 1 (Basics)</option>
+                        <option value="2">Class 2 (Addition/Subtraction)</option>
+                        <option value="3">Class 3 (Multiplication)</option>
+                        <option value="4">Class 4 (Division)</option>
+                        <option value="5">Class 5 (Decimals Intro)</option>
+                        <option value="6">Class 6 (Fractions Intro)</option>
+                        <option value="7">Class 7 (Advanced Fractions/Decimals)</option>
+                        <option value="8">Class 8 (Pre-Algebra)</option>
+                        <option value="9">Class 9 (Algebra)</option>
+                        <option value="10">Class 10 (SSC Board Level)</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                </div>
+            </div>
+            
+            <button onclick="startApp()" class="btn-primary w-full mt-8 py-4 rounded-xl text-xl uppercase tracking-wider font-bold shadow-lg z-10 relative">
+                Enter Academy <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+            </button>
+        </div>
+
+        <div id="view-dashboard" class="w-full hidden">
+            <header class="flex flex-col md:flex-row justify-between items-center mb-10 bg-black/20 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
+                <div>
+                    <h2 class="text-3xl font-bold"><span class="text-slate-400 font-light">Welcome,</span> <span id="welcomeMsg" class="text-gradient"></span></h2>
+                    <p class="text-slate-400 mt-1"><i class="fa-solid fa-graduation-cap mr-2"></i>Class <span id="dashClassLabel" class="text-white font-semibold"></span> Student</p>
+                </div>
+                <button onclick="logout()" class="mt-4 md:mt-0 px-6 py-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/50 rounded-lg transition-colors">
+                    <i class="fa-solid fa-power-off mr-2"></i> Sign Out
+                </button>
+            </header>
+
+            <h3 class="text-2xl font-semibold mb-6 text-center md:text-left"><i class="fa-solid fa-book-open mr-3 text-purple-400"></i>Select a Module</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- English -->
+                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('English')">
+                    <div class="w-20 h-20 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl">A</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">English</h3>
+                    <p class="text-slate-400 text-sm">Vocabulary & Phonics</p>
+                </div>
+                
+                <!-- Hindi -->
+                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('Hindi')">
+                    <div class="w-20 h-20 mx-auto bg-orange-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl">अ</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Hindi</h3>
+                    <p class="text-slate-400 text-sm">Shabd & Uchaaran</p>
+                </div>
+
+                <!-- Urdu -->
+                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('Urdu')">
+                    <div class="w-20 h-20 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl urdu-font" style="font-size: 2.5rem !important;">ا</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Urdu</h3>
+                    <p class="text-slate-400 text-sm">Alfaz & Maani</p>
+                </div>
+
+                <!-- Math Hub -->
+                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer relative overflow-hidden" onclick="showView('view-math-hub')">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10"></div>
+                    <div class="w-20 h-20 mx-auto bg-pink-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                        <i class="fa-solid fa-calculator text-3xl text-pink-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 relative z-10 text-pink-300">Mathematics</h3>
+                    <p class="text-slate-400 text-sm relative z-10">Practice, Tests & Videos</p>
+                </div>
+            </div>
+
+            <!-- Team & Copyright Footer -->
+            <div class="mt-20 pt-12 border-t border-white/10 text-center w-full">
+                <h4 class="text-sm text-slate-400 font-light mb-2 tracking-widest uppercase">A Web Development Project By The Students Of</h4>
+                <h3 class="text-3xl font-extrabold text-gradient mb-10">IQRA Academy of Excellence</h3>
+                
+                <div class="flex flex-wrap justify-center gap-10 mb-12">
+                    <!-- Faiz Khan (Project Head) -->
+                    <div class="flex flex-col items-center group">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-purple-500/50 group-hover:border-purple-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+                            <img src="https://i.ibb.co/kV41zHnn/faiz.jpg" alt="Faiz Khan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Faiz+Khan&amp;background=random&amp;color=fff'">
+                        </div>
+                        <span class="font-bold text-lg text-white">Faiz Khan</span>
+                        <span class="text-sm font-semibold text-purple-400 uppercase tracking-wide">Project Head</span>
+                    </div>
+                    
+                    <!-- Faisal Kamran -->
+                    <div class="flex flex-col items-center group">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-pink-500/50 group-hover:border-pink-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(236,72,153,0.4)]">
+                            <img src="https://i.ibb.co/DZhmwxr/image.jpg" alt="Faisal Kamran" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Faisal+Kamran&amp;background=random&amp;color=fff'">
+                        </div>
+                        <span class="font-bold text-lg text-white">Faisal Kamran</span>
+                        <span class="text-sm font-semibold text-pink-400 uppercase tracking-wide">Developer</span>
+                    </div>
+                    
+                    <!-- Ammar Qazi (Corrected Name) -->
+                    <div class="flex flex-col items-center group">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-500/50 group-hover:border-blue-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(59,130,246,0.4)]">
+                            <img src="https://i.ibb.co/TqtXV6pB/Whats-App-Image-2026-10-12-at-3-04-06-PM.jpg" alt="Ammar Qazi" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Ammar+Qazi&amp;background=random&amp;color=fff'">
+                        </div>
+                        <span class="font-bold text-lg text-white">Ammar Qazi</span>
+                        <span class="text-sm font-semibold text-blue-400 uppercase tracking-wide">Developer</span>
+                    </div>
+                    
+                    <!-- Ukasha -->
+                    <div class="flex flex-col items-center group">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-emerald-500/50 group-hover:border-emerald-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                            <img src="https://i.ibb.co/KcNdbNLJ/uuuu.jpg" alt="Ukasha" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Ukasha&amp;background=random&amp;color=fff'">
+                        </div>
+                        <span class="font-bold text-lg text-white">Ukasha</span>
+                        <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide">Developer</span>
+                    </div>
+                </div>
+                
+                <div class="bg-black/30 py-4 rounded-xl border border-white/10">
+                    <p class="text-slate-400 text-sm font-medium">
+                        &#169; 2026 IQRA Academy of Excellence. All Rights Reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-category" class="w-full max-w-4xl hidden animate-fade-in">
+        <div id="view-words" class="w-full hidden animate-fade-in">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="showView('view-category')" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-arrow-left mr-2"></i>Categories
+                </button>
+                <div class="bg-black/30 px-6 py-2 rounded-full border border-white/10">
+                    <span id="pageIndicator" class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">Page 1 / 10</span>
+                </div>
+            </div>
+
+            <div class="glass rounded-3xl p-6 md:p-10 relative">
+                <h2 id="wordTitle" class="text-3xl md:text-4xl font-bold mb-2 text-center"></h2>
+                <p class="text-center text-slate-400 mb-8"><i class="fa-solid fa-volume-high text-sm mr-2"></i>Tap card or click speaker to listen</p>
+                
+                <div id="wordContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Word cards injected here -->
+                </div>
+                
+                <div class="flex justify-between mt-10">
+                    <button id="prevBtn" onclick="changePage(-1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold">
+                        <i class="fa-solid fa-chevron-left mr-2"></i> Previous
+                    </button>
+                    <button id="nextBtn" onclick="changePage(1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold">
+                        Next <i class="fa-solid fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-math-hub" class="w-full max-w-5xl hidden animate-fade-in">
+            <button onclick="showView('view-dashboard')" class="mb-6 text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-arrow-left mr-2"></i>Back to Dashboard
+            </button>
+            
+            <div class="glass rounded-3xl p-10 text-center relative overflow-hidden">
+                <i class="fa-solid fa-square-root-variable absolute -right-10 -bottom-10 text-[15rem] text-white/5 rotate-12 pointer-events-none"></i>
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400">Math Arena</h2>
+                <p class="text-xl text-slate-300 mb-10">Master concepts or test your skills</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                    <!-- Gamified Test -->
+                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-pink-500/30" onclick="startMathSession()">
+                        <div class="bg-gradient-to-br from-pink-500 to-rose-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-pink-500/30">
+                            <i class="fa-solid fa-gamepad text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Play & Test</h3>
+                        <p class="text-slate-400 text-sm">10 Practice Qs + 10 Test Qs.</p>
+                    </div>
+                    <!-- Video Lessons -->
+                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-blue-500/30" onclick="showView('view-math-videos')">
+                        <div class="bg-gradient-to-br from-blue-500 to-cyan-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
+                            <i class="fa-brands fa-youtube text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Video Lessons</h3>
+                        <p class="text-slate-400 text-sm">Fractions & Decimals visually</p>
+                    </div>
+                    <!-- Tables (Pahade) -->
+                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-green-500/30" onclick="openTablesView()">
+                        <div class="bg-gradient-to-br from-green-500 to-emerald-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-500/30">
+                            <i class="fa-solid fa-list-ol text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Tables (पहाड़े)</h3>
+                        <p class="text-slate-400 text-sm">Learn 2 to 20 multiplication</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-math-videos" class="w-full max-w-4xl hidden animate-fade-in">
+            <button onclick="showView('view-math-hub')" class="mb-6 text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-arrow-left mr-2"></i>Back to Math Hub
+            </button>
+            <div class="glass rounded-3xl p-10 text-center">
+                <h2 class="text-4xl font-bold mb-8 text-gradient">Video Lessons</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/UPAJc7xypjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="p-4 bg-white/5"><h4 class="font-bold">Fractions & Decimals</h4><p class="text-xs text-slate-400 mt-1">Class 7 Math</p></div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
+                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/LFO07qWWtrs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="p-4 bg-white/5"><h4 class="font-bold">Decimals for Kids</h4><p class="text-xs text-slate-400 mt-1">Elementary Math</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-math" class="w-full max-w-4xl hidden animate-fade-in relative">
+            
+            <!-- Gamification HUD -->
+            <div class="flex flex-wrap justify-between items-center bg-black/40 p-4 rounded-2xl border border-white/10 backdrop-blur-md mb-6 shadow-lg">
+                <div class="flex items-center gap-4">
+                    <div class="bg-yellow-500/20 px-4 py-2 rounded-xl border border-yellow-500/50">
+                        <i class="fa-solid fa-star text-yellow-400 mr-2"></i><span id="xpScore" class="font-bold text-xl text-yellow-100">0 XP</span>
+                    </div>
+                    <div class="text-2xl tracking-widest text-orange-400" id="streakStars">☆☆☆</div>
+                </div>
+                
+                <div id="mathModeBadge" class="mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase animate-pulse-glow">
+                    Practice Mode
+                </div>
+            </div>
+
+            <div class="glass rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="quitMath()" class="text-slate-400 hover:text-white transition-colors text-sm">
+                        <i class="fa-solid fa-right-from-bracket mr-2"></i>Quit
+                    </button>
+                    <span id="mathProgress" class="bg-white/10 px-4 py-1 rounded-full text-sm font-semibold">Q: 1/10</span>
+                </div>
+
+                <!-- Playing Area -->
+                <div id="mathPlayArea">
+                    <div id="mathContainer" class="bg-black/30 border border-white/10 rounded-2xl p-10 mb-8 relative">
+                        <div id="mathQuestionText" class="text-5xl md:text-6xl font-extrabold tracking-tight"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="mathOptions">
+                        <!-- Options generated here -->
+                    </div>
+                    
+                    <div id="mathFeedback" class="mt-8 text-2xl font-bold min-h-[40px] transition-all"></div>
+                </div>
+
+                <!-- Report Card Area -->
+                <div id="mathReport" class="hidden py-10">
+                    <i class="fa-solid fa-trophy text-7xl text-yellow-400 mb-6 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]"></i>
+                    <h2 class="text-4xl font-bold mb-8">Test Completed!</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-10">
+                        <div class="bg-green-500/20 border border-green-500/50 rounded-2xl p-6">
+                            <div class="text-4xl font-bold text-green-400 mb-1" id="reportCorrect">0</div>
+                            <div class="text-sm text-green-200 uppercase tracking-wider">Correct</div>
+                        </div>
+                        <div class="bg-rose-500/20 border border-rose-500/50 rounded-2xl p-6">
+                            <div class="text-4xl font-bold text-rose-400 mb-1" id="reportWrong">0</div>
+                            <div class="text-sm text-rose-200 uppercase tracking-wider">Wrong</div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="startMathSession()" class="btn-primary px-8 py-3 rounded-xl font-bold text-lg mr-4">
+                        Play Again <i class="fa-solid fa-rotate-right ml-2"></i>
+                    </button>
+                    <button onclick="showView('view-math-hub')" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors font-bold text-lg">
+                        Back to Menu
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //<![CDATA[
+        // App State
+        let currentUser = { name: '', dob: '', classLvl: 1 };
+        let currentSubject = '';
+        let currentLetterCount = 2;
+        let currentPage = 0;
+        let wordsList = [];
+        
+        // Math Gamification State
+        let mathQuestionsDone = 0;
+        let testCorrectAnswers = 0;
+        let isTestMode = false;
+        let userXP = 0;
+        let currentStreak = 0;
+        let currentCorrectAnswer = null;
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
+            if(type === 'success') {
+                icon = '<i class="fa-solid fa-circle-check text-green-400"></i>';
+                toast.style.borderLeftColor = '#10b981';
+            } else if (type === 'error') {
+                icon = '<i class="fa-solid fa-circle-xmark text-rose-400"></i>';
+                toast.style.borderLeftColor = '#f43f5e';
+            } else if (type === 'warning') {
+                icon = '<i class="fa-solid fa-bolt text-yellow-400"></i>';
+                toast.style.borderLeftColor = '#eab308';
+            }
+
+            toast.innerHTML = `${icon} <span class="font-medium">${message}</span>`;
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 3.5s
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+
+        // View Router
+        function showView(viewId) {
+            document.querySelectorAll('body > div.container > div').forEach(el => {
+                if(el.id !== 'toast-container') {
+                    el.classList.add('hidden');
+                    el.classList.remove('animate-fade-in');
+                }
+            });
+            const view = document.getElementById(viewId);
+            view.classList.remove('hidden');
+            // Trigger animation reflow
+            void view.offsetWidth; 
+            view.classList.add('animate-fade-in');
+        }
+
+        function attemptLogin() {
+            const id = document.getElementById('loginId').value;
+            const pass = document.getElementById('loginPass').value;
+            
+            if (id === 'iqraaoe@123' && pass === '9665700883') {
+                showToast("Login Successful!", "success");
+                showView('view-onboarding');
+            } else {
+                showToast("Invalid Login ID or Password!", "error");
+            }
+        }
+
+        function startApp() {
+            const name = document.getElementById('studentName').value.trim();
+            const dob = document.getElementById('studentDOB').value;
+            const classLvl = document.getElementById('studentClass').value;
+
+            if(!name || !dob || !classLvl) {
+                showToast("Please fill all details correctly!", "error");
+                return;
+            }
+
+            currentUser = { name, dob, classLvl: parseInt(classLvl) };
+            
+            document.getElementById('welcomeMsg').innerText = name;
+            document.getElementById('dashClassLabel').innerText = classLvl;
+            
+            showToast(`Welcome aboard, ${name}!`, "success");
+            showView('view-dashboard');
+        }
+
+        function logout() {
+            // Reset state and clear inputs
+            currentUser = { name: '', dob: '', classLvl: 1 };
+            document.getElementById('loginId').value = '';
+            document.getElementById('loginPass').value = '';
+            
+            showToast("Logged out successfully.", "info");
+            showView('view-login');
+        }
+
+        const rhymingTemplates = {
+            'English': { 
+                2: [
+                    {w:"Am", m:"Hoon"}, {w:"Jam", m:"Murbba"}, {w:"Ram", m:"Bheda"}, {w:"Sam", m:"Naam"}, {w:"Yam", m:"Ratalu"},
+                    {w:"At", m:"Par"}, {w:"Bat", m:"Balla"}, {w:"Cat", m:"Billi"}, {w:"Hat", m:"Topi"}, {w:"Mat", m:"Chatai"},
+                    {w:"It", m:"Ye"}, {w:"Bit", m:"Tukda"}, {w:"Fit", m:"Swasth"}, {w:"Hit", m:"Maarna"}, {w:"Kit", m:"Saman"},
+                    {w:"Up", m:"Upar"}, {w:"Cup", m:"Pyala"}, {w:"Pup", m:"Pilla"}, {w:"In", m:"Andar"}, {w:"Pin", m:"Keel"}
+                ],
+                3: [
+                    {w:"Cap", m:"Topi"}, {w:"Map", m:"Naksha"}, {w:"Nap", m:"Jhapki"}, {w:"Tap", m:"Nal"}, {w:"Lap", m:"God"},
+                    {w:"Pen", m:"Kalam"}, {w:"Men", m:"Aadmi"}, {w:"Ten", m:"Das"}, {w:"Hen", m:"Murgi"}, {w:"Den", m:"Gufa"},
+                    {w:"Sun", m:"Suraj"}, {w:"Run", m:"Daudna"}, {w:"Fun", m:"Maza"}, {w:"Bun", m:"Pao"}, {w:"Gun", m:"Bandook"},
+                    {w:"Hop", m:"Kudna"}, {w:"Mop", m:"Pocha"}, {w:"Top", m:"Upar"}, {w:"Cop", m:"Police"}, {w:"Pop", m:"Awaaz"}
+                ]
+            },
+            'Hindi': {
+                2: [
+                    {w:"अब", m:"Ab", h:"अब"}, {w:"कब", m:"Kab", h:"कब"}, {w:"जब", m:"Jab", h:"जब"}, {w:"तब", m:"Tab", h:"तब"}, {w:"सब", m:"Sab", h:"सब"},
+                    {w:"कल", m:"Kal", h:"कल"}, {w:"जल", m:"Jal", h:"जल"}, {w:"थल", m:"Thal", h:"थल"}, {w:"नल", m:"Nal", h:"नल"}, {w:"पल", m:"Pal", h:"पल"},
+                    {w:"कर", m:"Kar", h:"कर"}, {w:"डर", m:"Dar", h:"डर"}, {w:"नर", m:"Nar", h:"नर"}, {w:"पर", m:"Par", h:"पर"}, {w:"मर", m:"Mar", h:"मर"},
+                    {w:"धन", m:"Dhan", h:"धन"}, {w:"मन", m:"Man", h:"मन"}, {w:"तन", m:"Tan", h:"तन"}, {w:"वन", m:"Van", h:"वन"}, {w:"जन", m:"Jan", h:"जन"}
+                ],
+                3: [
+                    {w:"अगर", m:"Agar", h:"अगर"}, {w:"मगर", m:"Magar", h:"मगर"}, {w:"नगर", m:"Nagar", h:"नगर"}, {w:"डगर", m:"Dagar", h:"डगर"}, {w:"सफर", m:"Safar", h:"सफर"},
+                    {w:"कमल", m:"Kamal", h:"कमल"}, {w:"अमल", m:"Amal", h:"अमल"}, {w:"नमक", m:"Namak", h:"नमक"}, {w:"चमक", m:"Chamak", h:"चमक"}, {w:"दमक", m:"Damak", h:"दमक"},
+                    {w:"पहल", m:"Pahal", h:"पहल"}, {w:"टहल", m:"Tahal", h:"टहल"}, {w:"महल", m:"Mahal", h:"महल"}, {w:"चहल", m:"Chahal", h:"चहल"}, {w:"कहर", m:"Kahar", h:"कहर"},
+                    {w:"पवन", m:"Pawan", h:"पवन"}, {w:"हवन", m:"Hawan", h:"हवन"}, {w:"भवन", m:"Bhawan", h:"भवन"}, {w:"नयन", m:"Nayan", h:"नयन"}, {w:"शयन", m:"Shayan", h:"शयन"}
+                ]
+            },
+            'Urdu': {
+                2: [
+                    {w:"اب", m:"Ab", h:"अब"}, {w:"کب", m:"Kab", h:"कब"}, {w:"جب", m:"Jab", h:"जब"}, {w:"تب", m:"Tab", h:"तब"}, {w:"سب", m:"Sab", h:"सब"},
+                    {w:"کل", m:"Kal", h:"कल"}, {w:"جل", m:"Jal", h:"जल"}, {w:"نل", m:"Nal", h:"नल"}, {w:"پل", m:"Pal", h:"پل"}, {w:"بل", m:"Bal", h:"बल"},
+                    {w:"کر", m:"Kar", h:"कर"}, {w:"ڈر", m:"Dar", h:"डर"}, {w:"پر", m:"Par", h:"पर"}, {w:"مر", m:"Mar", h:"مر"}, {w:"سر", m:"Sar", h:"सर"},
+                    {w:"دن", m:"Din", h:"दिन"}, {w:"گن", m:"Gin", h:"गिन"}, {w:"بن", m:"Bin", h:"बिन"}, {w:"سن", m:"Sun", h:"सुन"}, {w:"چن", m:"Chun", h:"चुन"}
+                ],
+                3: [
+                    {w:"اگر", m:"Agar", h:"अगर"}, {w:"مگر", m:"Magar", h:"मगर"}, {w:"نگر", m:"Nagar", h:"नगर"}, {w:"ڈگر", m:"Dagar", h:"डगर"}, {w:"سفر", m:"Safar", h:"सफर"},
+                    {w:"عمل", m:"Amal", h:"अमल"}, {w:"کمل", m:"Kamal", h:"कमल"}, {w:"محل", m:"Mahal", h:"महल"}, {w:"چہل", m:"Chahal", h:"चहल"}, {w:"پہل", m:"Pahal", h:"पहल"},
+                    {w:"نمک", m:"Namak", h:"नमक"}, {w:"چمک", m:"Chamak", h:"चमक"}, {w:"دمک", m:"Damak", h:"दमक"}, {w:"پلک", m:"Palak", h:"पलक"}, {w:"جھلک", m:"Jhalak", h:"झलक"},
+                    {w:"پون", m:"Pawan", h:"पवन"}, {w:"ہون", m:"Hawan", h:"हवन"}, {w:"بھون", m:"Bhawan", h:"भवन"}, {w:"نین", m:"Nayan", h:"नयन"}, {w:"شین", m:"Shayan", h:"शयन"}
+                ]
+            }
+        };
+
+        function generate100Words(lang, length) {
+            let list = [];
+            let baseArray = rhymingTemplates[lang][length];
+            // Loop array exactly 100 times to create 100 rhythmic items
+            for(let i=0; i<100; i++) {
+                let item = baseArray[i % baseArray.length];
+                list.push({ word: item.w, meaning: item.m, hindiPron: item.h });
+            }
+            return list;
+        }
+
+        function speakText(text, lang, hindiPron, element, event) {
+            if(event) event.stopPropagation();
+            
+            // Visual feedback on card
+            if(element) {
+                element.classList.add('animate-pulse-glow', 'border-purple-500');
+                setTimeout(() => element.classList.remove('animate-pulse-glow', 'border-purple-500'), 1500);
+            }
+
+            let textToSpeak = text;
+            let speechLang = 'en-US';
+
+            if (lang === 'Hindi') {
+                speechLang = 'hi-IN';
+            } else if (lang === 'Urdu') {
+                // FALLBACK HACK: Read Urdu using Hindi engine for absolute reliability
+                textToSpeak = hindiPron; 
+                speechLang = 'hi-IN';
+            }
+
+            const speech = new SpeechSynthesisUtterance(textToSpeak);
+            speech.lang = speechLang;
+            speech.rate = 0.8; 
+            speech.pitch = 1.1; // Slightly higher pitch for clarity
+            window.speechSynthesis.speak(speech);
+        }
+
+        function openCategory(subject) {
+            currentSubject = subject;
+            document.getElementById('categoryTitle').innerText = `${subject} Category`;
+            showView('view-category');
+        }
+
+        function loadWords(letters) {
+            currentLetterCount = letters;
+            wordsList = generate100Words(currentSubject, letters);
+            currentPage = 0;
+            document.getElementById('wordTitle').innerText = `${currentSubject} - ${letters} Letters`;
+            renderPage();
+            showView('view-words');
+        }
+
+        function renderPage() {
+            const container = document.getElementById('wordContainer');
+            container.innerHTML = '';
+            
+            const start = currentPage * 10;
+            const end = start + 10;
+            const pageData = wordsList.slice(start, end);
+
+            pageData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'glass-card p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group';
+                
+                // Add Nastaleeq class if Urdu
+                const urduClass = (currentSubject === 'Urdu') ? 'urdu-font' : '';
+
+                div.innerHTML = `
+                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="word-text ${urduClass} text-white mb-2 relative z-10 w-full text-center">
+                        ${item.word} 
+                    </div>
+                    <div class="meaning-text text-pink-300 font-semibold tracking-wide relative z-10">[ ${item.meaning} ]</div>
+                    
+                    <button class="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors z-20" onclick="speakText('${item.word}', '${currentSubject}', '${item.hindiPron}', this.parentElement, event)">
+                        <i class="fa-solid fa-volume-high text-white"></i>
+                    </button>
+                `;
+                
+                // Double tap fallback
+                div.ondblclick = () => speakText(item.word, currentSubject, item.hindiPron, div);
+                
+                container.appendChild(div);
+            });
+
+            document.getElementById('pageIndicator').innerText = `Page ${currentPage + 1} / 10`;
+            document.getElementById('prevBtn').disabled = (currentPage === 0);
+            document.getElementById('nextBtn').disabled = (currentPage === 9); // Total 10 pages for 100 words
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            if(currentPage < 0) currentPage = 0;
+            if(currentPage > 9) currentPage = 9;
+            renderPage();
+        }
+
+        function updateGamificationUI() {
+            document.getElementById('xpScore').innerText = `${userXP} XP`;
+            let stars = "";
+            for(let i=0; i<3; i++) {
+                stars += (i < currentStreak) ? "★" : "☆";
+            }
+            document.getElementById('streakStars').innerText = stars;
+        }
+
+        function createFloatingXP(amount, element) {
+            const floater = document.createElement('div');
+            floater.className = 'xp-float';
+            floater.innerText = `+${amount} XP`;
+            
+            // Position near the element
+            const rect = element.getBoundingClientRect();
+            floater.style.left = (rect.left + rect.width / 2 - 20) + 'px';
+            floater.style.top = (rect.top - 20) + 'px';
+            
+            document.body.appendChild(floater);
+            setTimeout(() => floater.remove(), 1000);
+        }
+
+        function fireConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function startMathSession() {
+            mathQuestionsDone = 0;
+            testCorrectAnswers = 0;
+            isTestMode = false;
+            currentStreak = 0;
+            
+            updateGamificationUI();
+            
+            const badge = document.getElementById('mathModeBadge');
+            badge.innerText = "Practice Mode";
+            badge.className = "mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase bg-blue-500/20 text-blue-300 border border-blue-500/50 animate-pulse-glow";
+            
+            document.getElementById('mathReport').classList.add('hidden');
+            document.getElementById('mathPlayArea').classList.remove('hidden');
+            
+            showView('view-math');
+            generateMathQuestion();
+        }
+
+        function quitMath() {
+            showView('view-math-hub');
+        }
+
+        function generateMathQuestion() {
+            const feedback = document.getElementById('mathFeedback');
+            feedback.innerHTML = "";
+            feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all opacity-0";
+            
+            // Mode Transitions
+            if (mathQuestionsDone === 10 && !isTestMode) {
+                showToast("Practice Complete! Entering EXAM MODE (No Hints).", "warning");
+                isTestMode = true;
+                mathQuestionsDone = 0;
+                currentStreak = 0;
+                updateGamificationUI();
+                
+                const badge = document.getElementById('mathModeBadge');
+                badge.innerText = "TEST MODE";
+                badge.className = "mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase bg-rose-500/20 text-rose-300 border border-rose-500/50 animate-pulse-glow";
+            } else if (mathQuestionsDone === 10 && isTestMode) {
+                showTestReport();
+                return;
+            }
+
+            mathQuestionsDone++;
+            document.getElementById('mathProgress').innerText = `Q: ${mathQuestionsDone} / 10`;
+
+            let question = "";
+            let correctAnswerStr = "";
+            let options = [];
+
+            // Class-Based Dynamic Logic
+            if (currentUser.classLvl <= 2) {
+                // Basic Addition/Subtraction
+                let a = Math.floor(Math.random() * 10) + 1;
+                let b = Math.floor(Math.random() * 10) + 1;
+                let op = Math.random() > 0.5 ? '+' : '-';
+                if(op === '-' && b > a) [a, b] = [b, a]; // Avoid negatives
+                question = `${a} ${op} ${b}`;
+                correctAnswerStr = (op === '+') ? (a + b).toString() : (a - b).toString();
+            } 
+            else if (currentUser.classLvl <= 4) {
+                // Multiplication / Simple Div
+                let a = Math.floor(Math.random() * 10) + 2;
+                let b = Math.floor(Math.random() * 5) + 2;
+                question = `${a} × ${b}`;
+                correctAnswerStr = (a * b).toString();
+            } 
+            else if (currentUser.classLvl === 5) {
+                // Decimals
+                let a = (Math.random() * 5 + 1).toFixed(1);
+                let b = (Math.random() * 3 + 1).toFixed(1);
+                question = `${a} + ${b}`;
+                correctAnswerStr = (parseFloat(a) + parseFloat(b)).toFixed(1).toString();
+            } 
+            else if (currentUser.classLvl <= 7) {
+                // Fractions
+                let n1 = Math.floor(Math.random() * 4) + 1;
+                let n2 = Math.floor(Math.random() * 4) + 1;
+                let den = Math.floor(Math.random() * 3) + 3; 
+                question = `${n1}/${den} + ${n2}/${den}`;
+                correctAnswerStr = `${n1 + n2}/${den}`;
+            }
+            else if (currentUser.classLvl <= 9) {
+                // Algebra
+                let x = Math.floor(Math.random() * 5) + 2;
+                let ans = Math.floor(Math.random() * 10) + 5;
+                question = `2x + ${x} = ${2 * ans + x} <br><span class="text-2xl text-pink-400">x = ?</span>`;
+                correctAnswerStr = ans.toString();
+            } else {
+                // Class 10 SSC - Quadratic Roots
+                let r1 = Math.floor(Math.random() * 5) + 1; 
+                let r2 = Math.floor(Math.random() * 4) + 1;
+                let sum = r1 + r2;
+                let prod = r1 * r2;
+                question = `Root of: x² - ${sum}x + ${prod} = 0`;
+                correctAnswerStr = r1.toString(); 
+            }
+
+            currentCorrectAnswer = correctAnswerStr;
+            options.push(correctAnswerStr);
+            
+            // Generate distinct wrong options based on data type
+            while(options.length < 4) {
+                let wrongAns = "";
+                if (correctAnswerStr.includes('/')) {
+                    // Fraction
+                    let parts = correctAnswerStr.split('/');
+                    let wNum = parseInt(parts[0]) + (Math.floor(Math.random()*4)-2);
+                    if(wNum <= 0) wNum = 1;
+                    wrongAns = `${wNum}/${parts[1]}`;
+                } else if (correctAnswerStr.includes('.')) {
+                    // Decimal
+                    wrongAns = (parseFloat(correctAnswerStr) + (Math.random()*2 - 1)).toFixed(1);
+                } else {
+                    // Integer
+                    wrongAns = (parseInt(correctAnswerStr) + Math.floor(Math.random() * 8) - 3).toString();
+                }
+                
+                if(wrongAns !== correctAnswerStr && !options.includes(wrongAns)) {
+                    options.push(wrongAns);
+                }
+            }
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+
+            document.getElementById('mathQuestionText').innerHTML = question;
+            const optionsDiv = document.getElementById('mathOptions');
+            optionsDiv.innerHTML = '';
+            
+            options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                // Prefix with A, B, C, D
+                const letter = String.fromCharCode(65 + index);
+                btn.className = 'bg-white/5 hover:bg-white/15 border border-white/10 p-6 rounded-xl text-2xl font-bold transition-all flex items-center justify-center gap-4 group';
+                btn.innerHTML = `<span class="text-slate-500 group-hover:text-purple-400 transition-colors">${letter}.</span> ${opt}`;
+                btn.onclick = (e) => checkMathAnswer(opt, btn, e);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkMathAnswer(selectedStr, btnElement, event) {
+            const feedback = document.getElementById('mathFeedback');
+            const buttons = document.querySelectorAll('#mathOptions button');
+            buttons.forEach(b => { b.disabled = true; b.classList.add('opacity-50', 'cursor-not-allowed'); });
+            
+            const isCorrect = (selectedStr === currentCorrectAnswer);
+
+            if (isTestMode) {
+                // Test Mode: Silent record, move fast
+                if(isCorrect) testCorrectAnswers++;
+                btnElement.classList.replace('bg-white/5', 'bg-white/30');
+                btnElement.classList.replace('opacity-50', 'opacity-100');
+                
+                setTimeout(generateMathQuestion, 500);
+            } else {
+                // Practice Mode: Gamified Feedback
+                feedback.classList.remove('opacity-0');
+                btnElement.classList.replace('opacity-50', 'opacity-100');
+                
+                if(isCorrect) {
+                    btnElement.classList.replace('bg-white/5', 'bg-green-500/30');
+                    btnElement.classList.replace('border-white/10', 'border-green-500/50');
+                    
+                    feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all text-green-400 flex items-center justify-center gap-2";
+                    feedback.innerHTML = '<i class="fa-solid fa-check-circle"></i> Brilliant!';
+                    
+                    // Gamification logic
+                    let xpGained = 10;
+                    currentStreak++;
+                    if(currentStreak > 3) currentStreak = 3;
+                    if(currentStreak === 3) xpGained += 15; // Combo Bonus
+                    
+                    userXP += xpGained;
+                    updateGamificationUI();
+                    createFloatingXP(xpGained, btnElement);
+                    
+                    setTimeout(generateMathQuestion, 1200);
+                } else {
+                    btnElement.classList.replace('bg-white/5', 'bg-rose-500/30');
+                    btnElement.classList.replace('border-white/10', 'border-rose-500/50');
+                    
+                    feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all text-rose-400 flex items-center justify-center gap-2";
+                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Correct answer was: ${currentCorrectAnswer}`;
+                    
+                    currentStreak = 0;
+                    updateGamificationUI();
+                    
+                    setTimeout(() => {
+                        buttons.forEach(b => { 
+                            b.disabled = false; 
+                            b.className = 'bg-white/5 hover:bg-white/15 border border-white/10 p-6 rounded-xl text-2xl font-bold transition-all flex items-center justify-center gap-4 group';
+                        });
+                        feedback.classList.add('opacity-0');
+                    }, 2000);
+                }
+            }
+        }
+
+        function showTestReport() {
+            document.getElementById('mathPlayArea').classList.add('hidden');
+            const reportDiv = document.getElementById('mathReport');
+            
+            document.getElementById('reportCorrect').innerText = testCorrectAnswers;
+            let wrongAns = 10 - testCorrectAnswers;
+            document.getElementById('reportWrong').innerText = wrongAns;
+            
+            reportDiv.classList.remove('hidden');
+            
+            // Calculate final rewards
+            if (testCorrectAnswers >= 7) {
+                fireConfetti();
+                let testBonus = testCorrectAnswers * 20;
+                userXP += testBonus;
+                showToast(`Incredible! You earned ${testBonus} Bonus XP!`, "success");
+            } else {
+                showToast(`Good effort! Keep practicing to get higher scores.`, "info");
+            }
+            updateGamificationUI();
+        }
+
+        // --- MATH TABLES LOGIC ---
+        let currentTableNumber = 2;
+        let isTablesInitialized = false;
+
+        function openTablesView() {
+            showView('view-tables');
+            if (!isTablesInitialized) {
+                initTables();
+                isTablesInitialized = true;
+            }
+            renderTable(currentTableNumber);
+        }
+
+        function initTables() {
+            const selectorDiv = document.getElementById('tableSelectors');
+            selectorDiv.innerHTML = '';
+            for (let i = 2; i <= 20; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'w-12 h-12 bg-white/5 hover:bg-green-500/30 hover:border-green-500/50 rounded-xl border border-white/10 font-bold text-lg transition-all';
+                btn.innerText = i;
+                btn.onclick = (e) => {
+                    // Highlight selected button
+                    document.querySelectorAll('#tableSelectors button').forEach(b => {
+                        b.classList.remove('bg-green-500/40', 'border-green-500');
+                        b.classList.add('bg-white/5', 'border-white/10');
+                    });
+                    btn.classList.remove('bg-white/5', 'border-white/10');
+                    btn.classList.add('bg-green-500/40', 'border-green-500');
+                    renderTable(i);
+                };
+                
+                // Set initial active state for 2
+                if(i === 2) {
+                    btn.classList.remove('bg-white/5', 'border-white/10');
+                    btn.classList.add('bg-green-500/40', 'border-green-500');
+                }
+                
+                selectorDiv.appendChild(btn);
+            }
+        }
+
+        function renderTable(num) {
+            currentTableNumber = num;
+            document.getElementById('currentTableTitle').innerText = `Table of ${num}`;
+            const contentDiv = document.getElementById('tableContent');
+            contentDiv.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const row = document.createElement('div');
+                row.className = "flex justify-center items-center gap-4 hover:scale-110 transition-transform cursor-default";
+                row.innerHTML = `
+                    <span class="text-slate-300 w-12 text-right">${num}</span> 
+                    <span class="text-pink-500 text-lg">×</span> 
+                    <span class="text-slate-300 w-8 text-center">${i}</span> 
+                    <span class="text-pink-500 text-lg">=</span> 
+                    <span class="text-white font-bold w-16 text-left">${num * i}</span>
+                `;
+                contentDiv.appendChild(row);
+            }
+        }
+
+        function speakCurrentTable() {
+            let textToSpeak = `The Table of ${currentTableNumber}. `;
+            for (let i = 1; i <= 10; i++) {
+                // Using "times" for clear text-to-speech pronunciation
+                textToSpeak += `${currentTableNumber} times ${i} is ${currentTableNumber * i}. `; 
+            }
+            const speech = new SpeechSynthesisUtterance(textToSpeak);
+            speech.lang = 'en-IN'; // Indian English accent
+            speech.rate = 0.8; // Slow down slightly for clarity
+            speech.pitch = 1.2;
+            window.speechSynthesis.speak(speech);
+            
+            showToast(`Reading Table of ${currentTableNumber} aloud...`, 'info');
+        }
+        //]]>
+    </script>
+</body>
+</html>
