@@ -65,6 +65,13 @@ body {
   line-height: 1.8;
 }
 
+.urdu-mark {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+  font-size: 2.75rem;
+  line-height: 1;
+  padding-top: 0.85rem;
+}
+
 .field {
   width: 100%;
   border-radius: 0.9rem;

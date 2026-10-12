@@ -79,7 +79,7 @@ export function DashboardHome() {
       <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {SUBJECTS.map((subject) => (
           <Link key={subject.key} href={`/languages/${subject.key}`} className="glass-card rounded-3xl p-6">
-            <div className={`text-5xl ${subject.key === "urdu" ? "urdu-font" : ""}`}>{subject.native}</div>
+            <div className={`flex h-16 items-end text-5xl ${subject.key === "urdu" ? "urdu-mark" : ""}`}>{subject.native}</div>
             <h2 className="mt-3 text-2xl font-bold">{subject.label}</h2>
             <p className="text-sm text-slate-400">{subject.blurb}</p>
           </Link>

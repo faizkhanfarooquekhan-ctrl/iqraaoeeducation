@@ -10,7 +10,7 @@ function Toasts() {
   const toasts = useAcademy((state) => state.toasts);
   const dismiss = useAcademy((state) => state.dismissToast);
   return (
-    <div className="pointer-events-none fixed right-4 top-4 z-[80] flex w-[min(100%-2rem,22rem)] flex-col gap-2">
+    <div className="pointer-events-none fixed right-4 top-20 z-[80] flex w-[min(100%-2rem,22rem)] flex-col gap-2">
       <AnimatePresence>
         {toasts.map((toast) => (
           <motion.div

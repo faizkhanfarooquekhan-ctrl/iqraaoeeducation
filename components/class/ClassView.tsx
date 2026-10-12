@@ -41,7 +41,7 @@ export function ClassView({ classLevel }: { classLevel: number }) {
       <div className="mt-4 grid gap-4 md:grid-cols-3">
         {SUBJECTS.map((subject) => (
           <Link key={subject.key} href={`/languages/${subject.key}`} className="glass-card rounded-3xl p-6">
-            <div className={`mb-3 text-4xl ${subject.key === "urdu" ? "urdu-font" : ""}`}>{subject.native}</div>
+            <div className={`mb-3 flex h-16 items-center text-4xl ${subject.key === "urdu" ? "urdu-mark" : ""}`}>{subject.native}</div>
             <h3 className="text-xl font-bold">{subject.label}</h3>
             <p className="mt-1 text-sm text-slate-400">2, 3, and 4 letter rhyme sets</p>
           </Link>

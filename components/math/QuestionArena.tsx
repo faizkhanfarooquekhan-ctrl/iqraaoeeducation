@@ -166,10 +166,10 @@ export function QuestionArena({
               const tone = !show
                 ? "border-white/10 bg-white/5"
                 : isAnswer
-                  ? "border-emerald-400/70 bg-emerald-500/20"
+                  ? "border-emerald-300 bg-emerald-500 text-white"
                   : isPicked
-                    ? "border-rose-400/70 bg-rose-500/20"
-                    : "border-white/10 bg-white/5 opacity-60";
+                    ? "border-rose-300 bg-rose-600 text-white"
+                    : "border-white/10 bg-white/5 opacity-40";
               return (
                 <button
                   key={option}

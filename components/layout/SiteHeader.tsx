@@ -19,8 +19,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#07060f]/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 via-pink-500 to-emerald-400 font-black text-white shadow-glow">
-            ا
+          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-violet-500 via-pink-500 to-emerald-400 text-sm font-black text-white shadow-glow">
+            IQ
           </span>
           <span>
             <span className="block text-sm font-black tracking-wide">IQRA AOE</span>

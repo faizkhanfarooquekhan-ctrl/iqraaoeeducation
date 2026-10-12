@@ -411,7 +411,7 @@ export const SUBJECTS: { key: SubjectKey; label: string; native: string; blurb: 
   {
     key: "urdu",
     label: "Urdu",
-    native: "ا",
+    native: "اردو",
     blurb: "الفاظ، قافیہ، اور ہندی آواز سے درست تلفظ۔",
     tint: "from-emerald-400/30 to-teal-600/10",
   },
