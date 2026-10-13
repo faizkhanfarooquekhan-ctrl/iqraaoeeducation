@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iqra AEO Care - दवाई की सही जानकारी</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans Devanagari", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
+        }
+
+        .search-container {
+            text-align: center;
+            margin: 30px auto 10px;
+            max-width: 640px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 15px 18px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            border: 2px solid #ccc;
+            border-radius: 30px 0 0 30px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        .search-container button {
+            width: 25%;
+            min-width: 110px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .suggestions {
+            max-width: 640px;
+            margin: 0 auto 20px;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .suggestions p {
+            margin: 0 0 8px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .chip {
+            display: inline-block;
+            margin: 4px;
+            padding: 6px 14px;
+            border: 1px solid #007bff;
+            background: #fff;
+            color: #007bff;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .chip:hover {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .result-container {
+            max-width: 800px;
+            margin: 0 auto 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .medicine-title {
+            color: #007bff;
+            font-size: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin: 0 0 20px;
+        }
+
+        .info-card {
+            background-color: #f9f9f9;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .info-card h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .info-card p {
+            margin: 5px 0 0;
+            line-height: 1.6;
+        }
+
+        .warning-card {
+            border-left-color: #ffc107;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            max-width: 640px;
+            padding: 0 20px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 560px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-container input[type="text"],
+            .search-container button {
+                width: 100%;
+                border-radius: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Iqra AEO Care</h1>
+        <p>हर ज़रूरी दवाई की आसान और सटीक जानकारी</p>
+        <a class="home-link" href="index.html">IQRA Academy पोर्टल पर वापस जाएँ</a>
+    </header>
+
+    <form class="search-container" onsubmit="searchMedicine(); return false;">
+        <input type="text" id="searchInput" placeholder="दवाई का नाम टाइप करें (जैसे: Calpol)..." aria-label="दवाई का नाम">
+        <button type="submit">सर्च करें</button>
+    </form>
+
+    <div class="suggestions">
+        <p>उपलब्ध दवाइयाँ:</p>
+        <button type="button" class="chip" data-query="calpol">Calpol</button>
+        <button type="button" class="chip" data-query="combiflam">Combiflam</button>
+        <button type="button" class="chip" data-query="pudin hara">Pudin Hara</button>
+    </div>
+
+    <div id="errorMessage" class="error-message" role="alert">
+        माफ़ कीजिए, यह दवाई हमारे डेटाबेस में नहीं मिली। कृपया नाम चेक करें (जैसे: calpol)।
+    </div>
+
+    <div id="resultContainer" class="result-container">
+        <h2 id="medName" class="medicine-title"></h2>
+
+        <div class="info-card">
+            <h3>किस काम आती है (उपयोग)?</h3>
+            <p id="medUse"></p>
+        </div>
+
+        <div class="info-card">
+            <h3>कौन ले सकता है (उम्र)?</h3>
+            <p id="medAgeGroup"></p>
+        </div>
+
+        <div class="info-card">
+            <h3>कब ले सकते हैं?</h3>
+            <p id="medTiming"></p>
+        </div>
+
+        <div class="info-card">
+            <h3>क्या फायदे हैं?</h3>
+            <p id="medBenefits"></p>
+        </div>
+
+        <div class="info-card">
+            <h3>क्या नुकसान (Side Effects) हो सकते हैं?</h3>
+            <p id="medSideEffects"></p>
+        </div>
+
+        <div class="info-card warning-card">
+            <h3>ज़रूरी चेतावनी (Disclaimer)</h3>
+            <p>यह जानकारी केवल मालूमात के लिए है। किसी भी दवाई का इस्तेमाल करने से पहले अपने डॉक्टर से सलाह ज़रूर लें।</p>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Iqra AEO Care. यह मेडिकल सलाह नहीं है।
+    </footer>
+
+    <script>
+        const medicineDatabase = {
+            calpol: {
+                name: "Calpol (Paracetamol)",
+                use: "यह मुख्य रूप से बुखार (Fever) कम करने और हल्के से मध्यम दर्द (जैसे सिरदर्द, दांत दर्द, बदन दर्द) से राहत पाने के लिए इस्तेमाल होती है।",
+                ageGroup: "इसे बच्चे (शिशुओं के लिए ड्रॉप्स/सिरप), जवान और बूढ़े सभी ले सकते हैं। लेकिन हर उम्र के लिए इसकी मात्रा (Dose) अलग-अलग होती है।",
+                timing: "इसे ज़रूरत पड़ने पर, खाना खाने के बाद लिया जा सकता है ताकि पेट खराब न हो। दो खुराकों के बीच कम से कम 4-6 घंटे का गैप होना चाहिए।",
+                benefits: "बुखार को जल्दी और सुरक्षित तरीके से कम करती है और दर्द से जल्दी आराम दिलाती है।",
+                sideEffects: "आमतौर पर यह सुरक्षित है, लेकिन ज्यादा मात्रा (Overdose) लेने से लीवर (Liver) को भारी नुकसान हो सकता है। कभी-कभी उल्टी या एलर्जी हो सकती है।"
+            },
+            combiflam: {
+                name: "Combiflam",
+                use: "यह एक दर्द निवारक (Painkiller) है। इसका इस्तेमाल सूजन, मांसपेशियों में दर्द, जोड़ों के दर्द और बुखार के लिए होता है।",
+                ageGroup: "मुख्य रूप से वयस्कों (Adults) के लिए। बच्चों को बिना डॉक्टर की सलाह के बिल्कुल नहीं देनी चाहिए।",
+                timing: "हमेशा खाना खाने के बाद लेनी चाहिए, खाली पेट लेने से गैस या अल्सर का खतरा रहता है।",
+                benefits: "दर्द और सूजन से बहुत जल्दी राहत दिलाती है।",
+                sideEffects: "एसिडिटी, सीने में जलन, पेट दर्द और लम्बे समय तक लेने पर किडनी पर बुरा असर पड़ सकता है।"
+            },
+            pudinhara: {
+                name: "Pudin Hara",
+                use: "पेट में गैस, बदहज़मी (Indigestion), और पेट दर्द से राहत पाने के लिए।",
+                ageGroup: "12 साल से बड़े बच्चे और वयस्क इसे ले सकते हैं। छोटे बच्चों के लिए नहीं है।",
+                timing: "पेट खराब होने पर, गैस महसूस होने पर या भारी खाना खाने के बाद इसे पानी के साथ ले सकते हैं।",
+                benefits: "यह आयुर्वेदिक (पुदीना आधारित) है, पेट को ठंडक पहुंचाती है और गैस को तुरंत बाहर निकालती है।",
+                sideEffects: "इसके बहुत कम नुकसान हैं। कुछ लोगों को गले में हल्की जलन महसूस हो सकती है।"
+            }
+        };
+
+        const aliases = {
+            paracetamol: "calpol",
+            crocin: "calpol",
+            dolo: "calpol",
+            pudin: "pudinhara",
+            pudinhara: "pudinhara",
+            "pudin hara": "pudinhara",
+            mint: "pudinhara"
+        };
+
+        function normalizeQuery(value) {
+            return value.trim().toLowerCase().replace(/[^a-z0-9\u0900-\u097F]+/g, "");
+        }
+
+        function findMedicine(rawInput) {
+            const compact = normalizeQuery(rawInput);
+            const spaced = rawInput.trim().toLowerCase().replace(/\s+/g, " ");
+
+            if (medicineDatabase[compact]) {
+                return medicineDatabase[compact];
+            }
+            if (aliases[compact]) {
+                return medicineDatabase[aliases[compact]];
+            }
+            if (aliases[spaced]) {
+                return medicineDatabase[aliases[spaced]];
+            }
+            return null;
+        }
+
+        function searchMedicine() {
+            const input = document.getElementById("searchInput").value;
+            const resultContainer = document.getElementById("resultContainer");
+            const errorMessage = document.getElementById("errorMessage");
+
+            if (input.trim() === "") {
+                resultContainer.style.display = "none";
+                errorMessage.style.display = "none";
+                return;
+            }
+
+            const med = findMedicine(input);
+            if (med) {
+                document.getElementById("medName").textContent = med.name;
+                document.getElementById("medUse").textContent = med.use;
+                document.getElementById("medAgeGroup").textContent = med.ageGroup;
+                document.getElementById("medTiming").textContent = med.timing;
+                document.getElementById("medBenefits").textContent = med.benefits;
+                document.getElementById("medSideEffects").textContent = med.sideEffects;
+                resultContainer.style.display = "block";
+                errorMessage.style.display = "none";
+                resultContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+                resultContainer.style.display = "none";
+                errorMessage.style.display = "block";
+            }
+        }
+
+        document.querySelectorAll(".chip").forEach((chip) => {
+            chip.addEventListener("click", () => {
+                document.getElementById("searchInput").value = chip.dataset.query;
+                searchMedicine();
+            });
+        });
+    </script>
+</body>
+</html>
