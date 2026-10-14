@@ -1,0 +1,6 @@
+{
+  "name": "IQRA AOE Education",
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "ports": [5173]
+}

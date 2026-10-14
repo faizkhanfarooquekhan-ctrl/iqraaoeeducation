@@ -1,0 +1,20 @@
+{
+  "name": "iqra-aoe-education",
+  "private": true,
+  "description": "IQRA AOE — Google Apps Script academy web app",
+  "scripts": {
+    "dev": "node .cursor/dev/serve.mjs",
+    "test:smoke": "node .cursor/dev/e2e-smoke.mjs",
+    "clasp:login": "clasp login --no-localhost",
+    "clasp:push": "clasp push",
+    "clasp:open": "clasp open",
+    "validate:manifest": "node -e \"JSON.parse(require('fs').readFileSync('appsscript.json','utf8')); console.log('appsscript.json OK');\""
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.5.0",
+    "puppeteer-core": "^24.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
