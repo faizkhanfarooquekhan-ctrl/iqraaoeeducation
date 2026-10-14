@@ -116,24 +116,51 @@ function urdu(title, rows) {
 
 function $(id) { return document.getElementById(id); }
 
+function showBootError(message) {
+  const box = $('boot-error');
+  if (!box) return;
+  if (!message) {
+    box.style.display = 'none';
+    box.textContent = '';
+    return;
+  }
+  box.style.display = 'block';
+  box.textContent = message;
+}
+
 function init() {
-  fillClassSelect($('new-class'), '5');
-  fillClassSelect($('edit-class'), '5');
-  const nextYear = new Date();
-  nextYear.setFullYear(nextYear.getFullYear() + 1);
-  $('new-expiry').value = nextYear.toISOString().slice(0, 10);
-  bindEvents();
-  startParticles();
-  restoreSession();
+  try {
+    fillClassSelect($('new-class'), '5');
+    fillClassSelect($('edit-class'), '5');
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    $('new-expiry').value = nextYear.toISOString().slice(0, 10);
+    bindEvents();
+    startParticles();
+    restoreSession();
+  } catch (err) {
+    showBootError('IQRA AOE could not start: ' + (err && err.message ? err.message : err));
+  }
 }
 
 function bindEvents() {
-  $('login-form').addEventListener('submit', onLogin);
+  $('login-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+  });
+  ['login-id', 'login-pass'].forEach(function (id) {
+    $(id).addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        iqraLogin();
+      }
+    });
+  });
   $('toggle-pass').addEventListener('click', function () {
     const input = $('login-pass');
     const show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    this.innerHTML = show ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
+    var eye = this.querySelector('i');
+    if (eye) eye.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
   });
   $('admin-logout').addEventListener('click', logout);
   $('student-logout').addEventListener('click', logout);
@@ -193,7 +220,10 @@ async function callApi(action, payload) {
       google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(function (err) {
-          reject(new Error(err && err.message ? err.message : 'The academy server could not be reached.'));
+          var message = 'The academy server could not be reached.';
+          if (err && err.message) message = err.message;
+          else if (typeof err === 'string' && err) message = err;
+          reject(new Error(message));
         })
         .api(action, payload || {});
     });
@@ -226,15 +256,26 @@ function toast(message, type) {
   setTimeout(function () { el.remove(); }, 3800);
 }
 
+function readToken() {
+  try { return sessionStorage.getItem('iqra_token') || ''; } catch (err) { return ''; }
+}
+
+function writeToken(token) {
+  try {
+    if (token) sessionStorage.setItem('iqra_token', token);
+    else sessionStorage.removeItem('iqra_token');
+  } catch (err) { /* sandboxed web-app iframes can block storage */ }
+}
+
 async function restoreSession() {
-  const token = sessionStorage.getItem('iqra_token') || '';
+  const token = readToken();
   const canCall = typeof window.IQRA_MOCK === 'function' || (window.google && google.script && google.script.run);
   if (!token || !canCall) return;
   try {
     const result = await callApi('session', { token: token });
     applySession(result);
   } catch (err) {
-    sessionStorage.removeItem('iqra_token');
+    writeToken('');
     if (String(err.message).indexOf('Expired') !== -1) toast(err.message, 'error');
   }
 }
@@ -243,7 +284,7 @@ function applySession(result) {
   state.token = result.token;
   state.role = result.role;
   state.profile = result.profile;
-  sessionStorage.setItem('iqra_token', result.token);
+  writeToken(result.token);
   if (result.role === 'admin') {
     showView('view-admin');
     refreshStudents();
@@ -253,8 +294,13 @@ function applySession(result) {
   }
 }
 
-async function onLogin(event) {
-  event.preventDefault();
+function iqraLogin() {
+  loginNow();
+  return false;
+}
+window.iqraLogin = iqraLogin;
+
+async function loginNow() {
   try {
     const result = await withBusy('Signing in…', function () {
       return callApi('login', {
@@ -263,10 +309,13 @@ async function onLogin(event) {
       });
     });
     $('login-pass').value = '';
+    showBootError('');
     applySession(result);
     toast(result.role === 'admin' ? 'Admin signed in.' : 'Welcome, ' + result.profile.studentName + '.', 'success');
   } catch (err) {
-    toast(err.message, 'error');
+    const message = err && err.message ? err.message : 'Sign in failed.';
+    toast(message, 'error');
+    showBootError(message);
   }
 }
 
@@ -275,7 +324,7 @@ async function logout() {
   state.token = '';
   state.role = '';
   state.profile = null;
-  sessionStorage.removeItem('iqra_token');
+  writeToken('');
   showView('view-login');
   if (token) {
     try { await callApi('logout', { token: token }); } catch (err) { /* session already gone */ }
@@ -503,7 +552,9 @@ function renderFamily() {
     speaker.type = 'button';
     speaker.className = 'speak';
     speaker.setAttribute('aria-label', 'Listen');
-    speaker.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    var speakerIcon = document.createElement('i');
+    speakerIcon.className = 'fa-solid fa-volume-high';
+    speaker.appendChild(speakerIcon);
     const play = function (event) {
       if (event) event.stopPropagation();
       speak(item.speak, state.language);

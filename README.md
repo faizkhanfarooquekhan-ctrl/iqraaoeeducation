@@ -71,7 +71,11 @@ Copy each file into the Apps Script project under the same name:
 10. Execute as: **Me**.
 11. Who has access: **Anyone**. Students then sign in with the academy ID and password, without a Google account prompt.
 12. Click **Deploy**, authorize the spreadsheet permission, and copy the web app URL.
-13. After every code change: Deploy → Manage deployments → pencil → New version → Deploy. The URL stays the same.
+13. After every code change: Deploy → Manage deployments → pencil → **New version** → Deploy. The URL stays the same. An old deployment keeps serving the previous code.
+
+### If login turns into a blank white page
+
+The sign-in form must not reload the web app. Reload is what Apps Script replaces with a white page. Use the latest `Index.html` and `JS.html`, then deploy a **new version**. In the editor, run `initializeSheets` once and accept the spreadsheet permission before you test login. A wrong ID or password stays on the dark page and shows the error at the top.
 
 Open the URL in a browser. `/dev` links are only for the script owner. Share the `/exec` URL.
 

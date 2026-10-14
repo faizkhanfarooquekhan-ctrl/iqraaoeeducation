@@ -22,11 +22,23 @@ var ADMIN_HEADERS = ['AdminID', 'AdminPass'];
 var SESSION_SECONDS = 21600;
 
 function doGet() {
-  return HtmlService.createTemplateFromFile('Index')
-    .evaluate()
-    .setTitle('IQRA AOE — Academy of Excellence')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  try {
+    return HtmlService.createTemplateFromFile('Index')
+      .evaluate()
+      .setTitle('IQRA AOE — Academy of Excellence')
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  } catch (err) {
+    return HtmlService.createHtmlOutput(
+      '<h1 style="font-family:sans-serif">IQRA AOE could not start</h1><p>' +
+      String(err && err.message ? err.message : err) +
+      '</p><p>In the Apps Script editor, run initializeSheets, then deploy a new web app version.</p>'
+    );
+  }
+}
+
+function doPost() {
+  return doGet();
 }
 
 function include(filename) {
