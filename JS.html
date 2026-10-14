@@ -1,0 +1,1224 @@
+var state = {
+  token: '',
+  role: '',
+  student: null,
+  students: [],
+  editing: false,
+  language: 'English',
+  letters: 2,
+  page: 0,
+  table: 2,
+  quiz: null
+};
+
+var PAGE_SIZE = 6;
+
+var FOCUS = {
+  1: 'Numbers, addition and subtraction within 20',
+  2: 'Addition and subtraction within 50',
+  3: 'Multiplication tables and equal groups',
+  4: 'Division and remainders',
+  5: 'Decimals, factors and like fractions',
+  6: 'LCM, HCF, fractions and decimals',
+  7: 'Unlike fractions, decimals, LCM and HCF',
+  8: 'Linear equations, area and angles',
+  9: 'Algebra, Pythagoras and geometric facts',
+  10: 'Quadratics, progressions, circles and trigonometry'
+};
+
+var LENGTHS = {
+  English: [
+    { n: 2, title: '2-letter words', copy: 'Rhymes such as be, he, me and go, no, so' },
+    { n: 3, title: '3-letter words', copy: 'Rhymes such as cat, hat, mat and sun, run, fun' },
+    { n: 4, title: '4-letter words', copy: 'Rhymes such as rain, pain, main and book, cook, look' }
+  ],
+  Hindi: [
+    { n: 2, title: 'दो अक्षर', copy: 'अब, कब, जब और कल, जल, नल' },
+    { n: 3, title: 'तीन अक्षर', copy: 'अगर, मगर, नगर और कमल, नमक, महल' },
+    { n: 4, title: 'चार अक्षर', copy: 'दूधवाला, विद्यालय, अधिकार' }
+  ],
+  Urdu: [
+    { n: 2, title: 'دو حروف', copy: 'اب، کب، جب اور کل، جل، نل' },
+    { n: 3, title: 'تین حروف', copy: 'اگر، مگر، نگر اور کمل، نمک، محل' },
+    { n: 4, title: 'چار حروف', copy: 'کتاب، حساب، جواب اور پانی، رانی، دانی' }
+  ]
+};
+
+var WORDS = {
+  English: {
+    2: [
+      { word: 'be', meaning: 'होना', rhyme: 'be · he · me · we' },
+      { word: 'he', meaning: 'वह', rhyme: 'be · he · me · we' },
+      { word: 'me', meaning: 'मुझे', rhyme: 'be · he · me · we' },
+      { word: 'we', meaning: 'हम', rhyme: 'be · he · me · we' },
+      { word: 'go', meaning: 'जाना', rhyme: 'go · no · so' },
+      { word: 'no', meaning: 'नहीं', rhyme: 'go · no · so' },
+      { word: 'so', meaning: 'इसलिए', rhyme: 'go · no · so' },
+      { word: 'do', meaning: 'करना', rhyme: 'do · to' },
+      { word: 'to', meaning: 'की ओर', rhyme: 'do · to' },
+      { word: 'by', meaning: 'के पास', rhyme: 'by · my' },
+      { word: 'my', meaning: 'मेरा', rhyme: 'by · my' },
+      { word: 'am', meaning: 'हूँ', rhyme: 'am' },
+      { word: 'an', meaning: 'एक', rhyme: 'an · in · on' },
+      { word: 'in', meaning: 'अंदर', rhyme: 'an · in · on' },
+      { word: 'on', meaning: 'पर', rhyme: 'an · in · on' },
+      { word: 'up', meaning: 'ऊपर', rhyme: 'up · us' },
+      { word: 'us', meaning: 'हमें', rhyme: 'up · us' },
+      { word: 'it', meaning: 'यह', rhyme: 'it · at' },
+      { word: 'at', meaning: 'पर', rhyme: 'it · at' }
+    ],
+    3: [
+      { word: 'cat', meaning: 'बिल्ली', rhyme: 'at' },
+      { word: 'hat', meaning: 'टोपी', rhyme: 'at' },
+      { word: 'mat', meaning: 'चटाई', rhyme: 'at' },
+      { word: 'bat', meaning: 'बल्ला', rhyme: 'at' },
+      { word: 'rat', meaning: 'चूहा', rhyme: 'at' },
+      { word: 'sat', meaning: 'बैठा', rhyme: 'at' },
+      { word: 'pen', meaning: 'कलम', rhyme: 'en' },
+      { word: 'hen', meaning: 'मुर्गी', rhyme: 'en' },
+      { word: 'ten', meaning: 'दस', rhyme: 'en' },
+      { word: 'men', meaning: 'आदमी', rhyme: 'en' },
+      { word: 'sun', meaning: 'सूरज', rhyme: 'un' },
+      { word: 'run', meaning: 'दौड़ना', rhyme: 'un' },
+      { word: 'fun', meaning: 'मज़ा', rhyme: 'un' },
+      { word: 'bun', meaning: 'बन', rhyme: 'un' },
+      { word: 'cap', meaning: 'टोपी', rhyme: 'ap' },
+      { word: 'map', meaning: 'नक्शा', rhyme: 'ap' },
+      { word: 'tap', meaning: 'नल', rhyme: 'ap' },
+      { word: 'hop', meaning: 'कूद', rhyme: 'op' },
+      { word: 'mop', meaning: 'पोछा', rhyme: 'op' },
+      { word: 'top', meaning: 'शीर्ष', rhyme: 'op' },
+      { word: 'dog', meaning: 'कुत्ता', rhyme: 'og' },
+      { word: 'log', meaning: 'लकड़ी', rhyme: 'og' },
+      { word: 'fog', meaning: 'कोहरा', rhyme: 'og' },
+      { word: 'pin', meaning: 'पिन', rhyme: 'in' },
+      { word: 'tin', meaning: 'टिन', rhyme: 'in' },
+      { word: 'win', meaning: 'जीत', rhyme: 'in' }
+    ],
+    4: [
+      { word: 'rain', meaning: 'बारिश', rhyme: 'ain' },
+      { word: 'pain', meaning: 'दर्द', rhyme: 'ain' },
+      { word: 'main', meaning: 'मुख्य', rhyme: 'ain' },
+      { word: 'gain', meaning: 'लाभ', rhyme: 'ain' },
+      { word: 'book', meaning: 'किताब', rhyme: 'ook' },
+      { word: 'cook', meaning: 'पकाना', rhyme: 'ook' },
+      { word: 'look', meaning: 'देखना', rhyme: 'ook' },
+      { word: 'hook', meaning: 'अंकुड़ा', rhyme: 'ook' },
+      { word: 'cake', meaning: 'केक', rhyme: 'ake' },
+      { word: 'lake', meaning: 'झील', rhyme: 'ake' },
+      { word: 'make', meaning: 'बनाना', rhyme: 'ake' },
+      { word: 'take', meaning: 'लेना', rhyme: 'ake' },
+      { word: 'ball', meaning: 'गेंद', rhyme: 'all' },
+      { word: 'call', meaning: 'बुलाना', rhyme: 'all' },
+      { word: 'fall', meaning: 'गिरना', rhyme: 'all' },
+      { word: 'wall', meaning: 'दीवार', rhyme: 'all' },
+      { word: 'king', meaning: 'राजा', rhyme: 'ing' },
+      { word: 'ring', meaning: 'अंगूठी', rhyme: 'ing' },
+      { word: 'sing', meaning: 'गाना', rhyme: 'ing' },
+      { word: 'wing', meaning: 'पंख', rhyme: 'ing' },
+      { word: 'moon', meaning: 'चाँद', rhyme: 'oon' },
+      { word: 'soon', meaning: 'जल्दी', rhyme: 'oon' },
+      { word: 'noon', meaning: 'दोपहर', rhyme: 'oon' },
+      { word: 'lamp', meaning: 'दीपक', rhyme: 'amp' },
+      { word: 'camp', meaning: 'शिविर', rhyme: 'amp' },
+      { word: 'gold', meaning: 'सोना', rhyme: 'old' },
+      { word: 'cold', meaning: 'ठंडा', rhyme: 'old' },
+      { word: 'hold', meaning: 'पकड़ना', rhyme: 'old' }
+    ]
+  },
+  Hindi: {
+    2: [
+      { word: 'अब', meaning: 'now', rhyme: 'अब · कब · जब' },
+      { word: 'कब', meaning: 'when', rhyme: 'अब · कब · जब' },
+      { word: 'जब', meaning: 'when', rhyme: 'अब · कब · जब' },
+      { word: 'तब', meaning: 'then', rhyme: 'अब · कब · जब' },
+      { word: 'सब', meaning: 'all', rhyme: 'अब · कब · जब' },
+      { word: 'कल', meaning: 'tomorrow', rhyme: 'कल · जल · नल' },
+      { word: 'जल', meaning: 'water', rhyme: 'कल · जल · नल' },
+      { word: 'नल', meaning: 'tap', rhyme: 'कल · जल · नल' },
+      { word: 'पल', meaning: 'moment', rhyme: 'कल · जल · नल' },
+      { word: 'बल', meaning: 'strength', rhyme: 'कल · जल · नल' },
+      { word: 'कर', meaning: 'hand', rhyme: 'कर · डर · पर' },
+      { word: 'डर', meaning: 'fear', rhyme: 'कर · डर · पर' },
+      { word: 'नर', meaning: 'man', rhyme: 'कर · डर · पर' },
+      { word: 'पर', meaning: 'on', rhyme: 'कर · डर · पर' },
+      { word: 'मन', meaning: 'mind', rhyme: 'मन · धन · तन' },
+      { word: 'धन', meaning: 'wealth', rhyme: 'मन · धन · तन' },
+      { word: 'तन', meaning: 'body', rhyme: 'मन · धन · तन' },
+      { word: 'वन', meaning: 'forest', rhyme: 'मन · धन · तन' }
+    ],
+    3: [
+      { word: 'अगर', meaning: 'if', rhyme: 'अगर · मगर · नगर' },
+      { word: 'मगर', meaning: 'but', rhyme: 'अगर · मगर · नगर' },
+      { word: 'नगर', meaning: 'city', rhyme: 'अगर · मगर · नगर' },
+      { word: 'डगर', meaning: 'path', rhyme: 'अगर · मगर · नगर' },
+      { word: 'सफर', meaning: 'journey', rhyme: 'अगर · मगर · नगर' },
+      { word: 'कमल', meaning: 'lotus', rhyme: 'कमल · अमल' },
+      { word: 'अमल', meaning: 'deed', rhyme: 'कमल · अमल' },
+      { word: 'नमक', meaning: 'salt', rhyme: 'नमक · चमक' },
+      { word: 'चमक', meaning: 'shine', rhyme: 'नमक · चमक' },
+      { word: 'दमक', meaning: 'glow', rhyme: 'नमक · चमक' },
+      { word: 'महल', meaning: 'palace', rhyme: 'महल · पहल' },
+      { word: 'पहल', meaning: 'initiative', rhyme: 'महल · पहल' },
+      { word: 'टहल', meaning: 'stroll', rhyme: 'महल · पहल' },
+      { word: 'पवन', meaning: 'breeze', rhyme: 'पवन · भवन' },
+      { word: 'हवन', meaning: 'havan', rhyme: 'पवन · भवन' },
+      { word: 'भवन', meaning: 'building', rhyme: 'पवन · भवन' },
+      { word: 'मकान', meaning: 'house', rhyme: 'मकान · कमरा' },
+      { word: 'कमरा', meaning: 'room', rhyme: 'मकान · कमरा' }
+    ],
+    4: [
+      { word: 'दूधवाला', meaning: 'milkman', rhyme: 'वाला' },
+      { word: 'फलवाला', meaning: 'fruit seller', rhyme: 'वाला' },
+      { word: 'चायवाला', meaning: 'tea seller', rhyme: 'वाला' },
+      { word: 'जूतावाला', meaning: 'cobbler', rhyme: 'वाला' },
+      { word: 'अस्पताल', meaning: 'hospital', rhyme: 'आलय' },
+      { word: 'विद्यालय', meaning: 'school', rhyme: 'आलय' },
+      { word: 'न्यायालय', meaning: 'court', rhyme: 'आलय' },
+      { word: 'परिवार', meaning: 'family', rhyme: 'आर' },
+      { word: 'अधिकार', meaning: 'right', rhyme: 'कार' },
+      { word: 'सरकार', meaning: 'government', rhyme: 'कार' },
+      { word: 'इकरार', meaning: 'promise', rhyme: 'रार' },
+      { word: 'हिन्दुस्तान', meaning: 'India', rhyme: 'स्तान' }
+    ]
+  },
+  Urdu: {
+    2: [
+      { word: 'اب', speak: 'अब', meaning: 'now', rhyme: 'اب · کب · جب' },
+      { word: 'کب', speak: 'कब', meaning: 'when', rhyme: 'اب · کب · جب' },
+      { word: 'جب', speak: 'जब', meaning: 'when', rhyme: 'اب · کب · جب' },
+      { word: 'تب', speak: 'तब', meaning: 'then', rhyme: 'اب · کب · جب' },
+      { word: 'سب', speak: 'सब', meaning: 'all', rhyme: 'اب · کب · جب' },
+      { word: 'کل', speak: 'कल', meaning: 'tomorrow', rhyme: 'کل · جل · نل' },
+      { word: 'جل', speak: 'जल', meaning: 'water', rhyme: 'کل · جل · نل' },
+      { word: 'نل', speak: 'नल', meaning: 'tap', rhyme: 'کل · جل · نل' },
+      { word: 'پل', speak: 'पल', meaning: 'moment', rhyme: 'کل · جل · نل' },
+      { word: 'بل', speak: 'बल', meaning: 'strength', rhyme: 'کل · جل · نل' },
+      { word: 'کر', speak: 'कर', meaning: 'do', rhyme: 'کر · ڈر · پر' },
+      { word: 'ڈر', speak: 'डर', meaning: 'fear', rhyme: 'کر · ڈر · پر' },
+      { word: 'پر', speak: 'पर', meaning: 'on', rhyme: 'کر · ڈر · پر' },
+      { word: 'دن', speak: 'दिन', meaning: 'day', rhyme: 'دن · بن · سن' },
+      { word: 'بن', speak: 'बन', meaning: 'forest', rhyme: 'دن · بن · سن' },
+      { word: 'سن', speak: 'सुन', meaning: 'listen', rhyme: 'دن · بن · سن' }
+    ],
+    3: [
+      { word: 'اگر', speak: 'अगर', meaning: 'if', rhyme: 'اگر · مگر · نگر' },
+      { word: 'مگر', speak: 'मगर', meaning: 'but', rhyme: 'اگر · مگر · نگر' },
+      { word: 'نگر', speak: 'नगर', meaning: 'city', rhyme: 'اگر · مگر · نگر' },
+      { word: 'ڈگر', speak: 'डगर', meaning: 'path', rhyme: 'اگر · مگر · نگر' },
+      { word: 'سفر', speak: 'सफर', meaning: 'journey', rhyme: 'اگر · مگر · نگر' },
+      { word: 'کمل', speak: 'कमल', meaning: 'lotus', rhyme: 'کمل · عمل' },
+      { word: 'عمل', speak: 'अमल', meaning: 'deed', rhyme: 'کمل · عمل' },
+      { word: 'نمک', speak: 'नमक', meaning: 'salt', rhyme: 'نمک · چمک' },
+      { word: 'چمک', speak: 'चमक', meaning: 'shine', rhyme: 'نمک · چمک' },
+      { word: 'دمک', speak: 'दमक', meaning: 'glow', rhyme: 'نمک · چمک' },
+      { word: 'محل', speak: 'महल', meaning: 'palace', rhyme: 'محل · پہل' },
+      { word: 'پہل', speak: 'पहल', meaning: 'initiative', rhyme: 'محل · پہل' },
+      { word: 'پون', speak: 'पवन', meaning: 'breeze', rhyme: 'پون · بھون' },
+      { word: 'ہون', speak: 'हवन', meaning: 'havan', rhyme: 'پون · بھون' },
+      { word: 'بھون', speak: 'भवन', meaning: 'building', rhyme: 'پون · بھون' }
+    ],
+    4: [
+      { word: 'کتاب', speak: 'किताब', meaning: 'book', rhyme: 'کتاب · حساب · جواب' },
+      { word: 'حساب', speak: 'हिसाब', meaning: 'account', rhyme: 'کتاب · حساب · جواب' },
+      { word: 'جواب', speak: 'जवाब', meaning: 'answer', rhyme: 'کتاب · حساب · جواب' },
+      { word: 'پانی', speak: 'पानी', meaning: 'water', rhyme: 'پانی · رانی · دانی' },
+      { word: 'رانی', speak: 'रानी', meaning: 'queen', rhyme: 'پانی · رانی · دانی' },
+      { word: 'دانی', speak: 'दानी', meaning: 'giver', rhyme: 'پانی · رانی · دانی' },
+      { word: 'نانی', speak: 'नानी', meaning: 'grandmother', rhyme: 'پانی · رانی · دانی' },
+      { word: 'مکان', speak: 'मकान', meaning: 'house', rhyme: 'مکان · دکان' },
+      { word: 'دکان', speak: 'दुकान', meaning: 'shop', rhyme: 'مکان · دکان' },
+      { word: 'لڑکا', speak: 'लड़का', meaning: 'boy', rhyme: 'لڑکا · لڑکی' },
+      { word: 'لڑکی', speak: 'लड़की', meaning: 'girl', rhyme: 'لڑکا · لڑکی' },
+      { word: 'انتظار', speak: 'इंतजार', meaning: 'wait', rhyme: 'انتظار · اقرار' },
+      { word: 'اقرار', speak: 'इकरार', meaning: 'promise', rhyme: 'انتظار · اقرار' },
+      { word: 'سرکار', speak: 'सरकार', meaning: 'government', rhyme: 'سرکار · اخبار' },
+      { word: 'اخبار', speak: 'अखबार', meaning: 'newspaper', rhyme: 'سرکار · اخبار' }
+    ]
+  }
+};
+
+var VIEW = {
+  login: 'view-login',
+  admin: 'view-admin',
+  dashboard: 'view-dashboard',
+  language: 'view-language',
+  words: 'view-words',
+  math: 'view-math',
+  videos: 'view-videos',
+  tables: 'view-tables',
+  quiz: 'view-quiz'
+};
+
+function callServer(name) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function (resolve, reject) {
+    if (!window.google || !google.script || !google.script.run) {
+      reject(new Error('Open this app from the deployed IQRA web app.'));
+      return;
+    }
+    var runner = google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(function (err) {
+        reject(err instanceof Error ? err : new Error((err && err.message) || 'Request failed'));
+      });
+    runner[name].apply(runner, args);
+  });
+}
+
+function toast(message, type) {
+  var stack = document.getElementById('toast-stack');
+  while (stack.children.length >= 2) stack.removeChild(stack.firstElementChild);
+  var node = document.createElement('div');
+  node.className = 'toast ' + (type || 'info');
+  var icon = document.createElement('i');
+  icon.className = type === 'success' ? 'fa-solid fa-circle-check' : type === 'error' ? 'fa-solid fa-circle-xmark' : 'fa-solid fa-bolt';
+  var text = document.createElement('span');
+  text.textContent = message;
+  node.appendChild(icon);
+  node.appendChild(text);
+  stack.appendChild(node);
+  requestAnimationFrame(function () { node.classList.add('show'); });
+  setTimeout(function () {
+    node.classList.remove('show');
+    setTimeout(function () { node.remove(); }, 350);
+  }, 3800);
+}
+
+function show(name) {
+  Object.keys(VIEW).forEach(function (key) {
+    document.getElementById(VIEW[key]).classList.remove('is-active');
+  });
+  document.getElementById(VIEW[name]).classList.add('is-active');
+  document.getElementById('team-footer').hidden = !(name === 'admin' || name === 'dashboard');
+  window.scrollTo(0, 0);
+}
+
+function persist() {
+  sessionStorage.setItem('iqra-aoe', JSON.stringify({
+    token: state.token,
+    role: state.role,
+    student: state.student
+  }));
+}
+
+function clearSession() {
+  state.token = '';
+  state.role = '';
+  state.student = null;
+  state.students = [];
+  state.quiz = null;
+  sessionStorage.removeItem('iqra-aoe');
+  var idField = document.getElementById('login-id');
+  var passField = document.getElementById('login-pass');
+  if (idField) idField.value = '';
+  if (passField) passField.value = '';
+}
+
+function prettyDate(ymd) {
+  if (!ymd) return '—';
+  var parts = String(ymd).split('-');
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return Number(parts[2]) + ' ' + months[Number(parts[1]) - 1] + ' ' + parts[0];
+}
+
+function paintStudent() {
+  var student = state.student;
+  if (!student) return;
+  document.getElementById('dash-name').textContent = student.studentName;
+  document.getElementById('dash-class').textContent = String(student.classLevel);
+  document.getElementById('dash-xp').textContent = String(student.totalXP);
+  document.getElementById('dash-streak').textContent = String(student.currentStreak);
+  document.getElementById('dash-expiry').textContent = prettyDate(student.expiryDate);
+  document.getElementById('dash-id').textContent = student.userId;
+  document.getElementById('dash-focus').textContent = 'Class ' + student.classLevel + ' · ' + (FOCUS[student.classLevel] || 'Mathematics');
+  document.getElementById('math-class-label').textContent = 'Class ' + student.classLevel + ' · ' + (FOCUS[student.classLevel] || 'Mathematics');
+}
+
+function speak(text, lang) {
+  if (!text || !window.speechSynthesis) return;
+  try {
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang;
+  utter.rate = 0.82;
+  var voices = window.speechSynthesis.getVoices();
+  var wanted = String(lang).toLowerCase();
+  var match = null;
+  voices.forEach(function (voice) {
+    var code = String(voice.lang || '').toLowerCase();
+    if (!match && code === wanted) match = voice;
+  });
+  if (!match) {
+    voices.forEach(function (voice) {
+      var code = String(voice.lang || '').toLowerCase();
+      if (!match && code.indexOf(wanted.slice(0, 2)) === 0) match = voice;
+    });
+  }
+  if (match) utter.voice = match;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+  } catch (err) {
+    toast('Audio is not available in this browser.', 'warning');
+  }
+}
+
+function speakWord(item) {
+  if (state.language === 'Urdu') speak(item.speak, 'hi-IN');
+  else if (state.language === 'Hindi') speak(item.word, 'hi-IN');
+  else speak(item.word, 'en-IN');
+}
+
+function openLanguage(lang) {
+  state.language = lang;
+  document.getElementById('lang-heading').textContent = lang + ' hub';
+  var host = document.getElementById('letter-choices');
+  host.replaceChildren();
+  LENGTHS[lang].forEach(function (item) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'choice';
+    var glyph = document.createElement('div');
+    glyph.className = 'glyph';
+    glyph.textContent = String(item.n);
+    var title = document.createElement('h3');
+    title.textContent = item.title;
+    var copy = document.createElement('p');
+    copy.textContent = item.copy;
+    button.appendChild(glyph);
+    button.appendChild(title);
+    button.appendChild(copy);
+    button.addEventListener('click', function () { openWords(item.n); });
+    host.appendChild(button);
+  });
+  show('language');
+}
+
+function openWords(count) {
+  state.letters = count;
+  state.page = 0;
+  renderWords();
+  show('words');
+}
+
+function renderWords() {
+  var list = WORDS[state.language][state.letters] || [];
+  var pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (state.page >= pages) state.page = pages - 1;
+  var start = state.page * PAGE_SIZE;
+  var slice = list.slice(start, start + PAGE_SIZE);
+  var grid = document.getElementById('word-grid');
+  grid.replaceChildren();
+  var label = state.language === 'Hindi' ? ' अक्षर' : state.language === 'Urdu' ? ' حروف' : '-letter words';
+  document.getElementById('word-heading').textContent = state.language + ' · ' + state.letters + label;
+  document.getElementById('listen-hint').textContent = state.language === 'Urdu'
+    ? 'Tap a card or the speaker. Urdu is read with the Hindi voice so browsers can pronounce it.'
+    : 'Tap a card or the speaker to hear the word.';
+  document.getElementById('page-indicator').textContent = 'Page ' + (state.page + 1) + ' / ' + pages;
+  slice.forEach(function (item) {
+    var card = document.createElement('article');
+    card.className = 'word-card';
+    var speaker = document.createElement('button');
+    speaker.type = 'button';
+    speaker.className = 'speak';
+    speaker.setAttribute('aria-label', 'Listen');
+    speaker.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    speaker.addEventListener('click', function (event) {
+      event.stopPropagation();
+      speakWord(item);
+    });
+    var word = document.createElement('div');
+    word.className = state.language === 'Urdu' ? 'word-text urdu-text' : state.language === 'Hindi' ? 'word-text hindi-text' : 'word-text';
+    word.textContent = item.word;
+    var meaning = document.createElement('div');
+    meaning.className = 'meaning';
+    meaning.textContent = item.meaning;
+    var rhyme = document.createElement('div');
+    rhyme.className = 'rhyme';
+    rhyme.textContent = item.rhyme;
+    card.appendChild(speaker);
+    card.appendChild(word);
+    card.appendChild(meaning);
+    card.appendChild(rhyme);
+    card.addEventListener('click', function () { speakWord(item); });
+    grid.appendChild(card);
+  });
+  document.getElementById('prev-page').disabled = state.page === 0;
+  document.getElementById('next-page').disabled = state.page >= pages - 1;
+}
+
+function openMath() {
+  if (!state.student) return;
+  paintStudent();
+  show('math');
+}
+
+function openTables() {
+  var host = document.getElementById('table-picks');
+  if (!host.childElementCount) {
+    for (var n = 2; n <= 20; n++) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = String(n);
+      button.dataset.table = String(n);
+      button.addEventListener('click', function (event) {
+        renderTable(Number(event.currentTarget.dataset.table));
+      });
+      host.appendChild(button);
+    }
+  }
+  renderTable(state.table || 2);
+  show('tables');
+}
+
+function renderTable(number) {
+  state.table = number;
+  document.getElementById('table-title').textContent = 'Table of ' + number;
+  document.querySelectorAll('#table-picks button').forEach(function (button) {
+    button.classList.toggle('on', Number(button.dataset.table) === number);
+  });
+  var lines = document.getElementById('table-lines');
+  lines.replaceChildren();
+  for (var i = 1; i <= 10; i++) {
+    var row = document.createElement('div');
+    row.textContent = number + '  ×  ' + i + '  =  ' + (number * i);
+    lines.appendChild(row);
+  }
+}
+
+function speakTable(lang) {
+  var number = state.table || 2;
+  var parts = [];
+  for (var i = 1; i <= 10; i++) {
+    if (lang === 'hi-IN') parts.push(number + ' गुणा ' + i + ' बराबर ' + (number * i));
+    else parts.push(number + ' times ' + i + ' is ' + (number * i));
+  }
+  speak(parts.join('. '), lang);
+}
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function pick(list) {
+  return list[rand(0, list.length - 1)];
+}
+
+function shuffle(list) {
+  var copy = list.slice();
+  for (var i = copy.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var hold = copy[i];
+    copy[i] = copy[j];
+    copy[j] = hold;
+  }
+  return copy;
+}
+
+function question(topic, text, answer, distractors) {
+  var options = [String(answer)];
+  function add(value) {
+    value = String(value);
+    if (value && options.indexOf(value) === -1) options.push(value);
+  }
+  distractors.forEach(add);
+  ['None of these', 'Not sure', '0', '10', '100'].forEach(function (value) {
+    if (options.length < 4) add(value);
+  });
+  return { topic: topic, text: text, answer: String(answer), options: shuffle(options.slice(0, 4)) };
+}
+
+function gcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b) {
+    var t = b;
+    b = a % b;
+    a = t;
+  }
+  return a || 1;
+}
+
+function addSmall() {
+  var a = rand(1, 9);
+  var b = rand(1, 10 - a);
+  return question('Addition', a + ' + ' + b + ' = ?', a + b, [a + b + 1, Math.max(0, a + b - 1), a + b + 2]);
+}
+
+function subSmall() {
+  var a = rand(5, 18);
+  var b = rand(0, a);
+  return question('Subtraction', a + ' − ' + b + ' = ?', a - b, [a - b + 1, Math.max(0, a - b - 1), a + b]);
+}
+
+function compareNumbers() {
+  var a = rand(0, 20);
+  var b = rand(0, 20);
+  while (a === b) b = rand(0, 20);
+  var answer = a > b ? a + ' is greater' : b + ' is greater';
+  return question('Numbers', 'Which is greater: ' + a + ' or ' + b + '?', answer, [
+    a > b ? b + ' is greater' : a + ' is greater',
+    'They are equal',
+    (a + b) + ' is greater'
+  ]);
+}
+
+function numberAfter() {
+  var n = rand(1, 20);
+  return question('Numbers', 'Which number comes just after ' + n + '?', n + 1, [n, n + 2, Math.max(0, n - 1)]);
+}
+
+function addWithin50() {
+  var a = rand(10, 30);
+  var b = rand(1, 15);
+  return question('Addition', a + ' + ' + b + ' = ?', a + b, [a + b + 1, a + b - 1, a + b + 10]);
+}
+
+function subWithin50() {
+  var a = rand(20, 50);
+  var b = rand(1, 15);
+  return question('Subtraction', a + ' − ' + b + ' = ?', a - b, [a - b - 1, a - b + 1, a + b]);
+}
+
+function doubles() {
+  var n = rand(2, 12);
+  return question('Doubles', n + ' + ' + n + ' = ?', n * 2, [n * 2 + 1, n * 2 - 1, n * 2 + 2]);
+}
+
+function timesTable() {
+  var a = rand(2, 10);
+  var b = rand(2, 10);
+  return question('Multiplication', a + ' × ' + b + ' = ?', a * b, [a * b + a, a * b - b, a * b + 1]);
+}
+
+function timesWord() {
+  var rows = rand(2, 6);
+  var each = rand(2, 9);
+  return question('Equal groups', rows + ' rows of ' + each + ' pencils. How many pencils?', rows * each, [rows + each, rows * each + each, rows * each - 1]);
+}
+
+function divideExact() {
+  var divisor = rand(2, 9);
+  var quotient = rand(2, 9);
+  var dividend = divisor * quotient;
+  return question('Division', dividend + ' ÷ ' + divisor + ' = ?', quotient, [quotient + 1, quotient - 1, divisor]);
+}
+
+function remainderQ() {
+  var divisor = rand(3, 9);
+  var quotient = rand(2, 6);
+  var remainder = rand(1, divisor - 1);
+  var dividend = divisor * quotient + remainder;
+  return question('Remainder', dividend + ' ÷ ' + divisor + '. What is the remainder?', remainder, [remainder + 1, divisor, quotient]);
+}
+
+function decimalAdd() {
+  var bank = [[1.2, 1.3], [2.5, 1.4], [0.6, 0.7], [3.1, 2.6], [4.5, 1.5]];
+  var pair = pick(bank);
+  var sum = Math.round((pair[0] + pair[1]) * 10) / 10;
+  return question('Decimals', pair[0].toFixed(1) + ' + ' + pair[1].toFixed(1) + ' = ?', sum.toFixed(1), [(sum + 0.1).toFixed(1), (sum - 0.1).toFixed(1), (pair[0] + pair[1] + 1).toFixed(1)]);
+}
+
+function decimalSub() {
+  var bank = [[3.5, 1.2], [4.8, 2.3], [6.4, 2.1], [5.0, 1.5]];
+  var pair = pick(bank);
+  var value = Math.round((pair[0] - pair[1]) * 10) / 10;
+  return question('Decimals', pair[0].toFixed(1) + ' − ' + pair[1].toFixed(1) + ' = ?', value.toFixed(1), [(value + 0.1).toFixed(1), (value + 1).toFixed(1), pair[1].toFixed(1)]);
+}
+
+function decimalMul() {
+  var bank = [[0.5, 8, '4'], [1.5, 4, '6'], [0.2, 5, '1'], [2.5, 2, '5'], [0.4, 10, '4']];
+  var row = pick(bank);
+  return question('Decimals', row[0] + ' × ' + row[1] + ' = ?', row[2], [String(Number(row[2]) + 1), String(row[0] + row[1]), String(Number(row[2]) + 2)]);
+}
+
+function likeFractions() {
+  var den = pick([4, 5, 6, 8]);
+  var a = rand(1, den - 2);
+  var b = rand(1, den - a);
+  return question('Fractions', a + '/' + den + ' + ' + b + '/' + den + ' = ?', (a + b) + '/' + den, [(a + b + 1) + '/' + den, a + '/' + den, (a + b) + '/' + (den + 1)]);
+}
+
+function unlikeFractions() {
+  var bank = [
+    ['1/2 + 1/4', '3/4', ['1/4', '2/4', '2/6']],
+    ['1/3 + 1/6', '1/2', ['2/9', '1/6', '2/3']],
+    ['1/2 + 1/3', '5/6', ['2/5', '1/6', '2/6']],
+    ['3/4 − 1/4', '1/2', ['2/4', '4/8', '1/4']],
+    ['2/3 − 1/6', '1/2', ['1/3', '1/6', '3/6']]
+  ];
+  var row = pick(bank);
+  return question('Fractions', row[0] + ' = ?', row[1], row[2]);
+}
+
+function factorOf() {
+  var bank = [
+    [12, 6, [5, 7, 8]],
+    [18, 9, [4, 5, 8]],
+    [20, 5, [3, 6, 9]],
+    [24, 8, [5, 7, 9]],
+    [15, 5, [2, 4, 6]]
+  ];
+  var row = pick(bank);
+  return question('Factors', 'Which number is a factor of ' + row[0] + '?', row[1], row[2]);
+}
+
+function placeValue() {
+  var bank = [
+    ['In 45.7, the digit 7 is in which place?', 'tenths', ['ones', 'tens', 'hundredths']],
+    ['In 3.25, the digit 5 is in which place?', 'hundredths', ['tenths', 'ones', 'tens']],
+    ['In 80.4, the digit 8 is in which place?', 'tens', ['ones', 'tenths', 'hundreds']],
+    ['In 6.03, the digit 3 is in which place?', 'hundredths', ['tenths', 'ones', 'tens']]
+  ];
+  var row = pick(bank);
+  return question('Place value', row[0], row[1], row[2]);
+}
+
+function lcmQ() {
+  var pairs = [[4, 6], [6, 8], [8, 12], [9, 12], [10, 15], [12, 18], [14, 21]];
+  var pair = pick(pairs);
+  var value = pair[0] / gcd(pair[0], pair[1]) * pair[1];
+  return question('LCM', 'LCM of ' + pair[0] + ' and ' + pair[1] + ' = ?', value, [pair[0] * pair[1], gcd(pair[0], pair[1]), value + pair[0]]);
+}
+
+function hcfQ() {
+  var pairs = [[12, 18], [8, 12], [20, 30], [14, 21], [16, 24], [15, 25]];
+  var pair = pick(pairs);
+  var value = gcd(pair[0], pair[1]);
+  return question('HCF', 'HCF of ' + pair[0] + ' and ' + pair[1] + ' = ?', value, [pair[0], pair[1], value * 2]);
+}
+
+function linearEq() {
+  var a = rand(2, 8);
+  var x = rand(2, 9);
+  var b = rand(1, 9);
+  var total = a * x + b;
+  return question('Linear equation', a + 'x + ' + b + ' = ' + total + '. What is x?', x, [x + 1, x - 1, a]);
+}
+
+function areaRect() {
+  var length = rand(4, 12);
+  var breadth = rand(3, 9);
+  return question('Geometry', 'Area of a rectangle ' + length + ' cm by ' + breadth + ' cm?', length * breadth + ' cm²', [2 * (length + breadth) + ' cm²', (length + breadth) + ' cm²', (length * breadth + length) + ' cm²']);
+}
+
+function perimeterRect() {
+  var length = rand(4, 12);
+  var breadth = rand(3, 9);
+  var value = 2 * (length + breadth);
+  return question('Geometry', 'Perimeter of a rectangle ' + length + ' cm by ' + breadth + ' cm?', value + ' cm', [(length * breadth) + ' cm', (length + breadth) + ' cm', (value + 2) + ' cm']);
+}
+
+function triangleAngle() {
+  var a = pick([35, 40, 45, 50, 55]);
+  var b = pick([30, 40, 60, 65, 70]);
+  var c = 180 - a - b;
+  return question('Geometry', 'A triangle has angles ' + a + '° and ' + b + '°. The third angle is', c + '°', [(a + b) + '°', (c + 10) + '°', (90 - a) + '°']);
+}
+
+function pythagoras() {
+  var triples = [[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [9, 12, 15]];
+  var triple = pick(triples);
+  return question('Pythagoras', 'A right triangle has legs ' + triple[0] + ' and ' + triple[1] + '. The hypotenuse is', triple[2], [triple[0] + triple[1], triple[2] + 1, triple[1]]);
+}
+
+function identitySquare() {
+  var a = rand(2, 8);
+  var b = rand(2, 6);
+  var value = (a + b) * (a + b);
+  return question('Algebra', 'Value of (' + a + ' + ' + b + ')²', value, [a * a + b * b, value + a, a + b]);
+}
+
+function straightAngle() {
+  var angle = pick([35, 48, 55, 70, 110, 125]);
+  return question('Geometry', 'Two angles on a straight line. One is ' + angle + '°. The other is', (180 - angle) + '°', [(90 - angle) + '°', angle + '°', (180 - angle + 10) + '°']);
+}
+
+function quadraticSum() {
+  var p = rand(1, 6);
+  var q = rand(p + 1, 8);
+  var sum = p + q;
+  var product = p * q;
+  return question('Quadratic equation', 'Sum of the roots of x² − ' + sum + 'x + ' + product + ' = 0', sum, [product, p, q]);
+}
+
+function quadraticRoot() {
+  var p = rand(1, 5);
+  var q = rand(p + 1, 8);
+  var sum = p + q;
+  var product = p * q;
+  return question('Quadratic equation', 'Smaller root of x² − ' + sum + 'x + ' + product + ' = 0', p, [q, sum, product]);
+}
+
+function apTerm() {
+  var a = rand(2, 6);
+  var d = rand(2, 5);
+  var n = pick([8, 10, 12]);
+  var term = a + (n - 1) * d;
+  var second = a + d;
+  var third = a + 2 * d;
+  return question('Arithmetic progression', n + 'th term of the AP ' + a + ', ' + second + ', ' + third + ', …', term, [term + d, a + n * d, term - d]);
+}
+
+function circleMeasure() {
+  var radius = pick([7, 14]);
+  var wantArea = Math.random() > 0.5;
+  if (wantArea) {
+    var area = radius === 7 ? 154 : 616;
+    return question('Circle', 'Area of a circle of radius ' + radius + ' cm. Take π = 22/7.', area + ' cm²', [(radius === 7 ? 44 : 88) + ' cm²', (area + 22) + ' cm²', (radius * radius) + ' cm²']);
+  }
+  var circ = radius === 7 ? 44 : 88;
+  return question('Circle', 'Circumference of a circle of radius ' + radius + ' cm. Take π = 22/7.', circ + ' cm', [(radius === 7 ? 154 : 616) + ' cm', (circ + 7) + ' cm', (radius * 2) + ' cm']);
+}
+
+function trigValue() {
+  var bank = [
+    ['sin 30°', '1/2', ['1', '√3/2', '0']],
+    ['cos 60°', '1/2', ['1', '√3/2', '0']],
+    ['tan 45°', '1', ['0', '1/2', '√3']],
+    ['sin 90°', '1', ['0', '1/2', '√3/2']],
+    ['cos 0°', '1', ['0', '1/2', '√3/2']]
+  ];
+  var row = pick(bank);
+  return question('Trigonometry', row[0] + ' = ?', row[1], row[2]);
+}
+
+var BANKS = {
+  1: [addSmall, subSmall, compareNumbers, numberAfter],
+  2: [addWithin50, subWithin50, doubles, addSmall],
+  3: [timesTable, timesWord, addWithin50],
+  4: [divideExact, remainderQ, timesTable],
+  5: [decimalAdd, likeFractions, factorOf, placeValue],
+  6: [lcmQ, hcfQ, decimalAdd, decimalSub, likeFractions],
+  7: [lcmQ, hcfQ, unlikeFractions, decimalMul, decimalSub],
+  8: [linearEq, areaRect, perimeterRect, triangleAngle],
+  9: [linearEq, pythagoras, identitySquare, straightAngle, triangleAngle],
+  10: [quadraticSum, quadraticRoot, apTerm, circleMeasure, trigValue, linearEq]
+};
+
+function nextQuestion(level) {
+  var bank = BANKS[level] || BANKS[5];
+  return bank[rand(0, bank.length - 1)]();
+}
+
+function beginQuiz() {
+  state.quiz = { phase: 'practice', number: 1, correct: 0, xp: 0, streak: 0, lock: false, current: null };
+  document.getElementById('report-area').hidden = true;
+  document.getElementById('play-area').hidden = false;
+  show('quiz');
+  ask();
+}
+
+function paintHud() {
+  var quiz = state.quiz;
+  var stars = '';
+  var shown = Math.min(quiz.streak, 3);
+  for (var i = 0; i < 3; i++) stars += i < shown ? '★' : '☆';
+  document.getElementById('session-xp').textContent = quiz.xp + ' XP this round  ' + stars;
+  var chip = document.getElementById('mode-chip');
+  chip.textContent = quiz.phase === 'test' ? 'Test mode' : 'Practice';
+  chip.className = 'mode-chip ' + (quiz.phase === 'test' ? 'mode-test' : 'mode-practice');
+  var segments = document.getElementById('segments');
+  segments.replaceChildren();
+  for (var s = 1; s <= 10; s++) {
+    var bar = document.createElement('i');
+    if (s < quiz.number) bar.className = 'on';
+    segments.appendChild(bar);
+  }
+}
+
+function ask() {
+  var quiz = state.quiz;
+  if (!quiz) return;
+  if (quiz.number > 10) {
+    if (quiz.phase === 'practice') {
+      quiz.phase = 'test';
+      quiz.number = 1;
+      quiz.streak = 0;
+      toast('Practice complete. Test mode has no hints.', 'warning');
+    } else {
+      finishQuiz();
+      return;
+    }
+  }
+  quiz.current = nextQuestion(state.student.classLevel || 1);
+  quiz.lock = false;
+  paintHud();
+  document.getElementById('q-topic').textContent = quiz.current.topic;
+  document.getElementById('q-text').textContent = quiz.current.text;
+  document.getElementById('q-progress').textContent = (quiz.phase === 'test' ? 'Test' : 'Practice') + ' question ' + quiz.number + ' of 10';
+  document.getElementById('q-feedback').textContent = '';
+  document.getElementById('q-feedback').className = 'feedback';
+  var host = document.getElementById('q-options');
+  host.replaceChildren();
+  quiz.current.options.forEach(function (option, index) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'option';
+    var letter = document.createElement('small');
+    letter.textContent = String.fromCharCode(65 + index);
+    button.appendChild(letter);
+    button.appendChild(document.createTextNode(option));
+    button.addEventListener('click', function () { chooseAnswer(option, button); });
+    host.appendChild(button);
+  });
+}
+
+function chooseAnswer(option, button) {
+  var quiz = state.quiz;
+  if (!quiz || quiz.lock) return;
+  quiz.lock = true;
+  var right = option === quiz.current.answer;
+  document.querySelectorAll('#q-options .option').forEach(function (item) { item.disabled = true; });
+  if (quiz.phase === 'test') {
+    if (right) quiz.correct += 1;
+    button.classList.add('picked');
+    setTimeout(function () {
+      quiz.number += 1;
+      ask();
+    }, 380);
+    return;
+  }
+  var feedback = document.getElementById('q-feedback');
+  if (right) {
+    button.classList.add('good');
+    quiz.streak += 1;
+    var gain = 10;
+    if (quiz.streak % 3 === 0) gain += 15;
+    quiz.xp += gain;
+    feedback.textContent = 'Brilliant! +' + gain + ' XP';
+    feedback.className = 'feedback good';
+    floatXp(button, gain);
+  } else {
+    button.classList.add('bad');
+    quiz.streak = 0;
+    feedback.textContent = 'Correct answer: ' + quiz.current.answer;
+    feedback.className = 'feedback bad';
+    document.querySelectorAll('#q-options .option').forEach(function (item) {
+      if (item.textContent.indexOf(quiz.current.answer) !== -1 && item.lastChild && item.lastChild.textContent === quiz.current.answer) {
+        item.classList.add('good');
+      }
+    });
+  }
+  paintHud();
+  setTimeout(function () {
+    quiz.number += 1;
+    ask();
+  }, right ? 900 : 1300);
+}
+
+function floatXp(anchor, amount) {
+  var floater = document.createElement('div');
+  floater.className = 'xp-float';
+  floater.textContent = '+' + amount + ' XP';
+  var rect = anchor.getBoundingClientRect();
+  floater.style.left = (rect.left + rect.width / 2) + 'px';
+  floater.style.top = rect.top + 'px';
+  document.body.appendChild(floater);
+  setTimeout(function () { floater.remove(); }, 900);
+}
+
+function gradeFor(correct) {
+  if (correct >= 9) return 'Distinction';
+  if (correct >= 7) return 'First class';
+  if (correct >= 5) return 'Pass';
+  return 'Keep practising';
+}
+
+function celebrate() {
+  if (typeof confetti !== 'function') return;
+  var end = Date.now() + 1600;
+  (function frame() {
+    confetti({ particleCount: 36, spread: 75, origin: { y: 0.7 }, zIndex: 80 });
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+}
+
+function finishQuiz() {
+  var quiz = state.quiz;
+  var earned = quiz.xp + quiz.correct * 20;
+  document.getElementById('play-area').hidden = true;
+  document.getElementById('report-area').hidden = false;
+  document.getElementById('session-xp').textContent = earned + ' XP earned';
+  var chip = document.getElementById('mode-chip');
+  chip.textContent = 'Report card';
+  chip.className = 'mode-chip mode-practice';
+  document.getElementById('report-correct').textContent = String(quiz.correct);
+  document.getElementById('report-wrong').textContent = String(10 - quiz.correct);
+  document.getElementById('report-accuracy').textContent = (quiz.correct * 10) + '%';
+  document.getElementById('report-xp').textContent = String(earned);
+  document.getElementById('report-grade').textContent = gradeFor(quiz.correct);
+  document.getElementById('report-student').textContent = state.student.studentName + ' · Class ' + state.student.classLevel;
+  document.getElementById('report-save').textContent = 'Saving XP to your academy record…';
+  if (quiz.correct >= 7) celebrate();
+  callServer('recordTestResult', state.token, earned).then(function (result) {
+    if (!result || !result.ok) throw new Error((result && result.error) || 'Could not update XP.');
+    state.student = result.student;
+    persist();
+    paintStudent();
+    document.getElementById('report-save').textContent = 'Saved. Total XP is now ' + result.student.totalXP + '. Streak ' + result.student.currentStreak + '.';
+    toast('XP saved to your record.', 'success');
+  }).catch(function (err) {
+    document.getElementById('report-save').textContent = err.message;
+    toast(err.message, 'error');
+  });
+}
+
+function defaultExpiry() {
+  var date = new Date();
+  date.setFullYear(date.getFullYear() + 1);
+  var month = String(date.getMonth() + 1).padStart(2, '0');
+  var day = String(date.getDate()).padStart(2, '0');
+  return date.getFullYear() + '-' + month + '-' + day;
+}
+
+function resetStudentForm() {
+  state.editing = false;
+  document.getElementById('student-form').reset();
+  document.getElementById('form-title').textContent = 'Add student';
+  document.getElementById('f-id').readOnly = false;
+  document.getElementById('f-pass').placeholder = 'At least 4 characters';
+  document.getElementById('f-class').value = '6';
+  document.getElementById('f-expiry').value = defaultExpiry();
+}
+
+function renderStudents() {
+  var query = document.getElementById('student-filter').value.trim().toLowerCase();
+  var body = document.getElementById('student-rows');
+  body.replaceChildren();
+  var rows = state.students.filter(function (student) {
+    var blob = (student.studentName + ' ' + student.userId + ' ' + student.classLevel).toLowerCase();
+    return !query || blob.indexOf(query) !== -1;
+  });
+  if (!rows.length) {
+    var empty = document.createElement('tr');
+    var cell = document.createElement('td');
+    cell.colSpan = 6;
+    cell.textContent = 'No students match this view.';
+    empty.appendChild(cell);
+    body.appendChild(empty);
+    return;
+  }
+  rows.forEach(function (student) {
+    var tr = document.createElement('tr');
+    tr.className = 'clickable';
+    [student.studentName + ' · ' + student.userId, 'Class ' + student.classLevel, prettyDate(student.expiryDate), String(student.totalXP), String(student.currentStreak)].forEach(function (value) {
+      var td = document.createElement('td');
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+    var status = document.createElement('td');
+    var pill = document.createElement('span');
+    pill.className = 'pill ' + (student.expired ? 'pill-bad' : 'pill-ok');
+    pill.textContent = student.expired ? 'Expired' : 'Active';
+    status.appendChild(pill);
+    tr.appendChild(status);
+    tr.addEventListener('click', function () { fillForm(student); });
+    body.appendChild(tr);
+  });
+}
+
+function fillForm(student) {
+  state.editing = true;
+  document.getElementById('form-title').textContent = 'Edit ' + student.studentName;
+  document.getElementById('f-id').value = student.userId;
+  document.getElementById('f-id').readOnly = true;
+  document.getElementById('f-pass').value = '';
+  document.getElementById('f-pass').placeholder = 'Leave blank to keep password';
+  document.getElementById('f-name').value = student.studentName;
+  document.getElementById('f-class').value = String(student.classLevel);
+  document.getElementById('f-expiry').value = student.expiryDate || '';
+}
+
+function loadStudents() {
+  return callServer('listStudents', state.token).then(function (result) {
+    if (!result || !result.ok) throw new Error((result && result.error) || 'Could not load students.');
+    state.students = result.students || [];
+    renderStudents();
+  }).catch(function (err) {
+    toast(err.message, 'error');
+    if (/sign in again/i.test(err.message)) {
+      clearSession();
+      show('login');
+    }
+  });
+}
+
+function startParticles() {
+  var canvas = document.getElementById('particle-field');
+  if (!canvas || !canvas.getContext) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ctx = canvas.getContext('2d');
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  var dots = [];
+  for (var i = 0; i < 42; i++) {
+    dots.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.8 + 0.4,
+      s: Math.random() * 0.35 + 0.08,
+      a: Math.random() * 0.4 + 0.12
+    });
+  }
+  function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(function (dot) {
+      dot.y -= dot.s;
+      if (dot.y < -4) {
+        dot.y = canvas.height + 4;
+        dot.x = Math.random() * canvas.width;
+      }
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(233, 213, 255,' + dot.a + ')';
+      ctx.arc(dot.x, dot.y, dot.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function openModal(title, copy, onYes) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-copy').textContent = copy;
+  document.getElementById('modal').hidden = false;
+  document.getElementById('modal-yes').onclick = function () {
+    document.getElementById('modal').hidden = true;
+    onYes();
+  };
+}
+
+function bind() {
+  document.getElementById('login-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    var button = document.getElementById('login-btn');
+    button.disabled = true;
+    callServer('login', document.getElementById('login-id').value.trim(), document.getElementById('login-pass').value)
+      .then(function (result) {
+        if (!result || !result.ok) {
+          toast((result && result.error) || 'Invalid Login ID or Password.', 'error');
+          return;
+        }
+        state.token = result.token;
+        state.role = result.role;
+        if (result.role === 'admin') {
+          state.student = null;
+          persist();
+          toast('Admin studio unlocked.', 'success');
+          show('admin');
+          resetStudentForm();
+          return loadStudents();
+        }
+        state.student = result.student;
+        persist();
+        paintStudent();
+        toast('Welcome, ' + result.student.studentName + '.', 'success');
+        show('dashboard');
+      })
+      .catch(function (err) { toast(err.message, 'error'); })
+      .then(function () { button.disabled = false; });
+  });
+
+  document.getElementById('student-logout').addEventListener('click', function () {
+    clearSession();
+    toast('Signed out.', 'info');
+    show('login');
+  });
+  document.getElementById('admin-logout').addEventListener('click', function () {
+    clearSession();
+    toast('Signed out.', 'info');
+    show('login');
+  });
+
+  document.body.addEventListener('click', function (event) {
+    var target = event.target.closest('[data-go]');
+    if (!target) return;
+    if (target.dataset.lang) {
+      openLanguage(target.dataset.lang);
+      return;
+    }
+    var dest = target.getAttribute('data-go');
+    if (dest === 'math') openMath();
+    else if (dest === 'tables') openTables();
+    else show(dest);
+  });
+
+  document.getElementById('prev-page').addEventListener('click', function () {
+    state.page -= 1;
+    renderWords();
+  });
+  document.getElementById('next-page').addEventListener('click', function () {
+    state.page += 1;
+    renderWords();
+  });
+  document.getElementById('speak-table-en').addEventListener('click', function () { speakTable('en-IN'); });
+  document.getElementById('speak-table-hi').addEventListener('click', function () { speakTable('hi-IN'); });
+  document.getElementById('start-math').addEventListener('click', beginQuiz);
+  document.getElementById('again-math').addEventListener('click', beginQuiz);
+  document.getElementById('quit-math').addEventListener('click', function () {
+    openModal('Leave this round?', 'XP from an unfinished round is not saved.', function () { show('math'); });
+  });
+  document.getElementById('modal-no').addEventListener('click', function () {
+    document.getElementById('modal').hidden = true;
+  });
+
+  document.getElementById('student-filter').addEventListener('input', renderStudents);
+  document.getElementById('reset-form').addEventListener('click', resetStudentForm);
+  document.getElementById('student-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    var payload = {
+      userId: document.getElementById('f-id').value.trim(),
+      password: document.getElementById('f-pass').value,
+      studentName: document.getElementById('f-name').value.trim(),
+      classLevel: document.getElementById('f-class').value,
+      expiryDate: document.getElementById('f-expiry').value
+    };
+    if (!state.editing && payload.password.length < 4) {
+      toast('Set a password of at least 4 characters.', 'error');
+      return;
+    }
+    var button = document.getElementById('save-student');
+    button.disabled = true;
+    callServer('saveStudent', state.token, payload, state.editing ? 'update' : 'create')
+      .then(function (result) {
+        if (!result || !result.ok) throw new Error((result && result.error) || 'Could not save the student.');
+        toast(state.editing ? 'Student updated.' : 'Student added.', 'success');
+        resetStudentForm();
+        return loadStudents();
+      })
+      .catch(function (err) { toast(err.message, 'error'); })
+      .then(function () { button.disabled = false; });
+  });
+}
+
+function restore() {
+  try {
+    var saved = JSON.parse(sessionStorage.getItem('iqra-aoe') || 'null');
+    if (!saved || !saved.token) return;
+    state.token = saved.token;
+    state.role = saved.role;
+    state.student = saved.student;
+    if (saved.role === 'admin') {
+      show('admin');
+      resetStudentForm();
+      loadStudents();
+    } else if (saved.student) {
+      paintStudent();
+      show('dashboard');
+    }
+  } catch (err) {
+    sessionStorage.removeItem('iqra-aoe');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  startParticles();
+  bind();
+  resetStudentForm();
+  if (window.speechSynthesis) window.speechSynthesis.getVoices();
+  restore();
+});
