@@ -3,4 +3,6 @@ set -euo pipefail
 cd /workspace
 
 npm ci
-npm run validate:manifest
+if [ -f appsscript.json ]; then
+  npm run validate:manifest
+fi
