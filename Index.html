@@ -33,7 +33,7 @@
   <div id="app">
 
     <section id="view-login" class="view view-login is-active">
-      <form id="login-form" class="glass login-card w-full text-center">
+      <form id="login-form" class="glass login-card w-full text-center" method="post" action="#" onsubmit="event.preventDefault(); return false;">
         <div class="brand-mark" aria-hidden="true"><i class="fa-solid fa-book-open"></i></div>
         <p class="eyebrow">Academy of Excellence</p>
         <h1 class="gradient-text">IQRA AOE</h1>
@@ -41,14 +41,14 @@
         <div class="field">
           <label for="login-id">User ID</label>
           <i class="fa-solid fa-user"></i>
-          <input id="login-id" name="userId" autocomplete="username" maxlength="40" required placeholder="IQRA001 or admin">
+          <input id="login-id" autocomplete="username" maxlength="40" required placeholder="IQRA001 or admin">
         </div>
         <div class="field">
           <label for="login-pass">Password</label>
           <i class="fa-solid fa-lock"></i>
-          <input id="login-pass" name="password" type="password" autocomplete="current-password" maxlength="80" required placeholder="Password">
+          <input id="login-pass" type="password" autocomplete="current-password" maxlength="80" required placeholder="Password">
         </div>
-        <button class="btn btn-primary" id="login-btn" type="submit">Secure login <i class="fa-solid fa-arrow-right"></i></button>
+        <button class="btn btn-primary" id="login-btn" type="button">Secure login <i class="fa-solid fa-arrow-right"></i></button>
       </form>
     </section>
 
@@ -62,7 +62,7 @@
         <button class="btn btn-danger" type="button" id="admin-logout"><i class="fa-solid fa-power-off"></i> Sign out</button>
       </header>
       <div class="admin-layout">
-        <form id="student-form" class="glass form-card">
+        <form id="student-form" class="glass form-card" method="post" action="#" onsubmit="event.preventDefault(); return false;">
           <h2 id="form-title">Add student</h2>
           <div class="field">
             <label for="f-id">User ID</label>

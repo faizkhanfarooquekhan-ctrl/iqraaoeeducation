@@ -421,7 +421,9 @@ function renderWords() {
     speaker.type = 'button';
     speaker.className = 'speak';
     speaker.setAttribute('aria-label', 'Listen');
-    speaker.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    var icon = document.createElement('i');
+    icon.className = 'fa-solid fa-volume-high';
+    speaker.appendChild(icon);
     speaker.addEventListener('click', function (event) {
       event.stopPropagation();
       speakWord(item);
@@ -1092,35 +1094,48 @@ function openModal(title, copy, onYes) {
   };
 }
 
-function bind() {
-  document.getElementById('login-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    var button = document.getElementById('login-btn');
-    button.disabled = true;
-    callServer('login', document.getElementById('login-id').value.trim(), document.getElementById('login-pass').value)
-      .then(function (result) {
-        if (!result || !result.ok) {
-          toast((result && result.error) || 'Invalid Login ID or Password.', 'error');
-          return;
-        }
-        state.token = result.token;
-        state.role = result.role;
-        if (result.role === 'admin') {
-          state.student = null;
-          persist();
-          toast('Admin studio unlocked.', 'success');
-          show('admin');
-          resetStudentForm();
-          return loadStudents();
-        }
-        state.student = result.student;
+function submitLogin() {
+  var button = document.getElementById('login-btn');
+  if (button.disabled) return;
+  button.disabled = true;
+  callServer('login', document.getElementById('login-id').value.trim(), document.getElementById('login-pass').value)
+    .then(function (result) {
+      if (!result || !result.ok) {
+        toast((result && result.error) || 'Invalid Login ID or Password.', 'error');
+        return;
+      }
+      state.token = result.token;
+      state.role = result.role;
+      if (result.role === 'admin') {
+        state.student = null;
         persist();
-        paintStudent();
-        toast('Welcome, ' + result.student.studentName + '.', 'success');
-        show('dashboard');
-      })
-      .catch(function (err) { toast(err.message, 'error'); })
-      .then(function () { button.disabled = false; });
+        toast('Admin studio unlocked.', 'success');
+        show('admin');
+        resetStudentForm();
+        return loadStudents();
+      }
+      state.student = result.student;
+      persist();
+      paintStudent();
+      toast('Welcome, ' + result.student.studentName + '.', 'success');
+      show('dashboard');
+    })
+    .catch(function (err) { toast((err && err.message) || 'Login failed.', 'error'); })
+    .then(function () { button.disabled = false; });
+}
+
+function bind() {
+  var loginForm = document.getElementById('login-form');
+  loginForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    submitLogin();
+  });
+  document.getElementById('login-btn').addEventListener('click', submitLogin);
+  loginForm.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      submitLogin();
+    }
   });
 
   document.getElementById('student-logout').addEventListener('click', function () {
@@ -1215,10 +1230,20 @@ function restore() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  startParticles();
-  bind();
-  resetStudentForm();
-  if (window.speechSynthesis) window.speechSynthesis.getVoices();
-  restore();
-});
+var booted = false;
+function boot() {
+  if (booted) return;
+  booted = true;
+  try {
+    startParticles();
+    bind();
+    resetStudentForm();
+    if (window.speechSynthesis) window.speechSynthesis.getVoices();
+    restore();
+  } catch (err) {
+    alert('IQRA could not start. ' + (err && err.message ? err.message : err));
+  }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+window.addEventListener('load', boot);
