@@ -59,7 +59,7 @@ Container-bound (simplest):
 2. Delete the starter `Code.gs` contents and paste `Code.gs` from this project.
 3. **+ → HTML**, name the files `Index`, `CSS`, and `JS`. Paste the matching file contents. Do not paste the `<style>` or `<script>` wrappers into `CSS` or `JS`; those wrappers already live in `Index.html`.
 4. Open **Project Settings** and check that the timezone is `Asia/Kolkata`. The manifest in `appsscript.json` sets this if you copy it into the project.
-5. Leave `SPREADSHEET_ID` empty. A bound script uses the sheet it lives on.
+5. `SPREADSHEET_ID` at the top of `Code.gs` is already set to `1YywsSUGKckzORomiB4AUsnZh4HFVLKnmZTXzVK3v6b8`. Keep that line. The app opens that spreadsheet even if the script was not created from inside the sheet.
 6. In the editor, choose `setupAcademySheets` and **Run**. Approve the Sheets permission. This adds headers (if the tabs were empty) and the seed accounts.
 7. Confirm both tabs look right, then change the seed passwords.
 
