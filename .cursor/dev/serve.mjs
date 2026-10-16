@@ -17,8 +17,15 @@ function readInclude(name) {
   return fs.readFileSync(file, 'utf8');
 }
 
+function resolveIndexPath() {
+  const candidates = ['index.html', 'Index.html'].map((name) => path.join(ROOT, name));
+  const found = candidates.find((file) => fs.existsSync(file));
+  if (!found) throw new Error('index.html not found');
+  return found;
+}
+
 function buildIndexHtml() {
-  let html = fs.readFileSync(path.join(ROOT, 'Index.html'), 'utf8');
+  let html = fs.readFileSync(resolveIndexPath(), 'utf8');
   html = html.replace(/\r\n/g, '\n');
   html = html.replace(INCLUDE_RE, (_, name) => readInclude(name));
   const mockTag = `<script>${mockApiScript()}</script>`;
