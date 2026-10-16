@@ -18,7 +18,11 @@ function readInclude(name) {
 }
 
 function buildIndexHtml() {
-  let html = fs.readFileSync(path.join(ROOT, 'Index.html'), 'utf8');
+  const indexPath = ['index.html', 'Index.html']
+    .map((name) => path.join(ROOT, name))
+    .find((file) => fs.existsSync(file));
+  if (!indexPath) throw new Error('index.html not found');
+  let html = fs.readFileSync(indexPath, 'utf8');
   html = html.replace(/\r\n/g, '\n');
   html = html.replace(INCLUDE_RE, (_, name) => readInclude(name));
   const mockTag = `<script>${mockApiScript()}</script>`;
