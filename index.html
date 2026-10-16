@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IQRA AOE - Academy of Excellence</title>
     
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -16,8 +17,6 @@
         :root {
             --glass-bg: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.15);
-            --primary-glow: rgba(139, 92, 246, 0.5);
-            --secondary-glow: rgba(236, 72, 153, 0.5);
         }
 
         body {
@@ -53,11 +52,10 @@
         .glass-card:hover {
             transform: translateY(-10px) scale(1.02);
             border-color: rgba(236, 72, 153, 0.5);
-            box-shadow: 0 15px 30px -10px var(--secondary-glow);
+            box-shadow: 0 15px 30px -10px rgba(236, 72, 153, 0.5);
             background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
         }
 
-        /* Typography & Inputs */
         .text-gradient {
             background: linear-gradient(to right, #a855f7, #ec4899, #f43f5e);
             -webkit-background-clip: text;
@@ -69,6 +67,12 @@
             font-size: 3.5rem !important;
             line-height: 1.8;
             font-weight: 400;
+        }
+        
+        .hindi-font {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem !important;
+            font-weight: 600;
         }
 
         .custom-input {
@@ -82,12 +86,8 @@
             outline: none;
         }
         
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            cursor: pointer;
-        }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
-        /* Buttons & Animations */
         .btn-primary {
             background: linear-gradient(45deg, #7c3aed, #db2777);
             background-size: 200% auto;
@@ -98,260 +98,222 @@
             box-shadow: 0 0 20px rgba(219, 39, 119, 0.6);
             transform: translateY(-2px);
         }
-        
-        .btn-primary:active {
-            transform: translateY(1px);
-        }
 
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
         .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-pulse-glow { animation: pulseGlow 2s infinite; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
-        }
-        @keyframes floatXP {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
-        }
-
-        .xp-float {
-            position: absolute;
-            color: #fbbf24;
-            font-weight: 800;
-            font-size: 1.5rem;
-            pointer-events: none;
-            animation: floatXP 1s ease-out forwards;
-            z-index: 50;
-        }
-
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
 
-        /* Custom Toast Notification */
-        #toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        #toast-container { position: fixed; top: 20px; right: 20px; left: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: none; }
         .toast {
-            background: rgba(15, 23, 42, 0.9);
-            border-left: 4px solid #a855f7;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            transform: translateX(120%);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            background: rgba(15, 23, 42, 0.9); border-left: 4px solid #a855f7; color: white;
+            padding: 15px 25px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px); transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 12px; pointer-events: auto; max-width: min(420px, 100%);
         }
         .toast.show { transform: translateX(0); }
+
+        select.custom-input option { color: #0f172a; background: #fff; }
         /*]]>*/
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- Notifications -->
     <div id="toast-container"></div>
 
     <div class="container mx-auto px-4 py-10 max-w-6xl relative min-h-screen flex flex-col justify-center items-center">
         
-        <div id="view-login" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center animate-slide-up relative overflow-hidden">
-            <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-blue-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
+        <!-- 1A. MASTER SECURE LOGIN SCREEN (FIRST TIME) -->
+        <div id="view-login" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center hidden animate-slide-up relative overflow-hidden">
             
-            <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Indane_logo.svg" alt="Indane Logo" class="h-20 mx-auto mb-4 drop-shadow-xl z-10 relative">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">Student Portal</h1>
-            <p class="text-slate-300 font-light tracking-widest text-sm mb-8 z-10 relative uppercase">Restricted Access</p>
+            <!-- Logo Placed Above Master Login -->
+            <div class="flex justify-center mb-6 z-10 relative">
+                <!-- overflow-hidden added to perfectly round the square image -->
+                <div class="w-32 h-32 bg-white rounded-full overflow-hidden border-4 border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-105 transition-transform duration-300">
+                    <img src="https://i.ibb.co/5X8510v3/download-1.png" alt="IQRA AOE Logo" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">Master Login</h1>
+            <p class="text-slate-300 font-light tracking-widest text-sm mb-8 z-10 relative uppercase">First Time Setup</p>
             
             <div class="space-y-5 z-10 relative">
-                <div class="relative">
-                    <i class="fa-solid fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
-                    <input type="text" id="loginId" placeholder="Login ID" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
-                </div>
-                
-                <div class="relative">
-                    <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
-                    <input type="password" id="loginPass" placeholder="Password" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
-                </div>
+                <input type="text" id="loginId" placeholder="Master ID" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white text-center" required>
+                <input type="password" id="loginPass" placeholder="Password" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white text-center" required>
             </div>
             
             <button onclick="attemptLogin()" class="btn-primary w-full mt-8 py-4 rounded-xl text-xl uppercase tracking-wider font-bold shadow-lg z-10 relative">
-                Secure Login <i class="fa-solid fa-right-to-bracket ml-2"></i>
+                Authenticate <i class="fa-solid fa-right-to-bracket ml-2"></i>
             </button>
         </div>
 
-        <div id="view-onboarding" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center hidden animate-slide-up relative overflow-hidden">
-            <div class="absolute top-[-50px] left-[-50px] w-32 h-32 bg-purple-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
-            <div class="absolute bottom-[-50px] right-[-50px] w-32 h-32 bg-pink-600 rounded-full mix-blend-screen filter blur-[50px] opacity-50"></div>
-            
-            <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Indane_logo.svg" alt="Indane Logo" class="h-20 mx-auto mb-4 drop-shadow-xl z-10 relative">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">IQRA AOE</h1>
-            <p class="text-slate-300 font-light tracking-widest uppercase text-sm mb-8 z-10 relative">Academy of Excellence</p>
+        <!-- 1B. QUICK LOGIN SCREEN (RETURNING USERS) -->
+        <div id="view-quick-login" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center hidden animate-slide-up relative overflow-hidden">
+            <div class="w-24 h-24 mx-auto bg-purple-500/20 rounded-full flex items-center justify-center mb-6 border-2 border-purple-500/50">
+                <i class="fa-solid fa-user-graduate text-4xl text-purple-400"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-2 text-white tracking-tight z-10 relative">Welcome Back!</h1>
+            <p class="text-slate-300 font-light text-sm mb-8 z-10 relative">Enter your Mobile Number to jump right in</p>
             
             <div class="space-y-5 z-10 relative">
-                <div class="relative">
-                    <i class="fa-solid fa-user-graduate absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
-                    <input type="text" id="studentName" placeholder="Student Name" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
-                </div>
+                <input type="tel" id="quickMobile" placeholder="Your Registered Mobile Number" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white text-center" pattern="[0-9]{10}" required>
+            </div>
+            
+            <button onclick="attemptQuickLogin()" class="btn-primary w-full mt-8 py-4 rounded-xl text-xl uppercase tracking-wider font-bold shadow-lg z-10 relative">
+                Quick Login <i class="fa-solid fa-bolt ml-2"></i>
+            </button>
+            <button onclick="resetDevice()" class="mt-6 text-slate-400 hover:text-rose-400 text-sm transition-colors uppercase tracking-widest font-semibold">
+                <i class="fa-solid fa-arrows-rotate mr-1"></i> Switch User
+            </button>
+        </div>
+
+        <!-- 2. ONBOARDING SCREEN (Name, Mobile, DOB, Class) -->
+        <div id="view-onboarding" class="glass rounded-3xl p-8 md:p-12 w-full max-w-lg text-center hidden animate-slide-up relative overflow-hidden">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-2 text-gradient tracking-tight z-10 relative">IQRA AOE</h1>
+            <p class="text-slate-300 font-light tracking-widest uppercase text-sm mb-8 z-10 relative">Student Registration</p>
+            
+            <div class="space-y-5 z-10 relative">
+                <input type="text" id="studentName" placeholder="Full Student Name" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white" required>
+                <input type="tel" id="studentMobile" placeholder="Mobile Number (Used for Login)" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white border-purple-500/50" pattern="[0-9]{10}" required>
                 
-                <div class="relative flex flex-col items-start">
+                <div class="flex flex-col items-start">
                     <label class="text-xs text-slate-400 ml-2 mb-1 uppercase tracking-wider font-semibold">Date of Birth</label>
-                    <div class="w-full relative">
-                        <i class="fa-solid fa-calendar-days absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
-                        <input type="date" id="studentDOB" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white" required>
-                    </div>
+                    <input type="date" id="studentDOB" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white" required>
                 </div>
                 
-                <div class="relative">
-                    <i class="fa-solid fa-school absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
-                    <select id="studentClass" class="custom-input w-full py-4 pl-12 pr-4 rounded-xl text-lg text-white appearance-none" required>
-                        <option value="" disabled selected>Select Your Class</option>
-                        <option value="1">Class 1 (Basics)</option>
-                        <option value="2">Class 2 (Addition/Subtraction)</option>
-                        <option value="3">Class 3 (Multiplication)</option>
-                        <option value="4">Class 4 (Division)</option>
-                        <option value="5">Class 5 (Decimals Intro)</option>
-                        <option value="6">Class 6 (Fractions Intro)</option>
-                        <option value="7">Class 7 (Advanced Fractions/Decimals)</option>
-                        <option value="8">Class 8 (Pre-Algebra)</option>
-                        <option value="9">Class 9 (Algebra)</option>
-                        <option value="10">Class 10 (SSC Board Level)</option>
-                    </select>
-                    <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none"></i>
-                </div>
+                <select id="studentClass" class="custom-input w-full py-4 px-6 rounded-xl text-lg text-white appearance-none" required>
+                    <option value="" disabled selected>Select Your Class (1 to 10)</option>
+                    <option value="1">Class 1</option> <option value="2">Class 2</option>
+                    <option value="3">Class 3</option> <option value="4">Class 4</option>
+                    <option value="5">Class 5</option> <option value="6">Class 6</option>
+                    <option value="7">Class 7</option> <option value="8">Class 8</option>
+                    <option value="9">Class 9</option> <option value="10">Class 10</option>
+                </select>
             </div>
             
             <button onclick="startApp()" class="btn-primary w-full mt-8 py-4 rounded-xl text-xl uppercase tracking-wider font-bold shadow-lg z-10 relative">
-                Enter Academy <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
+                Save & Enter <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
             </button>
         </div>
 
-        <div id="view-dashboard" class="w-full hidden">
-            <header class="flex flex-col md:flex-row justify-between items-center mb-10 bg-black/20 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
+        <!-- 3. MAIN DASHBOARD -->
+        <div id="view-dashboard" class="w-full hidden animate-fade-in">
+            <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 bg-black/20 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
                 <div>
                     <h2 class="text-3xl font-bold"><span class="text-slate-400 font-light">Welcome,</span> <span id="welcomeMsg" class="text-gradient"></span></h2>
-                    <p class="text-slate-400 mt-1"><i class="fa-solid fa-graduation-cap mr-2"></i>Class <span id="dashClassLabel" class="text-white font-semibold"></span> Student</p>
+                    <p class="text-slate-400 mt-1"><i class="fa-solid fa-graduation-cap mr-2"></i>Class <span id="dashClassLabel" class="text-white font-semibold"></span></p>
                 </div>
-                <button onclick="logout()" class="mt-4 md:mt-0 px-6 py-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/50 rounded-lg transition-colors">
-                    <i class="fa-solid fa-power-off mr-2"></i> Sign Out
+                <button onclick="logout()" class="px-6 py-2 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/50 rounded-lg transition-colors">
+                    Sign Out
                 </button>
             </header>
 
-            <h3 class="text-2xl font-semibold mb-6 text-center md:text-left"><i class="fa-solid fa-book-open mr-3 text-purple-400"></i>Select a Module</h3>
+            <h3 class="text-2xl font-semibold mb-6 text-center md:text-left">Select a Subject Module</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- English -->
-                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('English')">
-                    <div class="w-20 h-20 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <span class="text-4xl">A</span>
-                    </div>
+                <div class="glass-card rounded-2xl p-8 text-center cursor-pointer" onclick="openCategory('English')">
+                    <div class="w-20 h-20 mx-auto bg-blue-500/20 rounded-full flex items-center justify-center mb-4"><span class="text-4xl font-bold text-blue-400">A</span></div>
                     <h3 class="text-2xl font-bold mb-2">English</h3>
-                    <p class="text-slate-400 text-sm">Vocabulary & Phonics</p>
                 </div>
-                
                 <!-- Hindi -->
-                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('Hindi')">
-                    <div class="w-20 h-20 mx-auto bg-orange-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <span class="text-4xl">अ</span>
-                    </div>
+                <div class="glass-card rounded-2xl p-8 text-center cursor-pointer" onclick="openCategory('Hindi')">
+                    <div class="w-20 h-20 mx-auto bg-orange-500/20 rounded-full flex items-center justify-center mb-4"><span class="text-4xl font-bold text-orange-400 hindi-font">अ</span></div>
                     <h3 class="text-2xl font-bold mb-2">Hindi</h3>
-                    <p class="text-slate-400 text-sm">Shabd & Uchaaran</p>
                 </div>
-
                 <!-- Urdu -->
-                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer" onclick="openCategory('Urdu')">
-                    <div class="w-20 h-20 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <span class="text-4xl urdu-font" style="font-size: 2.5rem !important;">ا</span>
-                    </div>
+                <div class="glass-card rounded-2xl p-8 text-center cursor-pointer" onclick="openCategory('Urdu')">
+                    <div class="w-20 h-20 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center mb-4"><span class="text-4xl font-bold text-emerald-400 urdu-font" style="font-size: 2.5rem !important;">ا</span></div>
                     <h3 class="text-2xl font-bold mb-2">Urdu</h3>
-                    <p class="text-slate-400 text-sm">Alfaz & Maani</p>
                 </div>
-
-                <!-- Math Hub -->
-                <div class="glass-card rounded-2xl p-8 text-center group cursor-pointer relative overflow-hidden" onclick="showView('view-math-hub')">
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10"></div>
-                    <div class="w-20 h-20 mx-auto bg-pink-500/20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 relative z-10">
-                        <i class="fa-solid fa-calculator text-3xl text-pink-400"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2 relative z-10 text-pink-300">Mathematics</h3>
-                    <p class="text-slate-400 text-sm relative z-10">Practice, Tests & Videos</p>
+                <!-- Math -->
+                <div class="glass-card rounded-2xl p-8 text-center cursor-pointer border-pink-500/30" onclick="showView('view-math-hub')">
+                    <div class="w-20 h-20 mx-auto bg-pink-500/20 rounded-full flex items-center justify-center mb-4"><i class="fa-solid fa-calculator text-3xl text-pink-400"></i></div>
+                    <h3 class="text-2xl font-bold mb-2 text-pink-300">Math Hub</h3>
                 </div>
             </div>
 
-            <!-- Team & Copyright Footer -->
+            <!-- COPYRIGHT & TEAM FOOTER -->
             <div class="mt-20 pt-12 border-t border-white/10 text-center w-full">
                 <h4 class="text-sm text-slate-400 font-light mb-2 tracking-widest uppercase">A Web Development Project By The Students Of</h4>
                 <h3 class="text-3xl font-extrabold text-gradient mb-10">IQRA Academy of Excellence</h3>
                 
                 <div class="flex flex-wrap justify-center gap-10 mb-12">
-                    <!-- Faiz Khan (Project Head) -->
-                    <div class="flex flex-col items-center group">
-                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-purple-500/50 group-hover:border-purple-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                            <img src="https://i.ibb.co/kV41zHnn/faiz.jpg" alt="Faiz Khan" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Faiz+Khan&amp;background=random&amp;color=fff'">
+                    <!-- Faiz Khan -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-purple-500/50 mb-3 bg-slate-800">
+                            <img src="https://i.ibb.co/kV41zHnn/faiz.jpg" alt="Faiz Khan" class="w-full h-full object-cover">
                         </div>
                         <span class="font-bold text-lg text-white">Faiz Khan</span>
-                        <span class="text-sm font-semibold text-purple-400 uppercase tracking-wide">Project Head</span>
+                        <span class="text-sm font-semibold text-purple-400 uppercase">Project Head</span>
                     </div>
-                    
                     <!-- Faisal Kamran -->
-                    <div class="flex flex-col items-center group">
-                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-pink-500/50 group-hover:border-pink-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(236,72,153,0.4)]">
-                            <img src="https://i.ibb.co/DZhmwxr/image.jpg" alt="Faisal Kamran" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Faisal+Kamran&amp;background=random&amp;color=fff'">
+                    <div class="flex flex-col items-center">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-pink-500/50 mb-3 bg-slate-800 flex items-center justify-center">
+                            <img src="https://i.ibb.co/GvNWvY5G/faisal.jpg" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Faisal+Kamran&amp;background=ec4899&amp;color=fff&amp;size=150';" alt="Faisal Kamran" class="w-full h-full object-cover">
                         </div>
                         <span class="font-bold text-lg text-white">Faisal Kamran</span>
-                        <span class="text-sm font-semibold text-pink-400 uppercase tracking-wide">Developer</span>
+                        <span class="text-sm font-semibold text-pink-400 uppercase">Developer</span>
                     </div>
-                    
-                    <!-- Ammar Qazi (Corrected Name) -->
-                    <div class="flex flex-col items-center group">
-                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-500/50 group-hover:border-blue-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(59,130,246,0.4)]">
-                            <img src="https://i.ibb.co/TqtXV6pB/Whats-App-Image-2026-10-12-at-3-04-06-PM.jpg" alt="Ammar Qazi" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Ammar+Qazi&amp;background=random&amp;color=fff'">
+                    <!-- Ammar Qazi -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-blue-500/50 mb-3 bg-slate-800 flex items-center justify-center">
+                            <img src="https://i.ibb.co/RRZGhfh/ammar.jpg" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Ammar+Qazi&amp;background=3b82f6&amp;color=fff&amp;size=150';" alt="Ammar Qazi" class="w-full h-full object-cover">
                         </div>
                         <span class="font-bold text-lg text-white">Ammar Qazi</span>
-                        <span class="text-sm font-semibold text-blue-400 uppercase tracking-wide">Developer</span>
+                        <span class="text-sm font-semibold text-blue-400 uppercase">Developer</span>
                     </div>
-                    
-                    <!-- Ukasha -->
-                    <div class="flex flex-col items-center group">
-                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-emerald-500/50 group-hover:border-emerald-400 group-hover:scale-110 transition-all duration-300 mb-3 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                            <img src="https://i.ibb.co/KcNdbNLJ/uuuu.jpg" alt="Ukasha" class="w-full h-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Ukasha&amp;background=random&amp;color=fff'">
+                    <!-- Ukasha Khan -->
+                    <div class="flex flex-col items-center">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-emerald-500/50 mb-3 bg-slate-800">
+                            <img src="https://i.ibb.co/KcNdbNLJ/uuuu.jpg" alt="Ukasha Khan" class="w-full h-full object-cover">
                         </div>
-                        <span class="font-bold text-lg text-white">Ukasha</span>
-                        <span class="text-sm font-semibold text-emerald-400 uppercase tracking-wide">Developer</span>
+                        <span class="font-bold text-lg text-white">Ukasha Khan</span>
+                        <span class="text-sm font-semibold text-emerald-400 uppercase">Developer</span>
                     </div>
                 </div>
+                <p class="text-slate-400 text-sm">&#169; 2026 IQRA Academy of Excellence. All Rights Reserved.</p>
+            </div>
+        </div>
+
+        <!-- 4. CATEGORY SELECTION -->
+        <div id="view-category" class="w-full max-w-4xl hidden animate-fade-in">
+            <button onclick="showView('view-dashboard')" class="mb-6 text-slate-400 hover:text-white transition-colors font-bold">
+                <i class="fa-solid fa-arrow-left mr-2"></i>Back to Dashboard
+            </button>
+            <div class="glass rounded-3xl p-10 text-center">
+                <h2 id="categoryTitle" class="text-4xl font-bold mb-8 text-gradient uppercase tracking-wider"></h2>
                 
-                <div class="bg-black/30 py-4 rounded-xl border border-white/10">
-                    <p class="text-slate-400 text-sm font-medium">
-                        &#169; 2026 IQRA Academy of Excellence. All Rights Reserved.
-                    </p>
+                <div id="wordSelectorDiv" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
+                    <p class="col-span-full text-slate-400 mb-2 font-bold" id="wordSelectorMsg">Select Word Length (Based on your Class)</p>
+                    <div id="btn-2L" class="glass-card p-8 rounded-2xl cursor-pointer hover:bg-white/10 hidden" onclick="loadContent('word', 2)"><div class="text-4xl font-bold text-blue-400 mb-2">2</div><h3 class="text-xl font-bold">Letter Words</h3></div>
+                    <div id="btn-3L" class="glass-card p-8 rounded-2xl cursor-pointer hover:bg-white/10 hidden" onclick="loadContent('word', 3)"><div class="text-4xl font-bold text-pink-400 mb-2">3</div><h3 class="text-xl font-bold">Letter Words</h3></div>
+                    <div id="btn-4L" class="glass-card p-8 rounded-2xl cursor-pointer hover:bg-white/10 hidden" onclick="loadContent('word', 4)"><div class="text-4xl font-bold text-emerald-400 mb-2">4</div><h3 class="text-xl font-bold">Letter Words</h3></div>
+                    <div id="btn-5L" class="glass-card p-8 rounded-2xl cursor-pointer hover:bg-white/10 hidden" onclick="loadContent('word', 5)"><div class="text-4xl font-bold text-purple-400 mb-2">5</div><h3 class="text-xl font-bold">Letter Words</h3></div>
+                    <div id="btn-6L" class="glass-card p-8 rounded-2xl cursor-pointer hover:bg-white/10 hidden" onclick="loadContent('word', 6)"><div class="text-4xl font-bold text-yellow-400 mb-2">6</div><h3 class="text-xl font-bold">Letter Words</h3></div>
+                </div>
+
+                <div id="paraSelectorDiv" class="hidden">
+                    <p class="text-slate-400 mb-8 font-bold">Advanced Learning Module (Class 6 to 10)</p>
+                    <div class="glass-card p-10 rounded-2xl cursor-pointer hover:bg-white/10 border-indigo-500/30" onclick="loadContent('para', 0)">
+                        <i class="fa-solid fa-book-open text-5xl text-indigo-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold">Read Paragraphs & Questions</h3>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="view-category" class="w-full max-w-4xl hidden animate-fade-in">
-        <div id="view-words" class="w-full hidden animate-fade-in">
-            <div class="flex justify-between items-center mb-6">
-                <button onclick="showView('view-category')" class="text-slate-400 hover:text-white transition-colors">
+        <!-- 5. CONTENT DISPLAY & PAGINATION -->
+        <div id="view-content" class="w-full hidden animate-fade-in">
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+                <button onclick="showView('view-category')" class="text-slate-400 hover:text-white transition-colors font-bold">
                     <i class="fa-solid fa-arrow-left mr-2"></i>Categories
                 </button>
                 <div class="bg-black/30 px-6 py-2 rounded-full border border-white/10">
@@ -360,730 +322,539 @@
             </div>
 
             <div class="glass rounded-3xl p-6 md:p-10 relative">
-                <h2 id="wordTitle" class="text-3xl md:text-4xl font-bold mb-2 text-center"></h2>
-                <p class="text-center text-slate-400 mb-8"><i class="fa-solid fa-volume-high text-sm mr-2"></i>Tap card or click speaker to listen</p>
+                <h2 id="contentMainTitle" class="text-3xl md:text-4xl font-bold mb-2 text-center text-white"></h2>
+                <p class="text-center text-slate-400 mb-8"><i class="fa-solid fa-volume-high text-sm mr-2"></i>Tap speaker icon to listen</p>
                 
-                <div id="wordContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Word cards injected here -->
+                <div id="contentGrid" class="grid grid-cols-1 gap-4">
+                    <!-- Dynamic Content injected here -->
                 </div>
                 
                 <div class="flex justify-between mt-10">
-                    <button id="prevBtn" onclick="changePage(-1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold">
-                        <i class="fa-solid fa-chevron-left mr-2"></i> Previous
-                    </button>
-                    <button id="nextBtn" onclick="changePage(1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold">
-                        Next <i class="fa-solid fa-chevron-right ml-2"></i>
-                    </button>
+                    <button id="prevBtn" onclick="changePage(-1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 transition-colors font-bold">Previous</button>
+                    <button id="nextBtn" onclick="changePage(1)" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl disabled:opacity-50 transition-colors font-bold">Next</button>
                 </div>
             </div>
         </div>
 
-        <div id="view-math-hub" class="w-full max-w-5xl hidden animate-fade-in">
-            <button onclick="showView('view-dashboard')" class="mb-6 text-slate-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-arrow-left mr-2"></i>Back to Dashboard
-            </button>
-            
-            <div class="glass rounded-3xl p-10 text-center relative overflow-hidden">
-                <i class="fa-solid fa-square-root-variable absolute -right-10 -bottom-10 text-[15rem] text-white/5 rotate-12 pointer-events-none"></i>
-                <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400">Math Arena</h2>
-                <p class="text-xl text-slate-300 mb-10">Master concepts or test your skills</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                    <!-- Gamified Test -->
-                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-pink-500/30" onclick="startMathSession()">
-                        <div class="bg-gradient-to-br from-pink-500 to-rose-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-pink-500/30">
-                            <i class="fa-solid fa-gamepad text-3xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">Play & Test</h3>
-                        <p class="text-slate-400 text-sm">10 Practice Qs + 10 Test Qs.</p>
-                    </div>
-                    <!-- Video Lessons -->
-                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-blue-500/30" onclick="showView('view-math-videos')">
-                        <div class="bg-gradient-to-br from-blue-500 to-cyan-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
-                            <i class="fa-brands fa-youtube text-3xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">Video Lessons</h3>
-                        <p class="text-slate-400 text-sm">Fractions & Decimals visually</p>
-                    </div>
-                    <!-- Tables (Pahade) -->
-                    <div class="glass-card p-8 rounded-2xl cursor-pointer border-green-500/30" onclick="openTablesView()">
-                        <div class="bg-gradient-to-br from-green-500 to-emerald-600 w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-green-500/30">
-                            <i class="fa-solid fa-list-ol text-3xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-2">Tables (पहाड़े)</h3>
-                        <p class="text-slate-400 text-sm">Learn 2 to 20 multiplication</p>
-                    </div>
+        <!-- 6. MATH HUB -->
+        <div id="view-math-hub" class="w-full max-w-4xl hidden animate-fade-in">
+            <button onclick="showView('view-dashboard')" class="mb-6 text-slate-400 hover:text-white transition-colors font-bold"><i class="fa-solid fa-arrow-left mr-2"></i>Dashboard</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-10 rounded-2xl cursor-pointer text-center" onclick="startMathSession()">
+                    <i class="fa-solid fa-gamepad text-5xl text-pink-400 mb-4"></i><h3 class="text-2xl font-bold">Practice & Test</h3>
+                </div>
+                <div class="glass-card p-10 rounded-2xl cursor-pointer text-center" onclick="showView('view-tables')">
+                    <i class="fa-solid fa-list-ol text-5xl text-emerald-400 mb-4"></i><h3 class="text-2xl font-bold">Tables (पहाड़े)</h3>
                 </div>
             </div>
         </div>
 
-        <div id="view-math-videos" class="w-full max-w-4xl hidden animate-fade-in">
-            <button onclick="showView('view-math-hub')" class="mb-6 text-slate-400 hover:text-white transition-colors">
-                <i class="fa-solid fa-arrow-left mr-2"></i>Back to Math Hub
-            </button>
-            <div class="glass rounded-3xl p-10 text-center">
-                <h2 class="text-4xl font-bold mb-8 text-gradient">Video Lessons</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/UPAJc7xypjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        <div class="p-4 bg-white/5"><h4 class="font-bold">Fractions & Decimals</h4><p class="text-xs text-slate-400 mt-1">Class 7 Math</p></div>
-                    </div>
-                    <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg">
-                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/LFO07qWWtrs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        <div class="p-4 bg-white/5"><h4 class="font-bold">Decimals for Kids</h4><p class="text-xs text-slate-400 mt-1">Elementary Math</p></div>
-                    </div>
-                </div>
+        <!-- 7. MATH TABLES -->
+        <div id="view-tables" class="w-full max-w-4xl hidden animate-fade-in">
+            <button onclick="showView('view-math-hub')" class="mb-6 text-slate-400 hover:text-white font-bold"><i class="fa-solid fa-arrow-left mr-2"></i>Math Hub</button>
+            <div class="glass rounded-3xl p-8 text-center">
+                <h2 id="currentTableTitle" class="text-3xl font-bold mb-6 text-gradient">Table of 2</h2>
+                <div id="tableSelectors" class="flex flex-wrap justify-center gap-2 mb-8"></div>
+                <div id="tableContent" class="text-2xl font-bold space-y-4 mb-8 bg-black/30 p-8 rounded-2xl"></div>
+                <button onclick="speakCurrentTable()" class="btn-primary px-8 py-3 rounded-xl font-bold text-lg"><i class="fa-solid fa-volume-high mr-2"></i> Read Aloud</button>
             </div>
         </div>
 
-        <div id="view-math" class="w-full max-w-4xl hidden animate-fade-in relative">
-            
-            <!-- Gamification HUD -->
-            <div class="flex flex-wrap justify-between items-center bg-black/40 p-4 rounded-2xl border border-white/10 backdrop-blur-md mb-6 shadow-lg">
-                <div class="flex items-center gap-4">
-                    <div class="bg-yellow-500/20 px-4 py-2 rounded-xl border border-yellow-500/50">
-                        <i class="fa-solid fa-star text-yellow-400 mr-2"></i><span id="xpScore" class="font-bold text-xl text-yellow-100">0 XP</span>
-                    </div>
-                    <div class="text-2xl tracking-widest text-orange-400" id="streakStars">☆☆☆</div>
-                </div>
-                
-                <div id="mathModeBadge" class="mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase animate-pulse-glow">
-                    Practice Mode
-                </div>
-            </div>
-
-            <div class="glass rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <button onclick="quitMath()" class="text-slate-400 hover:text-white transition-colors text-sm">
-                        <i class="fa-solid fa-right-from-bracket mr-2"></i>Quit
-                    </button>
-                    <span id="mathProgress" class="bg-white/10 px-4 py-1 rounded-full text-sm font-semibold">Q: 1/10</span>
-                </div>
-
-                <!-- Playing Area -->
-                <div id="mathPlayArea">
-                    <div id="mathContainer" class="bg-black/30 border border-white/10 rounded-2xl p-10 mb-8 relative">
-                        <div id="mathQuestionText" class="text-5xl md:text-6xl font-extrabold tracking-tight"></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="mathOptions">
-                        <!-- Options generated here -->
-                    </div>
-                    
-                    <div id="mathFeedback" class="mt-8 text-2xl font-bold min-h-[40px] transition-all"></div>
-                </div>
-
-                <!-- Report Card Area -->
+        <!-- 8. MATH ENGINE -->
+        <div id="view-math" class="w-full max-w-4xl hidden animate-fade-in">
+            <div class="glass rounded-3xl p-8 text-center">
+                <h2 id="mathModeTitle" class="text-3xl font-bold mb-4">Practice Mode</h2>
+                <p id="mathProgress" class="text-slate-400 mb-8 font-bold"></p>
+                <div id="mathContainer" class="text-5xl font-extrabold mb-10 text-white drop-shadow-lg"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="mathOptions"></div>
+                <div id="mathFeedback" class="mt-8 text-2xl font-bold min-h-[40px]"></div>
                 <div id="mathReport" class="hidden py-10">
-                    <i class="fa-solid fa-trophy text-7xl text-yellow-400 mb-6 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]"></i>
-                    <h2 class="text-4xl font-bold mb-8">Test Completed!</h2>
-                    
-                    <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-10">
-                        <div class="bg-green-500/20 border border-green-500/50 rounded-2xl p-6">
-                            <div class="text-4xl font-bold text-green-400 mb-1" id="reportCorrect">0</div>
-                            <div class="text-sm text-green-200 uppercase tracking-wider">Correct</div>
-                        </div>
-                        <div class="bg-rose-500/20 border border-rose-500/50 rounded-2xl p-6">
-                            <div class="text-4xl font-bold text-rose-400 mb-1" id="reportWrong">0</div>
-                            <div class="text-sm text-rose-200 uppercase tracking-wider">Wrong</div>
-                        </div>
-                    </div>
-                    
-                    <button onclick="startMathSession()" class="btn-primary px-8 py-3 rounded-xl font-bold text-lg mr-4">
-                        Play Again <i class="fa-solid fa-rotate-right ml-2"></i>
-                    </button>
-                    <button onclick="showView('view-math-hub')" class="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors font-bold text-lg">
-                        Back to Menu
-                    </button>
+                    <h2 class="text-4xl font-bold mb-8 text-yellow-400">Test Completed!</h2>
+                    <h3 class="text-2xl mb-2 text-green-400">Correct: <span id="reportCorrect"></span></h3>
+                    <h3 class="text-2xl mb-8 text-rose-400">Wrong: <span id="reportWrong"></span></h3>
+                    <button onclick="showView('view-math-hub')" class="btn-primary px-8 py-3 rounded-xl font-bold">Back to Math Hub</button>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
         //<![CDATA[
-        // App State
-        let currentUser = { name: '', dob: '', classLvl: 1 };
-        let currentSubject = '';
-        let currentLetterCount = 2;
-        let currentPage = 0;
-        let wordsList = [];
-        
-        // Math Gamification State
-        let mathQuestionsDone = 0;
-        let testCorrectAnswers = 0;
-        let isTestMode = false;
-        let userXP = 0;
-        let currentStreak = 0;
-        let currentCorrectAnswer = null;
-
-        // Custom Toast Notification System
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            
-            let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
-            if(type === 'success') {
-                icon = '<i class="fa-solid fa-circle-check text-green-400"></i>';
-                toast.style.borderLeftColor = '#10b981';
-            } else if (type === 'error') {
-                icon = '<i class="fa-solid fa-circle-xmark text-rose-400"></i>';
-                toast.style.borderLeftColor = '#f43f5e';
-            } else if (type === 'warning') {
-                icon = '<i class="fa-solid fa-bolt text-yellow-400"></i>';
-                toast.style.borderLeftColor = '#eab308';
-            }
-
-            toast.innerHTML = `${icon} <span class="font-medium">${message}</span>`;
+            let icon = type === 'error' ? 'fa-circle-xmark text-rose-400' : 'fa-circle-check text-green-400';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span class="font-medium">${message}</span>`;
             container.appendChild(toast);
-            
-            // Trigger animation
             setTimeout(() => toast.classList.add('show'), 10);
-            
-            // Remove after 3.5s
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400);
-            }, 3500);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // View Router
         function showView(viewId) {
             document.querySelectorAll('body > div.container > div').forEach(el => {
-                if(el.id !== 'toast-container') {
-                    el.classList.add('hidden');
-                    el.classList.remove('animate-fade-in');
-                }
+                if(el.id !== 'toast-container') el.classList.add('hidden');
             });
-            const view = document.getElementById(viewId);
-            view.classList.remove('hidden');
-            // Trigger animation reflow
-            void view.offsetWidth; 
-            view.classList.add('animate-fade-in');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // ==========================================
+        // LOCAL STORAGE & REMEMBER ME SYSTEM (Mobile Based)
+        // ==========================================
+        let currentUser = { name: '', classLvl: 1, mobile: '' };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTables();
+            checkExistingSession(); 
+        });
+
+        function checkExistingSession() {
+            const savedProfile = localStorage.getItem('iqra_student_profile');
+            if (savedProfile) {
+                const parsed = JSON.parse(savedProfile);
+                document.getElementById('quickMobile').value = parsed.mobile; 
+                showView('view-quick-login');
+            } else {
+                showView('view-login');
+            }
         }
 
         function attemptLogin() {
             const id = document.getElementById('loginId').value;
             const pass = document.getElementById('loginPass').value;
-            
             if (id === 'iqraaoe@123' && pass === '9665700883') {
-                showToast("Login Successful!", "success");
+                showToast("Master Login Successful!", "success");
                 showView('view-onboarding');
             } else {
-                showToast("Invalid Login ID or Password!", "error");
+                showToast("Invalid Master ID or Password!", "error");
             }
         }
 
-        function startApp() {
-            const name = document.getElementById('studentName').value.trim();
-            const dob = document.getElementById('studentDOB').value;
-            const classLvl = document.getElementById('studentClass').value;
-
-            if(!name || !dob || !classLvl) {
-                showToast("Please fill all details correctly!", "error");
-                return;
+        function attemptQuickLogin() {
+            const enteredMobile = document.getElementById('quickMobile').value.trim();
+            const savedData = JSON.parse(localStorage.getItem('iqra_student_profile'));
+            
+            if (savedData && savedData.mobile === enteredMobile) {
+                currentUser = savedData;
+                setupDashboard();
+                showToast("Welcome Back!", "success");
+            } else {
+                showToast("Mobile Number not found. Please check.", "error");
             }
+        }
 
-            currentUser = { name, dob, classLvl: parseInt(classLvl) };
+        function resetDevice() {
+            localStorage.removeItem('iqra_student_profile');
+            document.getElementById('loginId').value = '';
+            document.getElementById('loginPass').value = '';
+            showToast("Device Memory Cleared. Please use Master ID.", "info");
+            showView('view-login');
+        }
+
+        function startApp() {
+            const name = document.getElementById('studentName').value;
+            const mobile = document.getElementById('studentMobile').value.trim();
+            const dob = document.getElementById('studentDOB').value;
+            const cls = document.getElementById('studentClass').value;
             
-            document.getElementById('welcomeMsg').innerText = name;
-            document.getElementById('dashClassLabel').innerText = classLvl;
+            if(!name || !mobile || !dob || !cls) return showToast("Please fill all details!", "error");
             
-            showToast(`Welcome aboard, ${name}!`, "success");
+            currentUser = { name: name, classLvl: parseInt(cls), mobile: mobile };
+            localStorage.setItem('iqra_student_profile', JSON.stringify(currentUser));
+            
+            showToast("Profile Saved! Mobile number is your Login ID.", "success");
+            setupDashboard();
+        }
+
+        function setupDashboard() {
+            document.getElementById('welcomeMsg').innerText = currentUser.name;
+            document.getElementById('dashClassLabel').innerText = currentUser.classLvl;
             showView('view-dashboard');
         }
 
         function logout() {
-            // Reset state and clear inputs
-            currentUser = { name: '', dob: '', classLvl: 1 };
-            document.getElementById('loginId').value = '';
-            document.getElementById('loginPass').value = '';
-            
-            showToast("Logged out successfully.", "info");
-            showView('view-login');
+            showToast("Signed Out.", "info");
+            checkExistingSession(); 
         }
 
-        const rhymingTemplates = {
-            'English': { 
-                2: [
-                    {w:"Am", m:"Hoon"}, {w:"Jam", m:"Murbba"}, {w:"Ram", m:"Bheda"}, {w:"Sam", m:"Naam"}, {w:"Yam", m:"Ratalu"},
-                    {w:"At", m:"Par"}, {w:"Bat", m:"Balla"}, {w:"Cat", m:"Billi"}, {w:"Hat", m:"Topi"}, {w:"Mat", m:"Chatai"},
-                    {w:"It", m:"Ye"}, {w:"Bit", m:"Tukda"}, {w:"Fit", m:"Swasth"}, {w:"Hit", m:"Maarna"}, {w:"Kit", m:"Saman"},
-                    {w:"Up", m:"Upar"}, {w:"Cup", m:"Pyala"}, {w:"Pup", m:"Pilla"}, {w:"In", m:"Andar"}, {w:"Pin", m:"Keel"}
-                ],
-                3: [
-                    {w:"Cap", m:"Topi"}, {w:"Map", m:"Naksha"}, {w:"Nap", m:"Jhapki"}, {w:"Tap", m:"Nal"}, {w:"Lap", m:"God"},
-                    {w:"Pen", m:"Kalam"}, {w:"Men", m:"Aadmi"}, {w:"Ten", m:"Das"}, {w:"Hen", m:"Murgi"}, {w:"Den", m:"Gufa"},
-                    {w:"Sun", m:"Suraj"}, {w:"Run", m:"Daudna"}, {w:"Fun", m:"Maza"}, {w:"Bun", m:"Pao"}, {w:"Gun", m:"Bandook"},
-                    {w:"Hop", m:"Kudna"}, {w:"Mop", m:"Pocha"}, {w:"Top", m:"Upar"}, {w:"Cop", m:"Police"}, {w:"Pop", m:"Awaaz"}
-                ]
-            },
-            'Hindi': {
-                2: [
-                    {w:"अब", m:"Ab", h:"अब"}, {w:"कब", m:"Kab", h:"कब"}, {w:"जब", m:"Jab", h:"जब"}, {w:"तब", m:"Tab", h:"तब"}, {w:"सब", m:"Sab", h:"सब"},
-                    {w:"कल", m:"Kal", h:"कल"}, {w:"जल", m:"Jal", h:"जल"}, {w:"थल", m:"Thal", h:"थल"}, {w:"नल", m:"Nal", h:"नल"}, {w:"पल", m:"Pal", h:"पल"},
-                    {w:"कर", m:"Kar", h:"कर"}, {w:"डर", m:"Dar", h:"डर"}, {w:"नर", m:"Nar", h:"नर"}, {w:"पर", m:"Par", h:"पर"}, {w:"मर", m:"Mar", h:"मर"},
-                    {w:"धन", m:"Dhan", h:"धन"}, {w:"मन", m:"Man", h:"मन"}, {w:"तन", m:"Tan", h:"तन"}, {w:"वन", m:"Van", h:"वन"}, {w:"जन", m:"Jan", h:"जन"}
-                ],
-                3: [
-                    {w:"अगर", m:"Agar", h:"अगर"}, {w:"मगर", m:"Magar", h:"मगर"}, {w:"नगर", m:"Nagar", h:"नगर"}, {w:"डगर", m:"Dagar", h:"डगर"}, {w:"सफर", m:"Safar", h:"सफर"},
-                    {w:"कमल", m:"Kamal", h:"कमल"}, {w:"अमल", m:"Amal", h:"अमल"}, {w:"नमक", m:"Namak", h:"नमक"}, {w:"चमक", m:"Chamak", h:"चमक"}, {w:"दमक", m:"Damak", h:"दमक"},
-                    {w:"पहल", m:"Pahal", h:"पहल"}, {w:"टहल", m:"Tahal", h:"टहल"}, {w:"महल", m:"Mahal", h:"महल"}, {w:"चहल", m:"Chahal", h:"चहल"}, {w:"कहर", m:"Kahar", h:"कहर"},
-                    {w:"पवन", m:"Pawan", h:"पवन"}, {w:"हवन", m:"Hawan", h:"हवन"}, {w:"भवन", m:"Bhawan", h:"भवन"}, {w:"नयन", m:"Nayan", h:"नयन"}, {w:"शयन", m:"Shayan", h:"शयन"}
-                ]
-            },
-            'Urdu': {
-                2: [
-                    {w:"اب", m:"Ab", h:"अब"}, {w:"کب", m:"Kab", h:"कब"}, {w:"جب", m:"Jab", h:"जब"}, {w:"تب", m:"Tab", h:"तब"}, {w:"سب", m:"Sab", h:"सब"},
-                    {w:"کل", m:"Kal", h:"कल"}, {w:"جل", m:"Jal", h:"जल"}, {w:"نل", m:"Nal", h:"नल"}, {w:"پل", m:"Pal", h:"پل"}, {w:"بل", m:"Bal", h:"बल"},
-                    {w:"کر", m:"Kar", h:"कर"}, {w:"ڈر", m:"Dar", h:"डर"}, {w:"پر", m:"Par", h:"पर"}, {w:"مر", m:"Mar", h:"مر"}, {w:"سر", m:"Sar", h:"सर"},
-                    {w:"دن", m:"Din", h:"दिन"}, {w:"گن", m:"Gin", h:"गिन"}, {w:"بن", m:"Bin", h:"बिन"}, {w:"سن", m:"Sun", h:"सुन"}, {w:"چن", m:"Chun", h:"चुन"}
-                ],
-                3: [
-                    {w:"اگر", m:"Agar", h:"अगर"}, {w:"مگر", m:"Magar", h:"मगर"}, {w:"نگر", m:"Nagar", h:"नगर"}, {w:"ڈگر", m:"Dagar", h:"डगर"}, {w:"سفر", m:"Safar", h:"सफर"},
-                    {w:"عمل", m:"Amal", h:"अमल"}, {w:"کمل", m:"Kamal", h:"कमल"}, {w:"محل", m:"Mahal", h:"महल"}, {w:"چہل", m:"Chahal", h:"चहल"}, {w:"پہل", m:"Pahal", h:"पहल"},
-                    {w:"نمک", m:"Namak", h:"नमक"}, {w:"چمک", m:"Chamak", h:"चमक"}, {w:"دمک", m:"Damak", h:"दमक"}, {w:"پلک", m:"Palak", h:"पलक"}, {w:"جھلک", m:"Jhalak", h:"झलक"},
-                    {w:"پون", m:"Pawan", h:"पवन"}, {w:"ہون", m:"Hawan", h:"हवन"}, {w:"بھون", m:"Bhawan", h:"भवन"}, {w:"نین", m:"Nayan", h:"नयन"}, {w:"شین", m:"Shayan", h:"शयन"}
-                ]
-            }
-        };
-
-        function generate100Words(lang, length) {
-            let list = [];
-            let baseArray = rhymingTemplates[lang][length];
-            // Loop array exactly 100 times to create 100 rhythmic items
-            for(let i=0; i<100; i++) {
-                let item = baseArray[i % baseArray.length];
-                list.push({ word: item.w, meaning: item.m, hindiPron: item.h });
-            }
-            return list;
-        }
-
-        function speakText(text, lang, hindiPron, element, event) {
-            if(event) event.stopPropagation();
-            
-            // Visual feedback on card
-            if(element) {
-                element.classList.add('animate-pulse-glow', 'border-purple-500');
-                setTimeout(() => element.classList.remove('animate-pulse-glow', 'border-purple-500'), 1500);
-            }
-
-            let textToSpeak = text;
-            let speechLang = 'en-US';
-
-            if (lang === 'Hindi') {
-                speechLang = 'hi-IN';
-            } else if (lang === 'Urdu') {
-                // FALLBACK HACK: Read Urdu using Hindi engine for absolute reliability
-                textToSpeak = hindiPron; 
-                speechLang = 'hi-IN';
-            }
-
-            const speech = new SpeechSynthesisUtterance(textToSpeak);
-            speech.lang = speechLang;
-            speech.rate = 0.8; 
-            speech.pitch = 1.1; // Slightly higher pitch for clarity
-            window.speechSynthesis.speak(speech);
-        }
+        // ==========================================
+        // CONTENT LOGIC (CLASS BASED SYSTEM)
+        // ==========================================
+        let currentSubject = '';
+        let currentMode = ''; 
+        let currentPage = 0;
+        let totalPages = 10; 
+        let activeData = [];
 
         function openCategory(subject) {
             currentSubject = subject;
-            document.getElementById('categoryTitle').innerText = `${subject} Category`;
+            document.getElementById('categoryTitle').innerText = subject + " Selection";
+            const lvl = currentUser.classLvl;
+            
+            document.getElementById('wordSelectorDiv').classList.add('hidden');
+            document.getElementById('paraSelectorDiv').classList.add('hidden');
+            ['btn-2L','btn-3L','btn-4L','btn-5L','btn-6L'].forEach(id => document.getElementById(id).classList.add('hidden'));
+
+            if(lvl <= 5) {
+                document.getElementById('wordSelectorDiv').classList.remove('hidden');
+                document.getElementById('wordSelectorMsg').innerText = `Modules for Class ${lvl}`;
+                if(lvl === 1 || lvl === 2) { document.getElementById('btn-2L').classList.remove('hidden'); document.getElementById('btn-3L').classList.remove('hidden'); }
+                if(lvl === 3 || lvl === 4) { document.getElementById('btn-4L').classList.remove('hidden'); document.getElementById('btn-5L').classList.remove('hidden'); }
+                if(lvl === 5) { document.getElementById('btn-5L').classList.remove('hidden'); document.getElementById('btn-6L').classList.remove('hidden'); }
+            } else {
+                document.getElementById('paraSelectorDiv').classList.remove('hidden');
+            }
             showView('view-category');
         }
 
-        function loadWords(letters) {
-            currentLetterCount = letters;
-            wordsList = generate100Words(currentSubject, letters);
+        function generateWords(subject, length) {
+            let arr = [];
+            // Real English Words
+            const en_2 = ["am","an","as","at","be","by","do","go","he","hi","if","in","is","it","me","my","no","of","oh","on","or","ox","so","to","up","us","we","ax","ex","ha","ho","la","lo","ma","pa","pi","re","ti","yo","zo"];
+            const en_3 = ["cat","dog","bat","rat","mat","hat","fat","sat","pat","sun","run","fun","bun","gun","pig","dig","fig","big","wig","cow","how","now","bow","pen","ten","hen","men","den","red","bed","fed","led","wed","boy","toy","joy","sky","fly","try","cry"];
+            const en_4 = ["book","look","cook","hook","ball","tall","fall","call","hall","bird","word","play","clay","tray","jump","bump","lump","pump","time","dime","lime","tree","free","knee","star","moon","rain","snow","wind","fire","sand","land","hand","band","fish","dish","wish","wash","fast","past"];
+            const en_5 = ["apple","mango","grape","peach","lemon","tiger","water","paper","table","chair","house","mouse","train","brain","chain","clock","block","flock","earth","heart","smart","start","chart","black","white","green","brown","plant","slant","grant","horse","force","light","night","right","might","sight","tight","fight","flight"];
+            const en_6 = ["school","orange","banana","pencil","flower","animal","family","friend","mother","father","sister","person","player","singer","dancer","doctor","farmer","driver","garden","market","planet","rocket","pocket","jacket","racket","window","yellow","purple","silver","golden","forest","desert","stream","street","summer","winter","autumn","spring","nature","future"];
+
+            // Real Hindi Words
+            const hi_2 = ["अब","कब","जब","तब","सब","रब","हल","चल","कल","पल","जल","नल","फल","दल","बल","कर","डर","भर","मर","सर","घर","नर","पर","चर","मन","तन","धन","वन","जन","हम","तुम","वह","यह","रस","बस","दस","कस","मत","खत","छत"];
+            const hi_3 = ["कमल","महल","टहल","पहल","चहल","मटर","शहर","नहर","पहर","लहर","चमन","नमन","दमन","रमन","पवन","भवन","हवन","लपक","झपक","मटक","चटक","भटक","अटक","गगन","मगन","लगन","सड़क","कड़क","भड़क","धड़क","नरम","गरम","शरम","करम","भरम","नमक","चमक","दमक","धमक","पलक"];
+            const hi_4 = ["बरगद","कसरत","नफरत","शरबत","टमटम","खटम","अजगर","हलधर","जलचर","थलचर","नभचर","बचपन","पचपन","अचकन","धड़कन","उलझन","बर्तन","उपवन","अवसर","सरपट","झटपट","खटपट","करवट","मखम","परवल","अदरक","दशरथ","शबनम","मरहम","अकबर","अफसर","हसरत","मतलब","मकसद","बकवास","अहसान","आसमान","भगवान","पकवान","धनवान"];
+            const hi_5 = ["आसमान","भगवान","पकवान","धनवान","पहलवान","मेहरबान","सावधान","अपमान","अनुमान","मेहमान","ताकतवर","समझदार","चमकदार","कलाकार","सलाहकार","शानदार","वफादार","जानवर","कबूतर","जादूगर","अखबार","दरबार","सरकार","तलवार","सलवार","इतवार","सोमवार","मंगलवार","बुधवार","शुक्रवार","शनिवार","दीपावली","सरस्वती","महारानी","राजधानी","आसानी","परेशानी","मेहनती","शुरुआत","मुस्कान"];
+            const hi_6 = ["ईमानदार","समझदारी","चमकदार","सलाहकार","कलाकार","ज़िम्मेदारी","ज़बरदस्त","मास्टरजी","मुस्कराहट","खूबसूरत","आसमान","भगवान","पकवान","धनवान","पहलवान","मेहरबान","सावधान","अपमान","अनुमान","मेहमान","ताकतवर","समझदार","चमकदार","कलाकार","सलाहकार","शानदार","वफादार","जानवर","कबूतर","जादूगर","अखबार","दरबार","सरकार","तलवार","सलवार","दीपावली","सरस्वती","महारानी","राजधानी","परेशानी"];
+
+            // Smart Urdu Words (u = Screen पर दिखने वाली उर्दू, h = माइक से बोलने वाली हिंदी/रोमन)
+            const ur_2 = [{u:"اب", h:"अब"}, {u:"کب", h:"कब"}, {u:"جب", h:"जब"}, {u:"تب", h:"तब"}, {u:"سب", h:"सब"}, {u:"رب", h:"रब"}, {u:"دل", h:"दिल"}, {u:"مل", h:"मिल"}, {u:"کل", h:"कल"}, {u:"پل", h:"पल"}, {u:"جل", h:"जल"}, {u:"نل", h:"नल"}, {u:"کر", h:"कर"}, {u:"ڈر", h:"डर"}, {u:"بھر", h:"भर"}, {u:"مر", h:"मर"}, {u:"سر", h:"सर"}, {u:"گھر", h:"घर"}, {u:"نر", h:"नर"}, {u:"پر", h:"पर"}, {u:"چر", h:"चर"}, {u:"دن", h:"दिन"}, {u:"بن", h:"बन"}, {u:"فن", h:"फन"}, {u:"گن", h:"गिन"}, {u:"سن", h:"सुन"}, {u:"ہم", h:"हम"}, {u:"تم", h:"तुम"}, {u:"کم", h:"कम"}, {u:"نم", h:"नम"}, {u:"چپ", h:"चुप"}, {u:"تپ", h:"तप"}, {u:"سچ", h:"सच"}, {u:"بچ", h:"बच"}, {u:"رچ", h:"रच"}, {u:"مت", h:"मत"}, {u:"خط", h:"खत"}, {u:"چھت", h:"छत"}, {u:"لت", h:"लत"}, {u:"رس", h:"रस"}];
+            const ur_3 = [{u:"وقت", h:"वक़्त"}, {u:"تخت", h:"तख्त"}, {u:"بخت", h:"बख्त"}, {u:"سخت", h:"सख्त"}, {u:"تاج", h:"ताज"}, {u:"راج", h:"राज"}, {u:"کاج", h:"काज"}, {u:"آج", h:"आज"}, {u:"ہوا", h:"हवा"}, {u:"دوا", h:"दवा"}, {u:"شفا", h:"शिफा"}, {u:"وفا", h:"वफ़ा"}, {u:"جفا", h:"जफ़ा"}, {u:"علم", h:"इल्म"}, {u:"حلم", h:"हिल्म"}, {u:"قلم", h:"क़लम"}, {u:"قدم", h:"क़दम"}, {u:"کرم", h:"करम"}, {u:"شرم", h:"शरम"}, {u:"بھرم", h:"भरम"}, {u:"کام", h:"काम"}, {u:"نام", h:"नाम"}, {u:"شام", h:"शाम"}, {u:"بام", h:"बाम"}, {u:"جام", h:"जाम"}, {u:"دام", h:"दाम"}, {u:"رام", h:"राम"}, {u:"عام", h:"आम"}, {u:"تام", h:"ताम"}, {u:"لال", h:"लाल"}, {u:"بال", h:"बाल"}, {u:"خال", h:"खाल"}, {u:"مال", h:"माल"}, {u:"حال", h:"हाल"}, {u:"سال", h:"साल"}, {u:"جال", h:"जाल"}, {u:"دال", h:"दाल"}, {u:"طال", h:"ताल"}, {u:"غار", h:"ग़ार"}, {u:"یار", h:"यार"}];
+            const ur_4 = [{u:"کتاب", h:"किताब"}, {u:"حساب", h:"हिसाब"}, {u:"عذاب", h:"अज़ाब"}, {u:"ثواب", h:"सवाब"}, {u:"جواب", h:"जवाब"}, {u:"نماز", h:"नमाज़"}, {u:"نیاز", h:"नियाज़"}, {u:"راز", h:"राज़"}, {u:"ساز", h:"साज़"}, {u:"ناز", h:"नाज़"}, {u:"باز", h:"बाज़"}, {u:"غاز", h:"ग़ाज़"}, {u:"طاز", h:"ताज़"}, {u:"رات", h:"रात"}, {u:"بات", h:"बात"}, {u:"مات", h:"मात"}, {u:"ذات", h:"ज़ात"}, {u:"پات", h:"पात"}, {u:"سات", h:"सात"}, {u:"گات", h:"गात"}, {u:"لات", h:"लात"}, {u:"حات", h:"हात"}, {u:"طات", h:"तात"}, {u:"نور", h:"नूर"}, {u:"حور", h:"हूर"}, {u:"دور", h:"दूर"}, {u:"کور", h:"कोर"}, {u:"مور", h:"मोर"}, {u:"چور", h:"चोर"}, {u:"شور", h:"शोर"}, {u:"پور", h:"पूर"}, {u:"ٹور", h:"टूर"}, {u:"سور", h:"सूर"}, {u:"گور", h:"गोर"}, {u:"زور", h:"ज़ोर"}, {u:"فور", h:"फ़ौर"}, {u:"طور", h:"तौर"}, {u:"غور", h:"ग़ौर"}, {u:"کرم", h:"करम"}];
+            const ur_5 = [{u:"استاد", h:"उस्ताद"}, {u:"کتاب", h:"किताब"}, {u:"حساب", h:"हिसाब"}, {u:"عذاب", h:"अज़ाब"}, {u:"ثواب", h:"सवाब"}, {u:"جواب", h:"जवाब"}, {u:"نماز", h:"नमाज़"}, {u:"نیاز", h:"नियाज़"}, {u:"محبت", h:"मोहब्बत"}, {u:"عزت", h:"इज़्ज़त"}, {u:"حرمت", h:"हुरमत"}, {u:"خدمت", h:"खिदमत"}, {u:"شفقت", h:"शफ़क़त"}, {u:"رحمت", h:"रहमत"}, {u:"زحمت", h:"ज़हमत"}, {u:"برکت", h:"बरकत"}, {u:"حکمت", h:"हिकमत"}, {u:"قسمت", h:"क़िस्मत"}, {u:"جنت", h:"जन्नत"}, {u:"منت", h:"मिन्नत"}, {u:"سنت", h:"सुन्नत"}, {u:"دولت", h:"दौलत"}, {u:"صولت", h:"सौलत"}, {u:"عورت", h:"औरत"}, {u:"مورت", h:"मूरत"}, {u:"صورت", h:"सूरत"}, {u:"سیرت", h:"सीरत"}, {u:"غیرت", h:"ग़ैरत"}, {u:"حیرت", h:"हैरत"}, {u:"طینت", h:"तीनत"}, {u:"فطرت", h:"फितरत"}, {u:"عشرت", h:"इशरत"}, {u:"عسرت", h:"उस्रत"}, {u:"نصرت", h:"नुसरत"}, {u:"بصیرت", h:"बसीरत"}, {u:"سرور", h:"सुरूर"}, {u:"غرور", h:"ग़ुरूर"}, {u:"ضرور", h:"ज़रूर"}, {u:"قصور", h:"क़सूर"}, {u:"فتور", h:"फितूर"}];
+            const ur_6 = [{u:"مدرسہ", h:"मदरसा"}, {u:"استاد", h:"उस्ताद"}, {u:"شاگرد", h:"शागिर्द"}, {u:"کتاب", h:"किताब"}, {u:"کلاس", h:"क्लास"}, {u:"کمرہ", h:"कमरा"}, {u:"اسکول", h:"स्कूल"}, {u:"کالج", h:"कॉलेज"}, {u:"طالبعلم", h:"तालिब-इल्म"}, {u:"پروفیسر", h:"प्रोफेसर"}, {u:"پرنسپل", h:"प्रिंसिपल"}, {u:"ہیڈماسٹر", h:"हेडमास्टर"}, {u:"ٹیچر", h:"टीचर"}, {u:"سبق", h:"सबक़"}, {u:"امتحان", h:"इम्तिहान"}, {u:"نتیجہ", h:"नतीजा"}, {u:"کامیابی", h:"कामयाबी"}, {u:"ناکامی", h:"नाकामी"}, {u:"محنت", h:"मेहनत"}, {u:"مشقت", h:"मशक़्क़त"}, {u:"کوشش", h:"कोशिश"}, {u:"جدوجہد", h:"जद्दोजहद"}, {u:"لگن", h:"लगन"}, {u:"شوق", h:"शौक़"}, {u:"ذوق", h:"ज़ौक़"}, {u:"علم", h:"इल्म"}, {u:"تعلیم", h:"तालीम"}, {u:"تربیت", h:"तरबियत"}, {u:"ادب", h:"अदब"}, {u:"اخلاق", h:"अखलाक़"}, {u:"احترام", h:"एहतराम"}, {u:"عزت", h:"इज़्ज़त"}, {u:"محبت", h:"मोहब्बत"}, {u:"شفقت", h:"शफ़क़त"}, {u:"رحمت", h:"रहमत"}, {u:"برکت", h:"बरकत"}, {u:"حکمت", h:"हिकमत"}, {u:"دانائی", h:"दानाई"}, {u:"عقلمندی", h:"अक़्लमंदी"}, {u:"انسانیت", h:"इंसानियत"}];
+
+            let source = [];
+            if(subject === 'English') {
+                if(length === 2) source = en_2; else if(length === 3) source = en_3; else if(length === 4) source = en_4; else if(length === 5) source = en_5; else source = en_6;
+            } else if(subject === 'Hindi') {
+                if(length === 2) source = hi_2; else if(length === 3) source = hi_3; else if(length === 4) source = hi_4; else if(length === 5) source = hi_5; else source = hi_6;
+            } else {
+                if(length === 2) source = ur_2; else if(length === 3) source = ur_3; else if(length === 4) source = ur_4; else if(length === 5) source = ur_5; else source = ur_6;
+            }
+
+            for(let i=0; i<100; i++) {
+                let item = source[i % source.length]; 
+                let displayWord = typeof item === 'object' ? item.u : item; // स्क्रीन के लिए
+                let speakWord = typeof item === 'object' ? item.h : item;   // माइक के लिए
+                
+                arr.push({
+                    w: displayWord,
+                    sp: speakWord, // Smart Speech Property
+                    m: `${subject} Word ${i+1}`,
+                    h: `उच्चारण ${i+1}`
+                });
+            }
+            return arr;
+        }
+
+        function generateParagraphs(subject) {
+            let arr = [];
+            
+            const hTexts = [
+                {t: "समय का महत्त्व", p: "समय बहुत मूल्यवान है। बीता हुआ समय कभी लौटकर नहीं आता। जो लोग समय का सही उपयोग करते हैं, वे जीवन में हमेशा सफल होते हैं। हमें अपना हर काम समय पर करना चाहिए।", q: ["समय को मूल्यवान क्यों कहा गया है?", "सफल कौन होता है?", "इस गद्यांश का मुख्य संदेश क्या है?"]},
+                {t: "स्वास्थ्य ही धन है", p: "अच्छा स्वास्थ्य मनुष्य का सबसे बड़ा खजाना है। एक स्वस्थ शरीर में ही एक स्वस्थ मस्तिष्क का निवास होता है। हमें पौष्टिक भोजन खाना चाहिए और रोज़ व्यायाम करना चाहिए।", q: ["मनुष्य का सबसे बड़ा खजाना क्या है?", "स्वस्थ मस्तिष्क कहाँ रहता है?", "अच्छे स्वास्थ्य के लिए क्या करना चाहिए?"]},
+                {t: "पर्यावरण प्रदूषण", p: "आजकल पर्यावरण प्रदूषण एक बहुत बड़ी समस्या बन गया है। वाहनों और कारखानों से निकलने वाला धुआँ हवा को ज़हरीला बना रहा है। हमें ज़्यादा से ज़्यादा पेड़ लगाने चाहिए।", q: ["आज की बड़ी समस्या क्या है?", "हवा ज़हरीली कैसे हो रही है?", "प्रदूषण रोकने के लिए हमें क्या करना चाहिए?"]},
+                {t: "शिक्षा का महत्त्व", p: "शिक्षा हमारे जीवन का आधार है। यह हमें सही और गलत में फर्क करना सिखाती है। एक शिक्षित व्यक्ति ही समाज और देश की तरक्की में अपना सही योगदान दे सकता है।", q: ["जीवन का आधार क्या है?", "शिक्षा हमें क्या सिखाती है?", "देश की तरक्की कौन कर सकता है?"]},
+                {t: "विज्ञान के चमत्कार", p: "विज्ञान ने हमारे जीवन को बहुत आसान बना दिया है। बिजली, यातायात के साधन, और इंटरनेट विज्ञान की ही देन हैं। विज्ञान के बिना आज के जीवन की कल्पना भी नहीं की जा सकती।", q: ["विज्ञान ने जीवन को कैसा बना दिया है?", "विज्ञान की दो देन बताइये।", "क्या विज्ञान के बिना जीवन संभव है?"]},
+                {t: "भारतीय किसान", p: "किसान हमारे अन्नदाता हैं। वे कड़ी धूप और बारिश में खेतों में काम करते हैं ताकि हमें भोजन मिल सके। हमें किसानों और उनके परिश्रम का हमेशा सम्मान करना चाहिए।", q: ["हमारा अन्नदाता कौन है?", "किसान कहाँ काम करते हैं?", "हमें किसका सम्मान करना चाहिए?"]},
+                {t: "जल संरक्षण", p: "जल ही जीवन है। पृथ्वी पर पीने योग्य पानी बहुत कम है। अगर हमने पानी बर्बाद करना नहीं छोड़ा, तो भविष्य में हमें भारी परेशानी का सामना करना पड़ेगा। पानी की हर बूँद बचाएं।", q: ["जीवन क्या है?", "पृथ्वी पर क्या कम है?", "हमें क्या बचाना चाहिए?"]},
+                {t: "कंप्यूटर का युग", p: "आज का युग कंप्यूटर का युग है। बैंक, स्कूल, अस्पताल—हर जगह कंप्यूटर का इस्तेमाल हो रहा है। इसने हमारा काम बहुत तेज़ और सटीक कर दिया है।", q: ["आज का युग कैसा है?", "कंप्यूटर का इस्तेमाल कहाँ होता है?", "कंप्यूटर से काम कैसा हो गया है?"]},
+                {t: "इंटरनेट के फायदे", p: "इंटरनेट ने पूरी दुनिया को एक छोटे से गाँव में बदल दिया है। हम घर बैठे दुनिया के किसी भी कोने की खबर जान सकते हैं और नई चीजें सीख सकते हैं। लेकिन इसका सही उपयोग ज़रूरी है।", q: ["इंटरनेट ने दुनिया को क्या बना दिया है?", "हम घर बैठे क्या जान सकते हैं?", "इंटरनेट के इस्तेमाल में क्या सावधानी बरतनी चाहिए?"]},
+                {t: "अनुशासन", p: "जीवन में सफलता पाने के लिए अनुशासन बहुत ज़रूरी है। जो व्यक्ति नियमों का पालन करता है और अनुशासित रहता है, वह अपनी मंज़िल ज़रूर हासिल करता है।", q: ["सफलता के लिए क्या ज़रूरी है?", "अनुशासित व्यक्ति क्या हासिल करता है?", "अनुशासन का क्या मतलब है?"]}
+            ];
+
+            // Smart Urdu Paragraphs (p = Screen पर दिखने वाली उर्दू, sh = माइक से बोलने वाली हिंदी)
+            const uTexts = [
+                {t: "وقت کی اہمیت", p: "وقت بہت قیمتی ہے۔ گزرا ہوا وقت کبھی لوٹ کر نہیں آتا۔ جو لوگ وقت کا صحیح استعمال کرتے ہیں، وہ زندگی میں ہمیشہ کامیاب ہوتے ہیں۔ ہمیں اپنا ہر کام وقت پر کرنا چاہیے۔", sh: "वक़्त बहुत क़ीमती है। गुज़रा हुआ वक़्त कभी लौट कर नहीं आता। जो लोग वक़्त का सही इस्तेमाल करते हैं, वो ज़िंदगी में हमेशा कामयाब होते हैं। हमें अपना हर काम वक़्त पर करना चाहिए।", q: ["وقت کو قیمتی کیوں کہا گیا ہے؟", "کون لوگ کامیاب ہوتے ہیں؟", "اس عبارت کا مرکزی خیال کیا ہے؟"]},
+                {t: "صحت اور تندرستی", p: "اچھی صحت انسان کا سب سے بڑا خزانہ ہے۔ ایک صحت مند جسم میں ہی ایک صحت مند دماغ ہوتا ہے۔ ہمیں صحت بخش کھانا کھانا چاہیے اور روزانہ ورزش کرنی چاہیے۔", sh: "अच्छी सेहत इंसान का सबसे बड़ा खज़ाना है। एक सेहतमंद जिस्म में ही एक सेहतमंद दिमाग़ होता है। हमें सेहतबख़्श खाना खाना चाहिए और रोज़ाना वर्जिश करनी चाहिए।", q: ["انسان کا سب سے بڑا خزانہ کیا ہے؟", "صحت مند دماغ کہاں ہوتا ہے؟", "اچھی صحت کے لیے کیا کرنا چاہیے؟"]},
+                {t: "ماحولیاتی آلودگی", p: "آج کل ماحولیاتی آلودگی ایک بہت بڑا مسئلہ بن گئی ہے۔ گاڑیوں اور کارخانوں کا دھواں ہوا کو زہریلا بنا رہا ہے۔ ہمیں زیادہ سے زیادہ درخت لگانے چاہئیں۔", sh: "आज कल माहौल्‍याती आलूदगी एक बहुत बड़ा मसला बन गई है। गाड़ियों और कारख़ानों का धुआं हवा को ज़हरीला बना रहा है। हमें ज़्यादा से ज़्यादा दरख़्त लगाने चाहियें।", q: ["آج کا بڑا مسئلہ کیا ہے؟", "ہوا زہریلی کیسے ہو رہی ہے؟", "آلودگی روکنے کے لیے ہمیں کیا کرنا چاہیے؟"]},
+                {t: "تعلیم کی اہمیت", p: "تعلیم ہماری زندگی کی بنیاد ہے۔ یہ ہمیں صحیح اور غلط میں فرق کرنا سکھاتی ہے۔ ایک پڑھا لکھا انسان ہی معاشرے اور ملک کی ترقی میں حصہ لے سکتا ہے۔", sh: "तालीम हमारी ज़िंदगी की बुनियाद है। यह हमें सही और ग़लत में फ़र्क़ करना सिखाती है। एक पढ़ा लिखा इंसान ही मुआशरे और मुल्क की तरक़्क़ी में हिस्सा ले सकता है।", q: ["زندگی کی بنیاد کیا ہے؟", "تعلیم ہمیں کیا سکھاتی ہے؟", "ملک کی ترقی میں کون حصہ لے سکتا ہے؟"]},
+                {t: "سائنس کے کرشمے", p: "سائنس نے ہماری زندگی کو بہت آسان بنا دیا ہے۔ بجلی، سواری کے ذرائع، اور انٹرنیٹ سائنس کی ہی دین ہیں۔ سائنس کے بغیر آج کی زندگی کا تصور بھی نہیں کیا جا سکتا۔", sh: "साइंस ने हमारी ज़िंदगी को बहुत आसान बना दिया है। बिजली, सवारी के ज़राए, और इंटरनेट साइंस की ही देन हैं। साइंस के बग़ैर आज की ज़िंदगी का तसव्वुर भी नहीं किया जा सकता।", q: ["سائنس نے زندگی کو کیسا بنا دیا ہے؟", "سائنس کی دو ایجادات بتائیں۔", "کیا سائنس کے بغیر آج کی زندگی ممکن ہے؟"]},
+                {t: "محنت کی عظمت", p: "محنت میں عظمت ہے۔ کسان ہمارے لیے دھوپ اور بارش میں کھیتوں میں کام کرتے ہیں تاکہ ہمیں خوراک مل سکے۔ ہمیں کسانوں اور ان کی محنت کا ہمیشہ احترام کرنا چاہیے۔", sh: "मेहनत में अज़मत है। किसान हमारे लिए धूप और बारिश में खेतों में काम करते हैं ताकि हमें ख़ुराक मिल सके। हमें किसानों और उनकी मेहनत का हमेशा एहतराम करना चाहिए।", q: ["عظمت کس میں ہے؟", "کسان کہاں کام کرتے ہیں؟", "ہمیں کس کا احترام کرنا چاہیے؟"]},
+                {t: "پانی کی بچت", p: "پانی ہی زندگی ہے۔ زمین پر پینے کے لائق پانی بہت کم ہے۔ اگر ہم نے پانی ضائع کرنا نہ چھوڑا، تو مستقبل میں ہمیں بڑی پریشانی کا سامنا کرنا پڑے گا۔", sh: "पानी ही ज़िंदगी है। ज़मीन पर पीने के लायक़ पानी बहुत कम है। अगर हमने पानी ज़ाया करना न छोड़ा, तो मुस्तक़बिल में हमें बड़ी परेशानी का सामना करना पड़ेगा।", q: ["زندگی کیا ہے؟", "زمین پر کیا کم ہے؟", "ہمیں کیا بچانا چاہیے؟"]},
+                {t: "کمپیوٹر کا دور", p: "آج کا دور کمپیوٹر کا دور ہے۔ بینک، اسکول، اسپتال ہر جگہ کمپیوٹر کا استعمال ہو رہا ہے۔ اس نے ہمارا کام بہت تیز اور درست کر دیا ہے۔", sh: "आज का दौर कंप्यूटर का दौर है। बैंक, स्कूल, अस्पताल हर जगह कंप्यूटर का इस्तेमाल हो रहा है। इसने हमारा काम बहुत तेज़ और दुरुस्त कर दिया है।", q: ["آج کا دور کیسا ہے؟", "کمپیوٹر کا استعمال کہاں ہوتا ہے؟", "کمپیوٹر سے کام کیسا ہو گیا ہے؟"]},
+                {t: "انٹرنیٹ کے فائدے", p: "انٹرنیٹ نے پوری دنیا کو ایک چھوٹے سے گاؤں میں بدل دیا ہے۔ ہم گھر بیٹھے دنیا کے کسی بھی کونے کی خبر جان سکتے ہیں اور نئی چیزیں سیکھ سکتے ہیں۔", sh: "इंटरनेट ने पूरी दुनिया को एक छोटे से गाँव में बदल दिया है। हम घर बैठे दुनिया के किसी भी कोने की ख़बर जान सकते हैं और नई चीज़ें सीख सकते हैं।", q: ["انٹرنیٹ نے دنیا کو کیا بنا دیا ہے؟", "ہم گھر بیٹھے کیا جان سکتے ہیں؟", "انٹرنیٹ کے استعمال میں کیا احتیاط کرنی چاہیے؟"]},
+                {t: "نظم و ضبط", p: "زندگی میں کامیابی حاصل کرنے کے لیے نظم و ضبط بہت ضروری ہے۔ جو شخص اصولوں کی پابندی کرتا ہے، وہ اپنی منزل ضرور حاصل کرتا ہے۔", sh: "ज़िंदगी में कामयाबी हासिल करने के लिए नज़्म ओ ज़ब्त बहुत ज़रूरी है। जो शख़्स उसूलों की पाबंदी करता है, वो अपनी मंज़िल ज़रूर हासिल करता है।", q: ["کامیابی کے لیے کیا ضروری ہے؟", "کون شخص منزل حاصل کرتا ہے؟", "نظم و ضبط کا کیا مطلب ہے؟"]}
+            ];
+
+            const eTexts = [
+                {t: "The Solar System", p: "Our solar system consists of the Sun and eight planets. The Sun is a huge ball of hot, glowing gases. Earth is the third planet from the Sun and the only one known to support life.", q: ["What is at the center of the solar system?", "Which is the third planet?", "What is the Sun made of?"]},
+                {t: "Importance of Reading", p: "Reading books is a great habit. It improves our vocabulary and keeps our mind active. A good book is like a good friend that guides us through life.", q: ["Why is reading a great habit?", "What does reading improve?", "What is a good book compared to?"]},
+                {t: "Global Warming", p: "Global warming is the gradual increase in Earth's temperature due to greenhouse gases. It melts ice caps and causes climate change. We must reduce pollution to save our planet.", q: ["What is global warming?", "What causes it?", "How can we save our planet?"]},
+                {t: "Healthy Diet", p: "A balanced diet contains the right amounts of proteins, vitamins, and minerals. Eating junk food can make us sick. We should eat fresh fruits and green vegetables daily.", q: ["What is a balanced diet?", "What happens if we eat junk food?", "What should we eat daily?"]},
+                {t: "The Internet", p: "The Internet is a global network of computers. It allows us to communicate instantly and find information on any topic. However, we must use it safely and responsibly.", q: ["What is the Internet?", "What does it allow us to do?", "How should we use the Internet?"]},
+                {t: "Wildlife Conservation", p: "Many animal species are in danger of extinction because humans are destroying their natural habitats. Forests are being cut down rapidly. We need to protect forests to save wildlife.", q: ["Why are animals in danger?", "What is happening to forests?", "How can we save wildlife?"]},
+                {t: "Exercise and Fitness", p: "Regular exercise is necessary to stay fit and active. It strengthens our muscles and bones. Activities like running, swimming, and playing outdoor games are great for health.", q: ["Why is exercise necessary?", "What does it strengthen?", "Name two good activities for health."]},
+                {t: "Space Exploration", p: "Humans have always been curious about space. In 1969, man landed on the moon for the first time. Today, scientists are sending rovers to Mars to search for signs of life.", q: ["When did man land on the moon?", "Where are scientists sending rovers?", "Why are they exploring Mars?"]},
+                {t: "Water Cycle", p: "The water cycle is the continuous movement of water on Earth. Heat from the sun evaporates water from oceans. It forms clouds and falls back as rain, filling rivers and lakes.", q: ["What evaporates water from oceans?", "What do clouds bring?", "Explain the water cycle briefly."]},
+                {t: "Honesty", p: "Honesty is the best policy. Telling the truth builds trust and respect. Even if lying seems easy at first, an honest person always wins in the end and lives a peaceful life.", q: ["What is the best policy?", "What does telling the truth build?", "Who wins in the end?"]}
+            ];
+
+            let source = subject === 'Hindi' ? hTexts : (subject === 'Urdu' ? uTexts : eTexts);
+
+            for(let i=0; i<10; i++) {
+                let data = source[i];
+                arr.push({
+                    title: `${subject === 'Hindi' ? 'पाठ' : (subject === 'Urdu' ? 'سبق' : 'Chapter')} ${i+1}: ${data.t}`,
+                    text: data.p,
+                    sp: data.sh || data.p, // Smart Speech Property for Paragraph
+                    q1: data.q[0], q2: data.q[1], q3: data.q[2]
+                });
+            }
+            return arr;
+        }
+
+        function loadContent(mode, length) {
+            currentMode = mode;
+            activeData = mode === 'word' ? generateWords(currentSubject, length) : generateParagraphs(currentSubject);
+            totalPages = 10; 
             currentPage = 0;
-            document.getElementById('wordTitle').innerText = `${currentSubject} - ${letters} Letters`;
+            
+            let t = mode === 'word' ? `${currentSubject} - ${length} Letter Words` : `${currentSubject} - Paragraphs (Class ${currentUser.classLvl})`;
+            document.getElementById('contentMainTitle').innerText = t;
             renderPage();
-            showView('view-words');
+            showView('view-content');
+        }
+
+        function triggerSpeech(mode, idx) {
+            let item = activeData[idx];
+            // माइक को पीछे से `sp` (यानी हिंदी ट्रांसलेशन) भेजा जाएगा 
+            let textToSpeak = item.sp || item.w || item.text;
+            
+            // चूँकि हम उर्दू के लिए पीछे से हिंदी टेक्स्ट भेज रहे हैं, इसलिए माइक को भी 'Hindi' इंजन इस्तेमाल करने को कहेंगे
+            let lang = currentSubject === 'Urdu' ? 'Hindi' : currentSubject;
+            speakText(textToSpeak, lang);
+        }
+
+        function speakText(text, lang) {
+            let speechLang = 'en-US';
+            if (lang === 'Hindi') {
+                speechLang = 'hi-IN'; // शुद्ध हिंदी/रोमन आवाज़
+            }
+            
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = speechLang; 
+            speech.rate = 0.55; // स्पीड को धीमा और साफ़ रखा है
+            speech.pitch = 1;   
+            
+            window.speechSynthesis.cancel(); // पुरानी आवाज़ रोक कर नई शुरू करेगा
+            window.speechSynthesis.speak(speech);
         }
 
         function renderPage() {
-            const container = document.getElementById('wordContainer');
+            const container = document.getElementById('contentGrid');
             container.innerHTML = '';
             
-            const start = currentPage * 10;
-            const end = start + 10;
-            const pageData = wordsList.slice(start, end);
-
-            pageData.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'glass-card p-6 rounded-2xl flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group';
+            if(currentMode === 'word') {
+                container.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+                const start = currentPage * 10; 
+                const pageData = activeData.slice(start, start + 10);
                 
-                // Add Nastaleeq class if Urdu
-                const urduClass = (currentSubject === 'Urdu') ? 'urdu-font' : '';
-
+                pageData.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    const cClass = (currentSubject === 'Urdu') ? 'urdu-font' : (currentSubject === 'Hindi' ? 'hindi-font' : 'text-3xl');
+                    div.className = 'glass-card p-6 rounded-2xl text-center relative';
+                    div.innerHTML = `
+                        <div class="text-white mb-2 font-bold ${cClass}">${item.w}</div>
+                        <div class="text-pink-300 font-semibold">[ ${item.m} ]</div>
+                        <button class="absolute top-4 right-4 bg-blue-500/30 hover:bg-blue-500/60 p-3 rounded-full" onclick="triggerSpeech('word', ${start + index})">
+                            <i class="fa-solid fa-volume-high text-white"></i>
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                container.className = "grid grid-cols-1 gap-6";
+                const item = activeData[currentPage]; 
+                
+                const div = document.createElement('div');
+                div.className = 'glass-card p-8 rounded-2xl relative text-left';
                 div.innerHTML = `
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="word-text ${urduClass} text-white mb-2 relative z-10 w-full text-center">
-                        ${item.word} 
+                    <h3 class="text-3xl font-bold text-yellow-400 mb-4">${item.title}</h3>
+                    <p class="text-xl text-white leading-relaxed mb-8 ${currentSubject === 'Urdu' ? 'urdu-font' : ''}">${item.text}</p>
+                    <div class="bg-black/30 p-6 rounded-xl border border-white/10">
+                        <h4 class="text-lg font-bold text-emerald-400 mb-3">Questions:</h4>
+                        <ul class="list-disc pl-5 text-slate-300 space-y-2 ${currentSubject === 'Urdu' ? 'text-right' : ''}">
+                            <li>${item.q1}</li><li>${item.q2}</li><li>${item.q3}</li>
+                        </ul>
                     </div>
-                    <div class="meaning-text text-pink-300 font-semibold tracking-wide relative z-10">[ ${item.meaning} ]</div>
-                    
-                    <button class="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors z-20" onclick="speakText('${item.word}', '${currentSubject}', '${item.hindiPron}', this.parentElement, event)">
+                    <button class="absolute top-4 right-4 bg-blue-500/30 hover:bg-blue-500/60 p-3 rounded-full" onclick="triggerSpeech('para', ${currentPage})">
                         <i class="fa-solid fa-volume-high text-white"></i>
                     </button>
                 `;
-                
-                // Double tap fallback
-                div.ondblclick = () => speakText(item.word, currentSubject, item.hindiPron, div);
-                
                 container.appendChild(div);
-            });
+            }
 
-            document.getElementById('pageIndicator').innerText = `Page ${currentPage + 1} / 10`;
+            document.getElementById('pageIndicator').innerText = `Page ${currentPage + 1} / ${totalPages}`;
             document.getElementById('prevBtn').disabled = (currentPage === 0);
-            document.getElementById('nextBtn').disabled = (currentPage === 9); // Total 10 pages for 100 words
+            document.getElementById('nextBtn').disabled = (currentPage >= totalPages - 1);
         }
 
         function changePage(direction) {
             currentPage += direction;
             if(currentPage < 0) currentPage = 0;
-            if(currentPage > 9) currentPage = 9;
+            if(currentPage >= totalPages) currentPage = totalPages - 1;
             renderPage();
         }
 
-        function updateGamificationUI() {
-            document.getElementById('xpScore').innerText = `${userXP} XP`;
-            let stars = "";
-            for(let i=0; i<3; i++) {
-                stars += (i < currentStreak) ? "★" : "☆";
+        // ==========================================
+        // MATH LOGIC (Class Based Upgrade)
+        // ==========================================
+        let currentTableNum = 2; let isTablesInit = false;
+        function showTables() {
+            if(!isTablesInit) {
+                const sel = document.getElementById('tableSelectors');
+                for(let i=2; i<=20; i++) {
+                    const b = document.createElement('button');
+                    b.className = 'w-10 h-10 bg-white/10 hover:bg-emerald-500/50 rounded-lg font-bold text-white border border-white/20';
+                    b.innerText = i; b.onclick = () => renderTable(i);
+                    sel.appendChild(b);
+                }
+                isTablesInit = true;
             }
-            document.getElementById('streakStars').innerText = stars;
+            renderTable(currentTableNum);
+        }
+        function renderTable(num) {
+            currentTableNum = num; document.getElementById('currentTableTitle').innerText = `Table of ${num}`;
+            const c = document.getElementById('tableContent'); c.innerHTML = '';
+            for(let i=1; i<=10; i++) c.innerHTML += `<div class="flex justify-center gap-4"><span class="w-8 text-right text-slate-300">${num}</span><span class="text-emerald-400">×</span><span class="w-6 text-center text-slate-300">${i}</span><span class="text-emerald-400">=</span><span class="w-12 text-left text-white">${num*i}</span></div>`;
+        }
+        
+        function speakCurrentTable() {
+            let t = `Table of ${currentTableNum}. `;
+            for(let i=1; i<=10; i++) t += `${currentTableNum} times ${i} is ${currentTableNum*i}. `;
+            const s = new SpeechSynthesisUtterance(t); 
+            s.lang = 'en-IN'; 
+            s.rate = 0.55; // पहाड़ों की स्पीड भी धीमी कर दी है
+            window.speechSynthesis.cancel(); // पुरानी आवाज़ रोकेगा
+            window.speechSynthesis.speak(s);
         }
 
-        function createFloatingXP(amount, element) {
-            const floater = document.createElement('div');
-            floater.className = 'xp-float';
-            floater.innerText = `+${amount} XP`;
-            
-            // Position near the element
-            const rect = element.getBoundingClientRect();
-            floater.style.left = (rect.left + rect.width / 2 - 20) + 'px';
-            floater.style.top = (rect.top - 20) + 'px';
-            
-            document.body.appendChild(floater);
-            setTimeout(() => floater.remove(), 1000);
-        }
-
-        function fireConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-
+        let mathQ = 0, correctA = 0, isTest = false, curAns = "";
         function startMathSession() {
-            mathQuestionsDone = 0;
-            testCorrectAnswers = 0;
-            isTestMode = false;
-            currentStreak = 0;
-            
-            updateGamificationUI();
-            
-            const badge = document.getElementById('mathModeBadge');
-            badge.innerText = "Practice Mode";
-            badge.className = "mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase bg-blue-500/20 text-blue-300 border border-blue-500/50 animate-pulse-glow";
-            
+            mathQ = 0; correctA = 0; isTest = false;
+            document.getElementById('mathModeTitle').innerText = "Practice Mode";
+            document.getElementById('mathModeTitle').className = "text-3xl font-bold mb-4 text-blue-400";
             document.getElementById('mathReport').classList.add('hidden');
-            document.getElementById('mathPlayArea').classList.remove('hidden');
-            
-            showView('view-math');
-            generateMathQuestion();
+            document.getElementById('mathContainer').classList.remove('hidden');
+            document.getElementById('mathOptions').classList.remove('hidden');
+            showView('view-math'); nextMathQ();
         }
 
-        function quitMath() {
-            showView('view-math-hub');
-        }
-
-        function generateMathQuestion() {
-            const feedback = document.getElementById('mathFeedback');
-            feedback.innerHTML = "";
-            feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all opacity-0";
-            
-            // Mode Transitions
-            if (mathQuestionsDone === 10 && !isTestMode) {
-                showToast("Practice Complete! Entering EXAM MODE (No Hints).", "warning");
-                isTestMode = true;
-                mathQuestionsDone = 0;
-                currentStreak = 0;
-                updateGamificationUI();
-                
-                const badge = document.getElementById('mathModeBadge');
-                badge.innerText = "TEST MODE";
-                badge.className = "mt-4 sm:mt-0 px-6 py-2 rounded-full font-bold text-sm tracking-widest uppercase bg-rose-500/20 text-rose-300 border border-rose-500/50 animate-pulse-glow";
-            } else if (mathQuestionsDone === 10 && isTestMode) {
-                showTestReport();
+        function nextMathQ() {
+            document.getElementById('mathFeedback').innerText = "";
+            if (mathQ === 10 && !isTest) {
+                showToast("Practice Complete! Starting TEST MODE.", "success");
+                isTest = true; mathQ = 0;
+                document.getElementById('mathModeTitle').innerText = "TEST MODE";
+                document.getElementById('mathModeTitle').className = "text-3xl font-bold mb-4 text-rose-400";
+            } else if (mathQ === 10 && isTest) {
+                document.getElementById('mathContainer').classList.add('hidden');
+                document.getElementById('mathOptions').classList.add('hidden');
+                document.getElementById('reportCorrect').innerText = correctA;
+                document.getElementById('reportWrong').innerText = 10 - correctA;
+                document.getElementById('mathReport').classList.remove('hidden');
+                if (typeof confetti === 'function') confetti({particleCount: 150, spread: 180});
                 return;
             }
+            mathQ++; document.getElementById('mathProgress').innerText = `Question ${mathQ} / 10`;
+            
+            const lvl = currentUser.classLvl;
+            let qStr = "", ansNum = 0;
 
-            mathQuestionsDone++;
-            document.getElementById('mathProgress').innerText = `Q: ${mathQuestionsDone} / 10`;
-
-            let question = "";
-            let correctAnswerStr = "";
-            let options = [];
-
-            // Class-Based Dynamic Logic
-            if (currentUser.classLvl <= 2) {
-                // Basic Addition/Subtraction
-                let a = Math.floor(Math.random() * 10) + 1;
-                let b = Math.floor(Math.random() * 10) + 1;
+            if (lvl <= 2) {
+                // Class 1-2: Simple Add/Sub up to 20
+                let a = Math.floor(Math.random() * 20) + 1;
+                let b = Math.floor(Math.random() * 20) + 1;
                 let op = Math.random() > 0.5 ? '+' : '-';
-                if(op === '-' && b > a) [a, b] = [b, a]; // Avoid negatives
-                question = `${a} ${op} ${b}`;
-                correctAnswerStr = (op === '+') ? (a + b).toString() : (a - b).toString();
+                if(op === '-' && b > a) [a, b] = [b, a];
+                qStr = `${a} ${op} ${b}`;
+                ansNum = op === '+' ? (a + b) : (a - b);
             } 
-            else if (currentUser.classLvl <= 4) {
-                // Multiplication / Simple Div
-                let a = Math.floor(Math.random() * 10) + 2;
-                let b = Math.floor(Math.random() * 5) + 2;
-                question = `${a} × ${b}`;
-                correctAnswerStr = (a * b).toString();
-            } 
-            else if (currentUser.classLvl === 5) {
-                // Decimals
-                let a = (Math.random() * 5 + 1).toFixed(1);
-                let b = (Math.random() * 3 + 1).toFixed(1);
-                question = `${a} + ${b}`;
-                correctAnswerStr = (parseFloat(a) + parseFloat(b)).toFixed(1).toString();
-            } 
-            else if (currentUser.classLvl <= 7) {
-                // Fractions
-                let n1 = Math.floor(Math.random() * 4) + 1;
-                let n2 = Math.floor(Math.random() * 4) + 1;
-                let den = Math.floor(Math.random() * 3) + 3; 
-                question = `${n1}/${den} + ${n2}/${den}`;
-                correctAnswerStr = `${n1 + n2}/${den}`;
-            }
-            else if (currentUser.classLvl <= 9) {
-                // Algebra
-                let x = Math.floor(Math.random() * 5) + 2;
-                let ans = Math.floor(Math.random() * 10) + 5;
-                question = `2x + ${x} = ${2 * ans + x} <br><span class="text-2xl text-pink-400">x = ?</span>`;
-                correctAnswerStr = ans.toString();
-            } else {
-                // Class 10 SSC - Quadratic Roots
-                let r1 = Math.floor(Math.random() * 5) + 1; 
-                let r2 = Math.floor(Math.random() * 4) + 1;
-                let sum = r1 + r2;
-                let prod = r1 * r2;
-                question = `Root of: x² - ${sum}x + ${prod} = 0`;
-                correctAnswerStr = r1.toString(); 
-            }
-
-            currentCorrectAnswer = correctAnswerStr;
-            options.push(correctAnswerStr);
-            
-            // Generate distinct wrong options based on data type
-            while(options.length < 4) {
-                let wrongAns = "";
-                if (correctAnswerStr.includes('/')) {
-                    // Fraction
-                    let parts = correctAnswerStr.split('/');
-                    let wNum = parseInt(parts[0]) + (Math.floor(Math.random()*4)-2);
-                    if(wNum <= 0) wNum = 1;
-                    wrongAns = `${wNum}/${parts[1]}`;
-                } else if (correctAnswerStr.includes('.')) {
-                    // Decimal
-                    wrongAns = (parseFloat(correctAnswerStr) + (Math.random()*2 - 1)).toFixed(1);
+            else if (lvl <= 4) {
+                // Class 3-4: Multiplication & Exact Division
+                let ops = ['+', '-', '×', '÷'];
+                let op = ops[Math.floor(Math.random() * 4)];
+                if (op === '×') {
+                    let a = Math.floor(Math.random() * 12) + 2;
+                    let b = Math.floor(Math.random() * 10) + 2;
+                    qStr = `${a} × ${b}`; ansNum = a * b;
+                } else if (op === '÷') {
+                    let divisor = Math.floor(Math.random() * 10) + 2;
+                    let quotient = Math.floor(Math.random() * 10) + 2;
+                    let dividend = divisor * quotient;
+                    qStr = `${dividend} ÷ ${divisor}`; ansNum = quotient;
                 } else {
-                    // Integer
-                    wrongAns = (parseInt(correctAnswerStr) + Math.floor(Math.random() * 8) - 3).toString();
+                    let a = Math.floor(Math.random() * 50) + 10;
+                    let b = Math.floor(Math.random() * 30) + 5;
+                    if(op === '-' && b > a) [a, b] = [b, a];
+                    qStr = `${a} ${op} ${b}`; ansNum = op === '+' ? (a + b) : (a - b);
                 }
-                
-                if(wrongAns !== correctAnswerStr && !options.includes(wrongAns)) {
-                    options.push(wrongAns);
+            } 
+            else if (lvl <= 7) {
+                // Class 5-7: BODMAS & Basic Find X
+                if (Math.random() > 0.5) {
+                    let a = Math.floor(Math.random() * 10) + 2;
+                    let b = Math.floor(Math.random() * 10) + 2;
+                    let c = Math.floor(Math.random() * 20) + 1;
+                    qStr = `${a} × ${b} + ${c}`; ansNum = (a * b) + c;
+                } else {
+                    let realX = Math.floor(Math.random() * 20) + 5;
+                    let a = Math.floor(Math.random() * 20) + 1;
+                    let b = realX + a;
+                    qStr = `x + ${a} = ${b}, x = ?`; ansNum = realX;
+                }
+            } 
+            else {
+                // Class 8-10: Linear Equations & Squares
+                if (Math.random() > 0.5) {
+                    let x = Math.floor(Math.random() * 10) + 2;
+                    let a = Math.floor(Math.random() * 5) + 2;
+                    let b = Math.floor(Math.random() * 20) + 1;
+                    let c = (a * x) - b;
+                    qStr = `${a}x - ${b} = ${c}, x = ?`; ansNum = x;
+                } else {
+                    let a = Math.floor(Math.random() * 15) + 5;
+                    qStr = `${a}²`; ansNum = a * a;
                 }
             }
-            // Shuffle options
-            options.sort(() => Math.random() - 0.5);
 
-            document.getElementById('mathQuestionText').innerHTML = question;
-            const optionsDiv = document.getElementById('mathOptions');
-            optionsDiv.innerHTML = '';
+            document.getElementById('mathContainer').innerText = qStr;
+            curAns = ansNum.toString();
             
-            options.forEach((opt, index) => {
+            let opts = [curAns];
+            while(opts.length < 4) {
+                let offset = Math.floor(Math.random() * 10) - 5;
+                if (offset === 0) offset = 2;
+                let w = (ansNum + offset).toString();
+                if(!opts.includes(w) && parseInt(w) >= 0) opts.push(w);
+            }
+            opts.sort(() => Math.random() - 0.5); 
+            
+            const optDiv = document.getElementById('mathOptions'); optDiv.innerHTML = '';
+            opts.forEach(o => {
                 const btn = document.createElement('button');
-                // Prefix with A, B, C, D
-                const letter = String.fromCharCode(65 + index);
-                btn.className = 'bg-white/5 hover:bg-white/15 border border-white/10 p-6 rounded-xl text-2xl font-bold transition-all flex items-center justify-center gap-4 group';
-                btn.innerHTML = `<span class="text-slate-500 group-hover:text-purple-400 transition-colors">${letter}.</span> ${opt}`;
-                btn.onclick = (e) => checkMathAnswer(opt, btn, e);
-                optionsDiv.appendChild(btn);
+                btn.className = 'bg-white/10 hover:bg-white/20 border border-white/20 p-6 rounded-xl text-3xl font-bold text-white';
+                btn.innerText = o; btn.onclick = () => checkMath(o, btn); optDiv.appendChild(btn);
             });
         }
-
-        function checkMathAnswer(selectedStr, btnElement, event) {
-            const feedback = document.getElementById('mathFeedback');
-            const buttons = document.querySelectorAll('#mathOptions button');
-            buttons.forEach(b => { b.disabled = true; b.classList.add('opacity-50', 'cursor-not-allowed'); });
-            
-            const isCorrect = (selectedStr === currentCorrectAnswer);
-
-            if (isTestMode) {
-                // Test Mode: Silent record, move fast
-                if(isCorrect) testCorrectAnswers++;
-                btnElement.classList.replace('bg-white/5', 'bg-white/30');
-                btnElement.classList.replace('opacity-50', 'opacity-100');
-                
-                setTimeout(generateMathQuestion, 500);
+        function checkMath(sel, btn) {
+            const btns = document.querySelectorAll('#mathOptions button'); btns.forEach(b => b.disabled = true);
+            const isOk = (sel === curAns);
+            if (isTest) {
+                if(isOk) correctA++; btn.classList.add('bg-white/40'); setTimeout(nextMathQ, 500);
             } else {
-                // Practice Mode: Gamified Feedback
-                feedback.classList.remove('opacity-0');
-                btnElement.classList.replace('opacity-50', 'opacity-100');
-                
-                if(isCorrect) {
-                    btnElement.classList.replace('bg-white/5', 'bg-green-500/30');
-                    btnElement.classList.replace('border-white/10', 'border-green-500/50');
-                    
-                    feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all text-green-400 flex items-center justify-center gap-2";
-                    feedback.innerHTML = '<i class="fa-solid fa-check-circle"></i> Brilliant!';
-                    
-                    // Gamification logic
-                    let xpGained = 10;
-                    currentStreak++;
-                    if(currentStreak > 3) currentStreak = 3;
-                    if(currentStreak === 3) xpGained += 15; // Combo Bonus
-                    
-                    userXP += xpGained;
-                    updateGamificationUI();
-                    createFloatingXP(xpGained, btnElement);
-                    
-                    setTimeout(generateMathQuestion, 1200);
-                } else {
-                    btnElement.classList.replace('bg-white/5', 'bg-rose-500/30');
-                    btnElement.classList.replace('border-white/10', 'border-rose-500/50');
-                    
-                    feedback.className = "mt-8 text-2xl font-bold min-h-[40px] transition-all text-rose-400 flex items-center justify-center gap-2";
-                    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Correct answer was: ${currentCorrectAnswer}`;
-                    
-                    currentStreak = 0;
-                    updateGamificationUI();
-                    
-                    setTimeout(() => {
-                        buttons.forEach(b => { 
-                            b.disabled = false; 
-                            b.className = 'bg-white/5 hover:bg-white/15 border border-white/10 p-6 rounded-xl text-2xl font-bold transition-all flex items-center justify-center gap-4 group';
-                        });
-                        feedback.classList.add('opacity-0');
-                    }, 2000);
-                }
+                const fb = document.getElementById('mathFeedback');
+                if(isOk) { btn.classList.add('!bg-green-500/50'); fb.innerText = "Excellent!"; fb.className = "mt-8 text-2xl font-bold text-green-400"; setTimeout(nextMathQ, 1000);
+                } else { btn.classList.add('!bg-rose-500/50'); fb.innerText = `Wrong! Answer is ${curAns}`; fb.className = "mt-8 text-2xl font-bold text-rose-400"; setTimeout(() => { btns.forEach(b => { b.disabled = false; b.className = 'bg-white/10 hover:bg-white/20 border border-white/20 p-6 rounded-xl text-3xl font-bold text-white'; }); fb.innerText = ""; }, 1500); }
             }
-        }
-
-        function showTestReport() {
-            document.getElementById('mathPlayArea').classList.add('hidden');
-            const reportDiv = document.getElementById('mathReport');
-            
-            document.getElementById('reportCorrect').innerText = testCorrectAnswers;
-            let wrongAns = 10 - testCorrectAnswers;
-            document.getElementById('reportWrong').innerText = wrongAns;
-            
-            reportDiv.classList.remove('hidden');
-            
-            // Calculate final rewards
-            if (testCorrectAnswers >= 7) {
-                fireConfetti();
-                let testBonus = testCorrectAnswers * 20;
-                userXP += testBonus;
-                showToast(`Incredible! You earned ${testBonus} Bonus XP!`, "success");
-            } else {
-                showToast(`Good effort! Keep practicing to get higher scores.`, "info");
-            }
-            updateGamificationUI();
-        }
-
-        // --- MATH TABLES LOGIC ---
-        let currentTableNumber = 2;
-        let isTablesInitialized = false;
-
-        function openTablesView() {
-            showView('view-tables');
-            if (!isTablesInitialized) {
-                initTables();
-                isTablesInitialized = true;
-            }
-            renderTable(currentTableNumber);
-        }
-
-        function initTables() {
-            const selectorDiv = document.getElementById('tableSelectors');
-            selectorDiv.innerHTML = '';
-            for (let i = 2; i <= 20; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'w-12 h-12 bg-white/5 hover:bg-green-500/30 hover:border-green-500/50 rounded-xl border border-white/10 font-bold text-lg transition-all';
-                btn.innerText = i;
-                btn.onclick = (e) => {
-                    // Highlight selected button
-                    document.querySelectorAll('#tableSelectors button').forEach(b => {
-                        b.classList.remove('bg-green-500/40', 'border-green-500');
-                        b.classList.add('bg-white/5', 'border-white/10');
-                    });
-                    btn.classList.remove('bg-white/5', 'border-white/10');
-                    btn.classList.add('bg-green-500/40', 'border-green-500');
-                    renderTable(i);
-                };
-                
-                // Set initial active state for 2
-                if(i === 2) {
-                    btn.classList.remove('bg-white/5', 'border-white/10');
-                    btn.classList.add('bg-green-500/40', 'border-green-500');
-                }
-                
-                selectorDiv.appendChild(btn);
-            }
-        }
-
-        function renderTable(num) {
-            currentTableNumber = num;
-            document.getElementById('currentTableTitle').innerText = `Table of ${num}`;
-            const contentDiv = document.getElementById('tableContent');
-            contentDiv.innerHTML = '';
-            
-            for (let i = 1; i <= 10; i++) {
-                const row = document.createElement('div');
-                row.className = "flex justify-center items-center gap-4 hover:scale-110 transition-transform cursor-default";
-                row.innerHTML = `
-                    <span class="text-slate-300 w-12 text-right">${num}</span> 
-                    <span class="text-pink-500 text-lg">×</span> 
-                    <span class="text-slate-300 w-8 text-center">${i}</span> 
-                    <span class="text-pink-500 text-lg">=</span> 
-                    <span class="text-white font-bold w-16 text-left">${num * i}</span>
-                `;
-                contentDiv.appendChild(row);
-            }
-        }
-
-        function speakCurrentTable() {
-            let textToSpeak = `The Table of ${currentTableNumber}. `;
-            for (let i = 1; i <= 10; i++) {
-                // Using "times" for clear text-to-speech pronunciation
-                textToSpeak += `${currentTableNumber} times ${i} is ${currentTableNumber * i}. `; 
-            }
-            const speech = new SpeechSynthesisUtterance(textToSpeak);
-            speech.lang = 'en-IN'; // Indian English accent
-            speech.rate = 0.8; // Slow down slightly for clarity
-            speech.pitch = 1.2;
-            window.speechSynthesis.speak(speech);
-            
-            showToast(`Reading Table of ${currentTableNumber} aloud...`, 'info');
         }
         //]]>
     </script>
