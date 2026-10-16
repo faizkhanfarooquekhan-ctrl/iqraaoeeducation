@@ -1,0 +1,999 @@
+const TRACKS = {
+  1: 'Class 1 · Basics, addition, and subtraction within 10',
+  2: 'Class 2 · Addition and subtraction',
+  3: 'Class 3 · Multiplication tables',
+  4: 'Class 4 · Division and multiplication',
+  5: 'Class 5 · Decimals and introductory fractions',
+  6: 'Class 6 · Fractions, decimals, and LCM',
+  7: 'Class 7 · Fractions, decimals, LCM, and HCF',
+  8: 'Class 8 · Algebra and geometry basics',
+  9: 'Class 9 · Linear equations and quadratics',
+  10: 'Class 10 · Quadratics, algebra, and geometry'
+};
+
+const WORD_BANK = {
+  English: {
+    2: [
+      family('be · me · we', [['Be', 'To exist'], ['Me', 'I, myself'], ['We', 'You and I'], ['He', 'A boy or man']]),
+      family('go · no · so', [['Go', 'To move'], ['No', 'Not yes'], ['So', 'Therefore']]),
+      family('do · to', [['Do', 'To act'], ['To', 'Toward']]),
+      family('my · by', [['My', 'Belonging to me'], ['By', 'Beside']])
+    ],
+    3: [
+      family('-at', [['Cat', 'A small pet'], ['Bat', 'A stick for sport'], ['Hat', 'A cover for the head'], ['Mat', 'A floor rug'], ['Rat', 'A small animal'], ['Sat', 'Rested on a seat']]),
+      family('-ap', [['Cap', 'A soft hat'], ['Map', 'A drawing of a place'], ['Nap', 'A short sleep'], ['Tap', 'A water spout']]),
+      family('-en', [['Pen', 'A writing tool'], ['Hen', 'A female chicken'], ['Men', 'Adult boys'], ['Ten', 'The number 10'], ['Den', 'An animal home']]),
+      family('-un', [['Sun', 'The day star'], ['Run', 'To move fast'], ['Fun', 'A good time'], ['Bun', 'A small bread']]),
+      family('-op', [['Hop', 'A small jump'], ['Mop', 'A cleaning cloth'], ['Top', 'The highest part'], ['Pop', 'A short sound']]),
+      family('-og', [['Dog', 'A pet animal'], ['Log', 'A piece of wood'], ['Fog', 'A thick mist'], ['Hog', 'A pig']])
+    ],
+    4: [
+      family('-ook', [['Book', 'Pages you read'], ['Cook', 'To make food'], ['Hook', 'A curved hanger'], ['Look', 'To see'], ['Took', 'Did take']]),
+      family('-ain', [['Rain', 'Water from clouds'], ['Pain', 'A hurt'], ['Main', 'The most important'], ['Gain', 'To get more']]),
+      family('-ake', [['Cake', 'A sweet bake'], ['Lake', 'A body of water'], ['Make', 'To create'], ['Rake', 'A garden tool'], ['Wake', 'To stop sleeping']]),
+      family('-all', [['Ball', 'A round toy'], ['Call', 'To shout for someone'], ['Fall', 'To drop down'], ['Hall', 'A passage'], ['Tall', 'High'], ['Wall', 'A side of a room']]),
+      family('-ay', [['Play', 'To have fun'], ['Clay', 'Soft earth'], ['Pray', 'To speak to God'], ['Stay', 'To remain'], ['Tray', 'A flat carrier']]),
+      family('-ing', [['King', 'A ruler'], ['Ring', 'A circle or a bell sound'], ['Sing', 'To make music'], ['Wing', 'A bird\'s arm']])
+    ]
+  },
+  Hindi: {
+    2: [
+      family('अब · कब · जब', [['अब', 'Ab'], ['कब', 'Kab'], ['जब', 'Jab'], ['तब', 'Tab'], ['सब', 'Sab']], true),
+      family('कल · जल · फल', [['कल', 'Kal'], ['जल', 'Jal'], ['नल', 'Nal'], ['पल', 'Pal'], ['बल', 'Bal'], ['फल', 'Phal']], true),
+      family('कर · डर · घर', [['कर', 'Kar'], ['डर', 'Dar'], ['घर', 'Ghar'], ['पर', 'Par']], true),
+      family('मन · धन · जन', [['मन', 'Man'], ['धन', 'Dhan'], ['तन', 'Tan'], ['वन', 'Van'], ['जन', 'Jan']], true),
+      family('हम · दम · कम', [['हम', 'Hum'], ['दम', 'Dam'], ['कम', 'Kam']], true)
+    ],
+    3: [
+      family('अगर · मगर · नगर', [['अगर', 'Agar'], ['मगर', 'Magar'], ['नगर', 'Nagar'], ['डगर', 'Dagar']], true),
+      family('नमक · चमक · दमक', [['नमक', 'Namak'], ['चमक', 'Chamak'], ['दमक', 'Damak']], true),
+      family('महल · टहल · पहल', [['महल', 'Mahal'], ['टहल', 'Tahal'], ['पहल', 'Pahal'], ['चहल', 'Chahal']], true),
+      family('पवन · भवन · नयन', [['पवन', 'Pawan'], ['भवन', 'Bhawan'], ['हवन', 'Hawan'], ['नयन', 'Nayan']], true),
+      family('रात · बात · मात', [['रात', 'Raat'], ['बात', 'Baat'], ['घात', 'Ghaat'], ['मात', 'Maat']], true)
+    ],
+    4: [
+      family('किताब · हिसाब · जवाब', [['किताब', 'Kitab'], ['हिसाब', 'Hisab'], ['जवाब', 'Jawab']], true),
+      family('बच्चा · कच्चा · सच्चा', [['बच्चा', 'Bachcha'], ['कच्चा', 'Kachcha'], ['सच्चा', 'Sachcha'], ['पक्का', 'Pakka']], true),
+      family('आकाश · प्रकाश', [['आकाश', 'Aakash'], ['प्रकाश', 'Prakash']], true),
+      family('पानी · रानी · दानी', [['पानी', 'Paani'], ['रानी', 'Rani'], ['दानी', 'Daani'], ['बानी', 'Baani']], true),
+      family('बादल · बादाम', [['बादल', 'Baadal'], ['बादाम', 'Badaam'], ['सवाल', 'Sawaal']], true)
+    ]
+  },
+  Urdu: {
+    2: [
+      urdu('اب · کب · جب', [['اب', 'Ab', 'अब'], ['کب', 'Kab', 'कब'], ['جب', 'Jab', 'जब'], ['تب', 'Tab', 'तब'], ['سب', 'Sab', 'सब']]),
+      urdu('کل · جل · پل', [['کل', 'Kal', 'कल'], ['جل', 'Jal', 'जल'], ['نل', 'Nal', 'नल'], ['پل', 'Pal', 'पल'], ['بل', 'Bal', 'बल']]),
+      urdu('کر · ڈر · گھر', [['کر', 'Kar', 'कर'], ['ڈر', 'Dar', 'डर'], ['گھر', 'Ghar', 'घर'], ['پر', 'Par', 'पर']]),
+      urdu('من · دھن · جن', [['من', 'Man', 'मन'], ['دھن', 'Dhan', 'धन'], ['تن', 'Tan', 'तन'], ['ون', 'Van', 'वन'], ['جن', 'Jan', 'जन']]),
+      urdu('ہم · دم · کم', [['ہم', 'Hum', 'हम'], ['دم', 'Dam', 'दम'], ['کم', 'Kam', 'कम']])
+    ],
+    3: [
+      urdu('اگر · مگر · نگر', [['اگر', 'Agar', 'अगर'], ['مگر', 'Magar', 'मगर'], ['نگر', 'Nagar', 'नगर'], ['ڈگر', 'Dagar', 'डगर']]),
+      urdu('نمک · چمک · دمک', [['نمک', 'Namak', 'नमक'], ['چمک', 'Chamak', 'चमक'], ['دمک', 'Damak', 'दमक']]),
+      urdu('محل · پہل · چہل', [['محل', 'Mahal', 'महल'], ['ٹہل', 'Tahal', 'टहल'], ['پہل', 'Pahal', 'पहल'], ['چہل', 'Chahal', 'चहल']]),
+      urdu('رات · بات · مات', [['رات', 'Raat', 'रात'], ['بات', 'Baat', 'बात'], ['گھات', 'Ghaat', 'घात'], ['مات', 'Maat', 'मात']])
+    ],
+    4: [
+      urdu('کتاب · حساب · جواب', [['کتاب', 'Kitab', 'किताब'], ['حساب', 'Hisab', 'हिसाब'], ['جواب', 'Jawab', 'जवाब']]),
+      urdu('بچہ · کچا · سچا', [['بچہ', 'Bachcha', 'बच्चा'], ['کچا', 'Kachcha', 'कच्चा'], ['سچا', 'Sachcha', 'सच्चा'], ['پکا', 'Pakka', 'पक्का']]),
+      urdu('آکاش · پرکاش', [['آکاش', 'Aakash', 'आकाश'], ['پرکاش', 'Prakash', 'प्रकाश']]),
+      urdu('پانی · رانی · دانی', [['پانی', 'Paani', 'पानी'], ['رانی', 'Rani', 'रानी'], ['دانی', 'Daani', 'दानी'], ['بانی', 'Baani', 'बानी']]),
+      urdu('سوال · بادام', [['سوال', 'Sawaal', 'सवाल'], ['بادام', 'Badaam', 'बादाम'], ['بادل', 'Baadal', 'बादल']])
+    ]
+  }
+};
+
+const state = {
+  token: '',
+  role: '',
+  profile: null,
+  students: [],
+  language: 'English',
+  letters: 2,
+  familyIndex: 0,
+  table: 2,
+  math: null,
+  modalMode: 'edit'
+};
+
+function family(title, rows, devanagari) {
+  return {
+    title: title,
+    words: rows.map(function (row) {
+      return { word: row[0], gloss: row[1], speak: row[0], script: devanagari ? 'devanagari' : '' };
+    })
+  };
+}
+
+function urdu(title, rows) {
+  return {
+    title: title,
+    words: rows.map(function (row) {
+      return { word: row[0], gloss: row[1], speak: row[2], script: 'nastaliq' };
+    })
+  };
+}
+
+function $(id) { return document.getElementById(id); }
+
+function showBootError(message) {
+  const box = $('boot-error');
+  if (!box) return;
+  if (!message) {
+    box.style.display = 'none';
+    box.textContent = '';
+    return;
+  }
+  box.style.display = 'block';
+  box.textContent = message;
+}
+
+function init() {
+  try {
+    fillClassSelect($('new-class'), '5');
+    fillClassSelect($('edit-class'), '5');
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    $('new-expiry').value = nextYear.toISOString().slice(0, 10);
+    bindEvents();
+    startParticles();
+    restoreSession();
+  } catch (err) {
+    showBootError('IQRA AOE could not start: ' + (err && err.message ? err.message : err));
+  }
+}
+
+function bindEvents() {
+  $('login-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+  });
+  ['login-id', 'login-pass'].forEach(function (id) {
+    $(id).addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        iqraLogin();
+      }
+    });
+  });
+  $('toggle-pass').addEventListener('click', function () {
+    const input = $('login-pass');
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    var eye = this.querySelector('i');
+    if (eye) eye.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+  });
+  $('admin-logout').addEventListener('click', logout);
+  $('student-logout').addEventListener('click', logout);
+  $('add-student').addEventListener('submit', onAddStudent);
+  $('student-search').addEventListener('input', renderStudents);
+  $('edit-modal').addEventListener('submit', onModalSubmit);
+  $('modal-cancel').addEventListener('click', closeModal);
+  document.body.addEventListener('click', onGlobalClick);
+  $('prev-family').addEventListener('click', function () { changeFamily(-1); });
+  $('next-family').addEventListener('click', function () { changeFamily(1); });
+  $('start-math').addEventListener('click', startMath);
+  $('quit-math').addEventListener('click', function () { showView('view-math-hub'); });
+  $('play-again').addEventListener('click', startMath);
+  $('retry-save').addEventListener('click', function () { saveXP(false); });
+  $('speak-table').addEventListener('click', speakTable);
+}
+
+function onGlobalClick(event) {
+  const go = event.target.closest('[data-go]');
+  if (go) {
+    showView(go.dataset.go);
+    if (go.dataset.go === 'view-tables') renderTable(state.table);
+    return;
+  }
+  const lang = event.target.closest('[data-lang]');
+  if (lang) {
+    state.language = lang.dataset.lang;
+    $('category-title').textContent = state.language;
+    $('category-kicker').textContent = state.language;
+    showView('view-category');
+    return;
+  }
+  const letters = event.target.closest('[data-letters]');
+  if (letters) {
+    state.letters = Number(letters.dataset.letters);
+    state.familyIndex = 0;
+    renderFamily();
+    showView('view-words');
+  }
+}
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(function (view) { view.classList.add('hidden'); });
+  const next = $(id);
+  next.classList.remove('hidden');
+  next.style.animation = 'none';
+  void next.offsetWidth;
+  next.style.animation = '';
+}
+
+async function callApi(action, payload) {
+  let result;
+  if (typeof window.IQRA_MOCK === 'function') {
+    result = await window.IQRA_MOCK(action, payload || {});
+  } else if (window.google && google.script && google.script.run) {
+    result = await new Promise(function (resolve, reject) {
+      google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(function (err) {
+          var message = 'The academy server could not be reached.';
+          if (err && err.message) message = err.message;
+          else if (typeof err === 'string' && err) message = err;
+          reject(new Error(message));
+        })
+        .api(action, payload || {});
+    });
+  } else {
+    throw new Error('Open IQRA AOE from its deployed web app link.');
+  }
+  if (!result || result.ok === false) throw new Error((result && result.error) || 'Request failed.');
+  return result;
+}
+
+async function withBusy(label, work) {
+  $('busy-text').textContent = label;
+  $('busy').classList.remove('hidden');
+  try { return await work(); }
+  finally { $('busy').classList.add('hidden'); }
+}
+
+function toast(message, type) {
+  const host = $('toasts');
+  while (host.children.length >= 2) host.firstElementChild.remove();
+  const el = document.createElement('div');
+  el.className = 'toast';
+  const icon = document.createElement('i');
+  icon.className = type === 'error' ? 'fa-solid fa-circle-xmark' : type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-info';
+  icon.style.color = type === 'error' ? '#fb7185' : type === 'success' ? '#6ee7b7' : '#93c5fd';
+  const text = document.createElement('span');
+  text.textContent = message;
+  el.append(icon, text);
+  host.appendChild(el);
+  setTimeout(function () { el.remove(); }, 3800);
+}
+
+function readToken() {
+  try { return sessionStorage.getItem('iqra_token') || ''; } catch (err) { return ''; }
+}
+
+function writeToken(token) {
+  try {
+    if (token) sessionStorage.setItem('iqra_token', token);
+    else sessionStorage.removeItem('iqra_token');
+  } catch (err) { return; }
+}
+
+async function restoreSession() {
+  const token = readToken();
+  const canCall = typeof window.IQRA_MOCK === 'function' || (window.google && google.script && google.script.run);
+  if (!token || !canCall) return;
+  try {
+    const result = await callApi('session', { token: token });
+    applySession(result);
+  } catch (err) {
+    writeToken('');
+    if (String(err.message).indexOf('Expired') !== -1) toast(err.message, 'error');
+  }
+}
+
+function applySession(result) {
+  state.token = result.token;
+  state.role = result.role;
+  state.profile = result.profile;
+  writeToken(result.token);
+  if (result.role === 'admin') {
+    showView('view-admin');
+    refreshStudents();
+  } else {
+    renderDashboard();
+    showView('view-dashboard');
+  }
+}
+
+function iqraLogin() {
+  loginNow();
+  return false;
+}
+window.iqraLogin = iqraLogin;
+
+async function loginNow() {
+  try {
+    const result = await withBusy('Signing in…', function () {
+      return callApi('login', {
+        userId: $('login-id').value,
+        password: $('login-pass').value
+      });
+    });
+    $('login-pass').value = '';
+    showBootError('');
+    applySession(result);
+    toast(result.role === 'admin' ? 'Admin signed in.' : 'Welcome, ' + result.profile.studentName + '.', 'success');
+  } catch (err) {
+    const message = err && err.message ? err.message : 'Sign in failed.';
+    toast(message, 'error');
+    showBootError(message);
+  }
+}
+
+async function logout() {
+  const token = state.token;
+  state.token = '';
+  state.role = '';
+  state.profile = null;
+  writeToken('');
+  showView('view-login');
+  if (token) {
+    try { await callApi('logout', { token: token }); } catch (err) {}
+  }
+  toast('Signed out.', 'info');
+}
+
+function renderDashboard() {
+  const profile = state.profile;
+  $('dash-name').textContent = profile.studentName;
+  $('dash-class').textContent = profile.classLevel;
+  $('stat-class').textContent = profile.classLevel;
+  $('stat-xp').textContent = profile.totalXP;
+  $('stat-streak').textContent = profile.currentStreak;
+  $('stat-expiry').textContent = prettyDate(profile.expiryDate);
+  $('math-track').textContent = TRACKS[profile.classLevel] || TRACKS[5];
+  $('math-blurb').textContent = TRACKS[profile.classLevel] || '';
+  const note = $('expiry-note');
+  const days = daysUntil(profile.expiryDate);
+  if (days >= 0 && days <= 7) {
+    note.textContent = 'Your access expires on ' + prettyDate(profile.expiryDate) + '. Please contact admin.';
+    note.classList.remove('hidden');
+  } else {
+    note.classList.add('hidden');
+  }
+}
+
+function fillClassSelect(select, selected) {
+  select.innerHTML = '';
+  for (let level = 1; level <= 10; level++) {
+    const option = document.createElement('option');
+    option.value = String(level);
+    option.textContent = 'Class ' + level;
+    if (String(level) === String(selected)) option.selected = true;
+    select.appendChild(option);
+  }
+}
+
+async function refreshStudents() {
+  const result = await withBusy('Loading students…', function () {
+    return callApi('listStudents', { token: state.token });
+  });
+  state.students = result.students || [];
+  renderAdminStats();
+  renderStudents();
+}
+
+function renderAdminStats() {
+  const total = state.students.length;
+  const expired = state.students.filter(function (student) { return student.expired; }).length;
+  $('admin-stats').innerHTML = '';
+  [['Students', total], ['Active', total - expired], ['Expired', expired]].forEach(function (item) {
+    const card = document.createElement('article');
+    card.className = 'stat glass';
+    const label = document.createElement('span');
+    label.textContent = item[0];
+    const value = document.createElement('strong');
+    value.textContent = item[1];
+    card.append(label, value);
+    $('admin-stats').appendChild(card);
+  });
+}
+
+function renderStudents() {
+  const query = $('student-search').value.trim().toLowerCase();
+  const list = $('student-list');
+  list.innerHTML = '';
+  const rows = state.students.filter(function (student) {
+    return !query || student.studentName.toLowerCase().indexOf(query) !== -1 || student.userId.toLowerCase().indexOf(query) !== -1;
+  });
+  if (!rows.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted';
+    empty.textContent = 'No students yet.';
+    list.appendChild(empty);
+    return;
+  }
+  rows.forEach(function (student) {
+    const card = document.createElement('article');
+    card.className = 'student-card';
+    const info = document.createElement('div');
+    const name = document.createElement('strong');
+    name.textContent = student.studentName + ' · ' + student.userId;
+    const meta = document.createElement('div');
+    meta.className = 'muted';
+    meta.textContent = 'Class ' + student.classLevel + ' · XP ' + student.totalXP + ' · Streak ' + student.currentStreak + ' · ' + prettyDate(student.expiryDate);
+    const badge = document.createElement('span');
+    badge.className = 'badge ' + (student.expired ? 'dead' : 'live');
+    badge.textContent = student.expired ? 'Expired' : 'Active';
+    info.append(name, meta);
+    const actions = document.createElement('div');
+    actions.className = 'row-actions';
+    actions.append(badge, miniButton('Edit', function () { openEdit(student); }), miniButton('Remove', function () { openDelete(student); }));
+    card.append(info, actions);
+    list.appendChild(card);
+  });
+}
+
+function miniButton(label, onClick) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'mini';
+  button.textContent = label;
+  button.addEventListener('click', onClick);
+  return button;
+}
+
+async function onAddStudent(event) {
+  event.preventDefault();
+  try {
+    const result = await withBusy('Saving student…', function () {
+      return callApi('addStudent', {
+        token: state.token,
+        student: {
+          userId: $('new-id').value,
+          studentName: $('new-name').value,
+          password: $('new-pass').value,
+          classLevel: $('new-class').value,
+          expiryDate: $('new-expiry').value
+        }
+      });
+    });
+    state.students = result.students;
+    $('add-student').reset();
+    fillClassSelect($('new-class'), '5');
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    $('new-expiry').value = nextYear.toISOString().slice(0, 10);
+    renderAdminStats();
+    renderStudents();
+    toast('Student added to the sheet.', 'success');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+function openEdit(student) {
+  state.modalMode = 'edit';
+  $('modal-title').textContent = 'Edit ' + student.studentName;
+  $('modal-copy').classList.add('hidden');
+  $('modal-fields').classList.remove('hidden');
+  $('edit-id').value = student.userId;
+  $('edit-name').value = student.studentName;
+  fillClassSelect($('edit-class'), student.classLevel);
+  $('edit-expiry').value = student.expiryDate;
+  $('edit-pass').value = '';
+  $('modal-save').textContent = 'Save';
+  $('modal-back').classList.remove('hidden');
+}
+
+function openDelete(student) {
+  state.modalMode = 'delete';
+  $('modal-title').textContent = 'Remove student';
+  $('modal-copy').textContent = 'Remove ' + student.studentName + ' (' + student.userId + ') from the Users sheet?';
+  $('modal-copy').classList.remove('hidden');
+  $('modal-fields').classList.add('hidden');
+  $('edit-id').value = student.userId;
+  $('modal-save').textContent = 'Remove';
+  $('modal-back').classList.remove('hidden');
+}
+
+function closeModal() {
+  $('modal-back').classList.add('hidden');
+}
+
+async function onModalSubmit(event) {
+  event.preventDefault();
+  const userId = $('edit-id').value;
+  try {
+    const result = await withBusy('Updating the sheet…', function () {
+      if (state.modalMode === 'delete') {
+        return callApi('deleteStudent', { token: state.token, userId: userId });
+      }
+      if (!$('edit-name').value.trim() || !$('edit-expiry').value) {
+        throw new Error('Name and expiry date are required.');
+      }
+      return callApi('updateStudent', {
+        token: state.token,
+        student: {
+          userId: userId,
+          studentName: $('edit-name').value,
+          classLevel: $('edit-class').value,
+          expiryDate: $('edit-expiry').value,
+          password: $('edit-pass').value
+        }
+      });
+    });
+    state.students = result.students;
+    closeModal();
+    renderAdminStats();
+    renderStudents();
+    toast(state.modalMode === 'delete' ? 'Student removed.' : 'Student updated.', 'success');
+  } catch (err) {
+    toast(err.message, 'error');
+  }
+}
+
+function renderFamily() {
+  const families = (WORD_BANK[state.language] && WORD_BANK[state.language][state.letters]) || [];
+  const current = families[state.familyIndex];
+  $('word-title').textContent = state.language + ' · ' + state.letters + '-letter words';
+  const familyLine = $('word-family');
+  familyLine.textContent = current ? current.title : '';
+  familyLine.dir = state.language === 'Urdu' ? 'rtl' : 'ltr';
+  familyLine.className = 'lede ' + (state.language === 'Urdu' ? 'nastaliq' : state.language === 'Hindi' ? 'devanagari' : '');
+  familyLine.style.color = 'white';
+  $('page-pill').textContent = 'Family ' + (state.familyIndex + 1) + ' / ' + families.length;
+  $('word-help').textContent = state.language === 'Urdu'
+    ? 'Tap a card to hear it. Urdu is read with the Hindi (hi-IN) voice.'
+    : 'Tap a card or the speaker to hear the word.';
+  $('prev-family').disabled = state.familyIndex === 0;
+  $('next-family').disabled = state.familyIndex >= families.length - 1;
+  const grid = $('word-grid');
+  grid.innerHTML = '';
+  (current ? current.words : []).forEach(function (item) {
+    const card = document.createElement('article');
+    card.className = 'word-card';
+    const term = document.createElement('div');
+    term.className = 'term ' + (item.script || '');
+    term.textContent = item.word;
+    const gloss = document.createElement('div');
+    gloss.className = 'gloss';
+    gloss.textContent = item.gloss;
+    const speaker = document.createElement('button');
+    speaker.type = 'button';
+    speaker.className = 'speak';
+    speaker.setAttribute('aria-label', 'Listen');
+    var speakerIcon = document.createElement('i');
+    speakerIcon.className = 'fa-solid fa-volume-high';
+    speaker.appendChild(speakerIcon);
+    const play = function (event) {
+      if (event) event.stopPropagation();
+      speak(item.speak, state.language);
+      card.style.borderColor = 'rgba(167,139,250,0.9)';
+      setTimeout(function () { card.style.borderColor = ''; }, 700);
+    };
+    speaker.addEventListener('click', play);
+    card.addEventListener('click', play);
+    card.append(speaker, term, gloss);
+    grid.appendChild(card);
+  });
+}
+
+function changeFamily(step) {
+  const families = WORD_BANK[state.language][state.letters];
+  state.familyIndex = Math.max(0, Math.min(families.length - 1, state.familyIndex + step));
+  renderFamily();
+}
+
+function speak(text, lang) {
+  if (!window.speechSynthesis) {
+    toast('This browser has no read-aloud voice.', 'error');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang === 'English' ? 'en-IN' : 'hi-IN';
+  utterance.rate = 0.82;
+  const voice = pickVoice(utterance.lang);
+  if (voice) utterance.voice = voice;
+  window.speechSynthesis.speak(utterance);
+}
+
+function pickVoice(lang) {
+  const voices = window.speechSynthesis.getVoices();
+  const wanted = lang.toLowerCase();
+  return voices.find(function (voice) { return (voice.lang || '').toLowerCase().indexOf(wanted) === 0; })
+    || voices.find(function (voice) { return wanted.startsWith('hi') && (voice.lang || '').toLowerCase().indexOf('hi') === 0; })
+    || null;
+}
+
+function startMath() {
+  state.math = {
+    phase: 'practice',
+    number: 0,
+    practiceCorrect: 0,
+    practiceXP: 0,
+    testCorrect: 0,
+    testXP: 0,
+    combo: 0,
+    locked: false,
+    nonce: '',
+    level: state.profile.classLevel
+  };
+  $('report').classList.add('hidden');
+  $('play-area').classList.remove('hidden');
+  $('retry-save').classList.add('hidden');
+  setModePill();
+  showView('view-math');
+  nextQuestion();
+}
+
+function setModePill() {
+  const pill = $('mode-pill');
+  const test = state.math.phase === 'test';
+  pill.textContent = test ? 'Test mode' : 'Practice';
+  pill.className = 'pill ' + (test ? 'test' : 'practice');
+  $('session-xp').textContent = (state.math.practiceXP + state.math.testXP) + ' XP';
+  $('combo').textContent = 'Combo ' + state.math.combo;
+}
+
+function nextQuestion() {
+  const math = state.math;
+  if (math.phase === 'practice' && math.number === 10) {
+    math.phase = 'test';
+    math.number = 0;
+    math.combo = 0;
+    setModePill();
+    toast('Practice complete. Test mode has no hints.', 'info');
+  }
+  if (math.phase === 'test' && math.number === 10) {
+    showReport();
+    return;
+  }
+  math.number += 1;
+  math.locked = false;
+  const made = makeQuestion(math.level);
+  math.answer = made.answer;
+  $('q-progress').textContent = math.number + ' / 10';
+  $('topic-label').textContent = 'Class ' + math.level + ' · ' + made.topic;
+  $('prompt').textContent = made.prompt;
+  $('feedback').textContent = '';
+  const box = $('options');
+  box.innerHTML = '';
+  made.choices.forEach(function (choice, index) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'option-btn';
+    const key = document.createElement('span');
+    key.className = 'key';
+    key.textContent = String.fromCharCode(65 + index) + '.';
+    const label = document.createElement('span');
+    label.textContent = choice;
+    button.append(key, label);
+    button.addEventListener('click', function () { answerQuestion(choice, button); });
+    box.appendChild(button);
+  });
+  setModePill();
+}
+
+function answerQuestion(choice, button) {
+  const math = state.math;
+  if (!math || math.locked) return;
+  math.locked = true;
+  const correct = choice === math.answer;
+  const buttons = $('options').querySelectorAll('button');
+  buttons.forEach(function (item) { item.disabled = true; });
+  if (math.phase === 'test') {
+    if (correct) {
+      math.testCorrect += 1;
+      math.testXP += 15;
+    }
+    button.style.borderColor = 'rgba(255,255,255,0.4)';
+    setTimeout(nextQuestion, 420);
+    return;
+  }
+  if (correct) {
+    button.classList.add('good');
+    math.practiceCorrect += 1;
+    math.combo += 1;
+    let gained = 10;
+    if (math.combo >= 3) gained += 5;
+    math.practiceXP += gained;
+    $('feedback').textContent = 'Brilliant!';
+    $('feedback').style.color = '#6ee7b7';
+    floatXP(gained, button);
+  } else {
+    button.classList.add('bad');
+    math.combo = 0;
+    $('feedback').textContent = 'Correct answer: ' + math.answer;
+    $('feedback').style.color = '#fda4af';
+  }
+  setModePill();
+  setTimeout(nextQuestion, correct ? 900 : 1300);
+}
+
+function showReport() {
+  const math = state.math;
+  const earned = math.practiceXP + math.testXP + (math.testCorrect === 10 ? 30 : 0);
+  math.earned = earned;
+  math.nonce = math.nonce || uid();
+  $('play-area').classList.add('hidden');
+  $('report').classList.remove('hidden');
+  $('mode-pill').textContent = 'Report';
+  $('mode-pill').className = 'pill';
+  $('rep-practice').textContent = math.practiceCorrect + '/10';
+  $('rep-test').textContent = math.testCorrect + '/10';
+  $('rep-xp').textContent = earned;
+  $('grade-line').textContent = gradeFor(math.testCorrect);
+  if (math.testCorrect >= 7 && window.confetti) {
+    confetti({ particleCount: 140, spread: 80, origin: { y: 0.7 }, zIndex: 80 });
+  }
+  saveXP(true);
+}
+
+async function saveXP(firstTry) {
+  const math = state.math;
+  $('sync-line').textContent = 'Saving XP to your sheet…';
+  try {
+    const result = await callApi('updateXP', { token: state.token, xp: math.earned, nonce: math.nonce });
+    state.profile = result.profile;
+    renderDashboard();
+    $('sync-line').textContent = 'Saved. Your total is now ' + result.profile.totalXP + ' XP.';
+    $('retry-save').classList.add('hidden');
+    if (firstTry) toast('XP saved to your record.', 'success');
+  } catch (err) {
+    $('sync-line').textContent = err.message;
+    $('retry-save').classList.remove('hidden');
+    toast(err.message, 'error');
+  }
+}
+
+function floatXP(amount, element) {
+  const chip = document.createElement('div');
+  chip.className = 'xp-float';
+  chip.textContent = '+' + amount + ' XP';
+  const rect = element.getBoundingClientRect();
+  chip.style.left = (rect.left + rect.width / 2) + 'px';
+  chip.style.top = rect.top + 'px';
+  document.body.appendChild(chip);
+  setTimeout(function () { chip.remove(); }, 900);
+}
+
+function renderTable(number) {
+  state.table = number;
+  $('table-title').textContent = 'Table of ' + number;
+  const picks = $('table-picks');
+  if (!picks.childElementCount) {
+    for (let n = 2; n <= 20; n++) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = n;
+      button.addEventListener('click', function () {
+        renderTable(n);
+      });
+      picks.appendChild(button);
+    }
+  }
+  picks.querySelectorAll('button').forEach(function (button) {
+    button.classList.toggle('active', Number(button.textContent) === number);
+  });
+  const lines = $('table-lines');
+  lines.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.textContent = number + ' × ' + i + ' = ' + (number * i);
+    row.addEventListener('click', function () {
+      speak(number + ' times ' + i + ' is ' + (number * i), 'English');
+    });
+    lines.appendChild(row);
+  }
+}
+
+function speakTable() {
+  const number = state.table;
+  let text = 'The table of ' + number + '. ';
+  for (let i = 1; i <= 10; i++) text += number + ' times ' + i + ' is ' + (number * i) + '. ';
+  speak(text, 'English');
+}
+
+function makeQuestion(level) {
+  const banks = {
+    1: [addSmall, subSmall, nextNumber, compare],
+    2: [addMid, subMid, wordAdd],
+    3: [multiply, addMid],
+    4: [divideExact, multiply, subMid],
+    5: [decAdd, fracAdd, multiply],
+    6: [fracAdd, decSub, lcmQuestion],
+    7: [lcmQuestion, hcfQuestion, decMul, fracAdd],
+    8: [linear, rectArea, rectPeri],
+    9: [linear, largerRoot, triArea],
+    10: [largerRoot, linear, pythagoras, triArea]
+  };
+  const bank = banks[level] || banks[1];
+  const made = bank[rand(0, bank.length - 1)]();
+  made.choices = choicesFor(made.answer);
+  return made;
+}
+
+function addSmall() { return sumQuestion(rand(0, 9), rand(0, 9), 'Addition'); }
+function addMid() { return sumQuestion(rand(10, 40), rand(5, 30), 'Addition'); }
+function wordAdd() {
+  const a = rand(3, 15);
+  const b = rand(2, 9);
+  return { topic: 'Addition', prompt: 'A student has ' + a + ' pencils and gets ' + b + ' more. How many now?', answer: String(a + b) };
+}
+function subSmall() { return diffQuestion(rand(0, 9), 'Subtraction'); }
+function subMid() { return diffQuestion(rand(20, 70), 'Subtraction'); }
+function nextNumber() {
+  const n = rand(1, 18);
+  return { topic: 'Basics', prompt: 'What number comes after ' + n + '?', answer: String(n + 1) };
+}
+function compare() {
+  const a = rand(0, 9);
+  let b = rand(0, 9);
+  if (a === b) b = (b + 1) % 10;
+  return { topic: 'Basics', prompt: 'Which is greater: ' + a + ' or ' + b + '?', answer: String(Math.max(a, b)) };
+}
+function multiply() {
+  const a = rand(2, 10);
+  const b = rand(2, 10);
+  return { topic: 'Multiplication', prompt: a + ' × ' + b, answer: String(a * b) };
+}
+function divideExact() {
+  const divisor = rand(2, 9);
+  const quotient = rand(2, 10);
+  return { topic: 'Division', prompt: (divisor * quotient) + ' ÷ ' + divisor, answer: String(quotient) };
+}
+function decAdd() {
+  const a = rand(1, 9) / 10;
+  const b = rand(1, 9) / 10;
+  return { topic: 'Decimals', prompt: a.toFixed(1) + ' + ' + b.toFixed(1), answer: ((a * 10 + b * 10) / 10).toFixed(1) };
+}
+function decSub() {
+  let a = rand(3, 9);
+  let b = rand(1, a - 1);
+  return { topic: 'Decimals', prompt: (a / 10).toFixed(1) + ' − ' + (b / 10).toFixed(1), answer: ((a - b) / 10).toFixed(1) };
+}
+function decMul() {
+  const a = rand(1, 9);
+  const b = rand(2, 9);
+  return { topic: 'Decimals', prompt: (a / 10).toFixed(1) + ' × ' + b, answer: ((a * b) / 10).toFixed(1) };
+}
+function fracAdd() {
+  const den = rand(3, 9);
+  const n1 = rand(1, den - 1);
+  const n2 = rand(1, den - n1);
+  return { topic: 'Fractions', prompt: n1 + '/' + den + ' + ' + n2 + '/' + den, answer: (n1 + n2) + '/' + den };
+}
+function lcmQuestion() {
+  const a = rand(2, 12);
+  const b = rand(2, 12);
+  return { topic: 'LCM', prompt: 'LCM of ' + a + ' and ' + b, answer: String(lcm(a, b)) };
+}
+function hcfQuestion() {
+  const left = rand(6, 36);
+  const right = rand(6, 36);
+  return { topic: 'HCF', prompt: 'HCF of ' + left + ' and ' + right, answer: String(hcf(left, right)) };
+}
+function linear() {
+  const a = rand(2, 9);
+  const x = rand(2, 12);
+  const b = rand(0, 12);
+  return { topic: 'Algebra', prompt: a + 'x + ' + b + ' = ' + (a * x + b) + '. Find x.', answer: String(x) };
+}
+function rectArea() {
+  const length = rand(3, 12);
+  const breadth = rand(2, 9);
+  return { topic: 'Geometry', prompt: 'Area of a rectangle, length ' + length + ' and breadth ' + breadth, answer: String(length * breadth) };
+}
+function rectPeri() {
+  const length = rand(3, 12);
+  const breadth = rand(2, 9);
+  return { topic: 'Geometry', prompt: 'Perimeter of a rectangle, length ' + length + ' and breadth ' + breadth, answer: String(2 * (length + breadth)) };
+}
+function triArea() {
+  const base = rand(2, 10) * 2;
+  const height = rand(2, 10);
+  return { topic: 'Geometry', prompt: 'Area of a triangle, base ' + base + ' and height ' + height, answer: String((base * height) / 2) };
+}
+function largerRoot() {
+  const smaller = rand(1, 5);
+  const larger = rand(smaller + 1, smaller + 6);
+  const sum = smaller + larger;
+  const product = smaller * larger;
+  return { topic: 'Quadratic equations', prompt: 'Larger root of x² − ' + sum + 'x + ' + product + ' = 0', answer: String(larger) };
+}
+function pythagoras() {
+  const triples = [[3, 4, 5], [5, 12, 13], [6, 8, 10], [8, 15, 17], [9, 12, 15], [7, 24, 25]];
+  const triple = triples[rand(0, triples.length - 1)];
+  return { topic: 'Geometry', prompt: 'Hypotenuse of a right triangle with legs ' + triple[0] + ' and ' + triple[1], answer: String(triple[2]) };
+}
+
+function sumQuestion(a, b, topic) {
+  return { topic: topic, prompt: a + ' + ' + b, answer: String(a + b) };
+}
+function diffQuestion(max, topic) {
+  const a = rand(1, max);
+  const b = rand(0, a);
+  return { topic: topic, prompt: a + ' − ' + b, answer: String(a - b) };
+}
+function choicesFor(answer) {
+  const options = new Set([String(answer)]);
+  let guard = 0;
+  while (options.size < 4 && guard < 40) {
+    guard += 1;
+    const text = String(answer);
+    let wrong = '';
+    if (text.indexOf('/') !== -1) {
+      const parts = text.split('/');
+      let numerator = Number(parts[0]) + rand(-2, 2);
+      if (numerator <= 0) numerator = Number(parts[0]) + 1;
+      wrong = numerator + '/' + parts[1];
+    } else if (text.indexOf('.') !== -1) {
+      const delta = rand(1, 4) / 10 * (Math.random() < 0.5 ? 1 : -1);
+      wrong = (Number(text) + delta).toFixed(1);
+    } else {
+      const delta = rand(-4, 5);
+      wrong = String(Number(text) + (delta === 0 ? 3 : delta));
+    }
+    if (!wrong || wrong === text) continue;
+      if (text.indexOf('/') === -1 && text.indexOf('.') === -1 && Number(wrong) < 0) continue;
+      options.add(wrong);
+  }
+  return shuffle(Array.from(options));
+}
+function hcf(a, b) { while (b) { const t = a % b; a = b; b = t; } return a; }
+function lcm(a, b) { return (a / hcf(a, b)) * b; }
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function shuffle(list) {
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const hold = list[i];
+    list[i] = list[j];
+    list[j] = hold;
+  }
+  return list;
+}
+function gradeFor(score) {
+  if (score >= 9) return 'Excellent. Maharashtra board ready.';
+  if (score >= 7) return 'Very good. Keep this rhythm.';
+  if (score >= 5) return 'Fair. Revise the questions you missed.';
+  return 'Keep practising. The next test will feel lighter.';
+}
+function prettyDate(iso) {
+  if (!iso) return '—';
+  const parts = iso.split('-').map(Number);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return parts[2] + ' ' + months[parts[1] - 1] + ' ' + parts[0];
+}
+function daysUntil(iso) {
+  if (!iso) return 99;
+  const parts = iso.split('-').map(Number);
+  const target = new Date(parts[0], parts[1] - 1, parts[2]);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.round((target - today) / 86400000);
+}
+function uid() {
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'xp' + Date.now() + Math.floor(Math.random() * 1000);
+}
+
+function startParticles() {
+  const canvas = $('particles');
+  if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  const dots = Array.from({ length: 46 }, function () {
+    return { x: Math.random(), y: Math.random(), r: Math.random() * 1.7 + 0.4, s: Math.random() * 0.12 + 0.02, a: Math.random() * 0.45 + 0.12 };
+  });
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  (function frame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(function (dot) {
+      dot.y -= dot.s / 80;
+      if (dot.y < 0) dot.y = 1;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,255,255,' + dot.a + ')';
+      ctx.arc(dot.x * canvas.width, dot.y * canvas.height, dot.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  })();
+}
+
+init();
