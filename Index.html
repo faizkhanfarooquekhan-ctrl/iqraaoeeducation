@@ -4,16 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IQRA AOE — Academy of Excellence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&amp;family=Noto+Sans+Devanagari:wght@500;700&amp;family=Noto+Nastaliq+Urdu:wght@500;700&amp;display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <?!= include('CSS'); ?>
   <script>
     function iqraAvatarFallback(img) {
       if (!img || img.dataset.fallback === '1') return;
       img.dataset.fallback = '1';
-      var parts = (img.alt || 'U').trim().split(/\s+/);
+      var parts = (img.alt || 'User').trim().split(/\s+/);
       var initials = ((parts[0] || 'U').charAt(0) + (parts[1] || '').charAt(0)).toUpperCase();
-      var id = 'g' + initials + Math.floor(Math.random() * 1000);
-      var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><defs><linearGradient id='" + id + "' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='#7c3aed'/><stop offset='100%' stop-color='#db2777'/></linearGradient></defs><rect width='200' height='200' fill='url(#" + id + ")'/><text x='100' y='118' text-anchor='middle' font-size='72' font-family='Arial,sans-serif' fill='white' font-weight='700'>" + initials + "</text></svg>";
-      img.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+      var canvas = document.createElement('canvas');
+      canvas.width = 200;
+      canvas.height = 200;
+      var ctx = canvas.getContext('2d');
+      var gradient = ctx.createLinearGradient(0, 0, 200, 200);
+      gradient.addColorStop(0, '#7c3aed');
+      gradient.addColorStop(1, '#db2777');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 200, 200);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 72px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(initials, 100, 108);
+      img.src = canvas.toDataURL('image/png');
     }
   </script>
 </head>
@@ -38,7 +54,7 @@
         <p class="eyebrow">Academy of Excellence</p>
         <h1 class="gradient-text" style="font-size:46px;font-weight:800;letter-spacing:-0.04em;">IQRA AOE</h1>
         <p class="lede">Student and admin sign in. Your class, XP, and access come from the academy register.</p>
-        <form id="login-form" class="stack" action="javascript:void(0)" method="post" onsubmit="event.preventDefault(); try { if (window.iqraLogin) window.iqraLogin(); } catch (err) {} return false;">
+        <form id="login-form" class="stack" action="javascript:void(0)" method="post" onsubmit="return false;">
           <div class="field">
             <i class="fa-solid fa-user"></i>
             <input id="login-id" autocomplete="username" placeholder="User ID" required>
@@ -66,7 +82,7 @@
       </header>
       <div class="stat-grid" id="admin-stats"></div>
       <div class="admin-layout">
-        <form id="add-student" class="panel glass" action="javascript:void(0)" method="post" onsubmit="event.preventDefault(); return false;">
+        <form id="add-student" class="panel glass" action="javascript:void(0)" method="post" onsubmit="return false;">
           <h3 style="font-size:22px;">Add a student</h3>
           <p class="muted" style="margin:6px 0 14px;">Writes a new row on the Users sheet.</p>
           <div class="stack">
@@ -284,7 +300,7 @@
   </main>
 
   <div id="modal-back" class="modal-back hidden">
-    <form id="edit-modal" class="modal glass" action="javascript:void(0)" method="post" onsubmit="event.preventDefault(); return false;">
+    <form id="edit-modal" class="modal glass" action="javascript:void(0)" method="post" onsubmit="return false;">
       <h3 id="modal-title" style="font-size:24px;">Edit student</h3>
       <p id="modal-copy" class="lede hidden"></p>
       <div class="stack" id="modal-fields">
@@ -313,6 +329,8 @@
     </form>
   </div>
 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <script>
     window.onerror = function (message, source, line) {
       var box = document.getElementById('boot-error');

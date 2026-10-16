@@ -264,7 +264,7 @@ function writeToken(token) {
   try {
     if (token) sessionStorage.setItem('iqra_token', token);
     else sessionStorage.removeItem('iqra_token');
-  } catch (err) { /* sandboxed web-app iframes can block storage */ }
+  } catch (err) { return; }
 }
 
 async function restoreSession() {
@@ -327,7 +327,7 @@ async function logout() {
   writeToken('');
   showView('view-login');
   if (token) {
-    try { await callApi('logout', { token: token }); } catch (err) { /* session already gone */ }
+    try { await callApi('logout', { token: token }); } catch (err) {}
   }
   toast('Signed out.', 'info');
 }

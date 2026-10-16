@@ -44,7 +44,9 @@ function doPost() {
 function include(filename) {
   var allowed = { CSS: true, JS: true, Team: true };
   if (!allowed[filename]) return '';
-  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+  // getRawContent copies the file unchanged. getContent() runs it through the
+  // template compiler and turns valid CSS/JS into "Unexpected token ';'" errors.
+  return HtmlService.createTemplateFromFile(filename).getRawContent();
 }
 
 function onOpen() {

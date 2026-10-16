@@ -50,7 +50,7 @@ Copy each file into the Apps Script project under the same name:
 |---|---|
 | `Code.gs` | `doGet`, login, expiry check, admin register, XP save |
 | `Index.html` | Page shell. Pulls the other files in with `<?!= include('...'); ?>` |
-| `CSS.html` | Tailwind, Font Awesome, canvas-confetti, glassmorphism styles |
+| `CSS.html` | Glassmorphism styles only. Scripts and font links stay in `Index.html` |
 | `JS.html` | Routing, language hub, math arena, sheet calls |
 | `Team.html` | Team portraits and copyright, included on both dashboards |
 | `appsscript.json` | Asia/Kolkata timezone, V8 runtime, web app access |
@@ -73,9 +73,13 @@ Copy each file into the Apps Script project under the same name:
 12. Click **Deploy**, authorize the spreadsheet permission, and copy the web app URL.
 13. After every code change: Deploy → Manage deployments → pencil → **New version** → Deploy. The URL stays the same. An old deployment keeps serving the previous code.
 
-### If login turns into a blank white page
+### If you see `Unexpected token ';'` or a blank white page
 
-The sign-in form must not reload the web app. Reload is what Apps Script replaces with a white page. Use the latest `Index.html` and `JS.html`, then deploy a **new version**. In the editor, run `initializeSheets` once and accept the spreadsheet permission before you test login. A wrong ID or password stays on the dark page and shows the error at the top.
+`Unexpected token ';' (line 348)` is the browser trying to run the stylesheet as JavaScript. That happens when an included file is passed through Apps Script's template compiler (`getContent()`), or when a `<script>` tag is left open. This project copies `CSS.html`, `JS.html`, and `Team.html` with `getRawContent()`, keeps every `<script>` closed, and does not put JavaScript inside the stylesheet.
+
+The sign-in form also must not reload the web app. Reload is what Apps Script replaces with a white page.
+
+Paste the latest `Code.gs`, `Index.html`, `CSS.html`, `JS.html`, and `Team.html`. In the editor, run `initializeSheets` once and accept the spreadsheet permission. Then Deploy → Manage deployments → pencil → **New version** → Deploy. An old deployment keeps serving the previous code, including this error. A wrong ID, a bad password, or an expired account stays on the dark page and shows the message at the top.
 
 Open the URL in a browser. `/dev` links are only for the script owner. Share the `/exec` URL.
 
